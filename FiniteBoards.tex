@@ -1,0 +1,84 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}    % needed for including graphics e.g. EPS, PS
+\topmargin -1.5cm        % read Lamport p.163
+\oddsidemargin -0.04cm   % read Lamport p.163
+\evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+\textwidth 16.59cm
+\textheight 21.94cm 
+%\pagestyle{empty}       % Uncomment if don't want page numbers
+\parskip 7.2pt           % sets spacing between paragraphs
+%\renewcommand{\baselinestretch}{1.5} % Uncomment for 1.5 spacing between lines
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{verbatim}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\parindent 0pt		 % sets leading space for paragraphs
+\author{Perry Kleinhenz, Fermi Ma, and Erik Waingarten}
+\title{18.821 - Poker Chips Finite board configurations}
+
+
+\begin{document}         
+\maketitle
+
+In this file, we analyze the case where the initial number of chips is finite. That is, the sum of all the chips on the board is finite. 
+
+\begin{theorem}
+\label{finitestability}
+If the initial board has a finite number of chips, there exists an $N$ such that after $N$ earthquakes, the system will be in a stable state (any subsequence earthquake does not cause any chips to move). 
+\end{theorem}
+
+The proof will be as follows: first, we will show that finite boards cannot return to a previous state. Let $B$ be the set of all possible board configurations, that is, $B = \{ f: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}^{\geq 0}\}$. Each board configuration is given by a function of the integer lattice to the nonnegative integers. So $f(x,y)$ is the number of chips in the grid location $x,y$. 
+
+The earthquake is defined as $E: B \rightarrow B$ acts in the following manner:
+\[ E(f(x,y)) = f(x,y) + \sum_{l \in n(x,y)} [[ f(l) \geq 4 ]] - 4[[f(x,y) \geq 4]] \]
+Where $n(x,y)$ is the set of neighbors of $x,y$, and $[[ X ]] = 1$ if $X$ happened and $0$ otherwise. Let $B_f \subset B$ with all boards with a finite number of chips. 
+\[ B_f = \bigcup_{n \geq 0} \{ f \in B | \sum_{x,y} f(x,y) = n \} \]
+
+So a restatement of the theorem is to say that for all $f \in B$ where $\sum_{x,y} f(x,y) = S$, there exists an $N$ such that for all $m \in \mathbb{Z}$, $E^N(f) = E^{N+m}(f)$. 
+
+\begin{lemma}
+If $E(f) \neq f$, then $E^n(f) \neq f$ for all $n > 0$.
+\end{lemma}
+
+\begin{proof}
+Let $\Phi: B_f \rightarrow \mathbb{Z}$ be the following function
+\[ \Phi(f) = \sum_{x,y} f(x,y)(x+y)^2 \]
+Note that this is well-defined since the boards contain a finite number of chips. I will show that 
+\[ E(f) \neq f \Rightarrow \Phi(E(f)) > \Phi(f) \]
+This means that if there is an earthquake that changes things, then $\Phi(f)$ increases, which means that if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or that you never return to your original state.
+
+We can evaluate $\Phi(E(f)) - \Phi(f)$.
+\[ \Phi(E(f)) = \sum_{x,y} E(f(x,y)) (x+y)^2 \]
+\[ = \sum_{x,y} \left(f(x,y) + \sum_{l \in n(x,y)} [[f(t) \geq 4]] - 4[[f(x,y) \geq 4]]\right) (x+y)^2 \]
+Suppose location $f(x,y) \geq 4$, then the number of chips in location $(x,y)$ will have decreased after applying $E$. For each decrease in of location $(x,y)$ of $4$, there is an increase in two neighbors by $1$. 
+
+Let $A$ be the set of active locations, or locations which $f(x,y) \geq 4$, which is non-empty by assumption. 
+So
+\[ \Phi(E(f)) - \Phi(f) \geq \sum_{(x,y) \in A} (-4)(x+y)^2 + 2(x+y+1)^2 + 2(x+y-1)^2 \]
+\[ \geq \sum_{(x,y) \in A} \begin{array}{cccccc} -4x^2 & -4y^2 & -8xy & & &\\
+									   +2x^2 & +2y^2 & +4xy & +2x& +2y &+ 2\\
+									   +2x^2 & +2y^2 & +4xy & -2x& -2y  & +2 \end{array} \]
+\[ \geq 4 > 0 \] 
+\end{proof}
+
+\begin{lemma}
+\label{finiteextension}
+Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $E^n(f)$ only contains chips within the range $[x_l - \log S, x_h + \log S] \times [y_l-\log S, y_h+\log S]$ for all $n$.
+\end{lemma}
+
+\begin{proof}
+For each chip that moves in one direction, there is another chip that moves in the opposite direction. Therefore, at each time, the number of chips that extend the range can be at most half of what extended before. This means that there are at most $\log S$ extensions on each side. 
+\end{proof}
+
+So now we are ready to prove the theorem that all finite boards will reach a stable state. 
+
+\begin{proof}
+(of Theorem~\ref{finitestability}) Suppose $f \in B$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie within the locations $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that all $E^n(f)$ will lie in $R = [x_l - \log S, x_h + \log S] \times [y_l - \log S, y_h + \log S]$. 
+
+There exists less than $(x_h - x_l + 2\log S)(y_h - y_l + 2\log S)S$ possible boards $b \in B$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \geq N < (x_h - x_l + 2\log S)(y_h - y_l + 2\log S)S$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
+\end{proof}
+
+\end{document}

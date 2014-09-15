@@ -43,6 +43,10 @@ def getBoundary(board):
     highestY = max(allY)
     return (lowestX, highestX, lowestY, highestY)
 
+def getStableBoundry(board):
+    actUntilStable(board)
+    return getBoundary(board)
+
 def printBoundary(board):
     (lowestX, highestX, lowestY, highestY) = getBoundary(board)
     print "Boundary: X:[%d, %d] \tY:[%d, %d]" % (lowestX, highestX, lowestY, lowestY)
@@ -62,7 +66,7 @@ def actUntilStable(board):
     count = 0
     while act(board):
         count += 1
-    print "Done: took %d actions" % count
+    return count
 
 def actAndSee(board):
     while 1:
