@@ -14,6 +14,7 @@
 \usepackage{verbatim}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
 \parindent 0pt		 % sets leading space for paragraphs
 \author{Perry Kleinhenz, Fermi Ma, and Erik Waingarten}
 \title{18.821 - Poker Chips}
@@ -22,10 +23,25 @@
 \begin{document}         
 \maketitle
 
+\begin{definition}
+Let a \textbf{valid} earthquake be an earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips.
+\end{definition}
 \begin{theorem}
-Here is a theorem
+For any board with finitely many chips that stabilizes after finitely many earthquakes, the order in which the earthquakes occur does not matter.
 \end{theorem}
 \begin{proof}
-it is true
+The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final result. This technique will then uniquely (up to a point) specify an order in which the earthquakes will occur, which completes the proof.
+
+First, we need a lemma in order to do the rearrangements.
+
+\begin{lemma}
+Let $E_1,E_2,E_3,\dots, E_k$ be a sequence of earthquakes, where each $E_i$ specifies the location of a square hit. Then the sequence given by moving some earthquake $E_j$ forward in the sequence to a new spot where $E_j$ is still a valid earthquake gives the same final configuration.
+\end{lemma}
+\begin{proof}
+Will need to formalize this, but this is true because addition and subtraction are commutative, and that moving $E_j$ earlier up in the sequence can't hurt another other squares' ability to have an earthquake.
+\end{proof}
+
+Now, given the original configuration of the board, let $A_i$ be the number of chips on square $i$.
+
 \end{proof}
 \end{document}
