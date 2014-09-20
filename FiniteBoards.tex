@@ -97,19 +97,19 @@ If $BE(f) \neq f$, then $BE^n(f) \neq f$ for all $n > 0$.
 
 \begin{proof}
 Let $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ be the following function
-\[ \Phi(f) = \sum_{x,y} f(x,y)(x+y)^2 \]
+\[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2 \]
 Note that this is well-defined since the boards contain a finite number of chips. We will show that 
-\[ E(f) \neq f \Rightarrow \Phi(BE(f)) > \Phi(f) \]
+\[ BE(f) \neq f \Rightarrow \Phi(BE(f)) > \Phi(f) \]
 This means that if there is an earthquake that changes things, then $\Phi(f)$ increases, which means that if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or that you never return to your original state.
 
 We can evaluate $\Phi(BE(f)) - \Phi(f)$.
-\[ \Phi(BE(f)) = \sum_{x,y} BE(f(x,y)) (x+y)^2 \]
-\[ = \sum_{x,y} \left(f(x,y) + \sum_{l \in n(x,y)} [[f(t) \geq 4]] - 4[[f(x,y) \geq 4]]\right) (x+y)^2 \]
+\[ \Phi(BE(f)) = \sum_{x,y} BE(f(x,y)) (|x|+|y|)^2 \]
+\[ = \sum_{x,y} \left(f(x,y) + \sum_{l \in n(x,y)} [[f(t) \geq 4]] - 4[[f(x,y) \geq 4]]\right) (|x|+|y|)^2 \]
 Suppose location $f(x,y) \geq 4$, then the number of chips in location $(x,y)$ will have decreased after applying $E$. For each decrease in the number of chips atlocation $(x,y)$ of $4$, there is an increase in its four neighbors neighbors by $1$. 
 
 Let $A$ be the set of active locations, or locations which $f(x,y) \geq 4$, which is non-empty by assumption. 
 So
-\[ \Phi(BE(f)) - \Phi(f) \geq \sum_{(x,y) \in A} (-4)(x+y)^2 + 2(x+y+1)^2 + 2(x+y-1)^2 \]
+\[ \Phi(BE(f)) - \Phi(f) \geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
 \[ \geq \sum_{(x,y) \in A} \begin{array}{cccccc} -4x^2 & -4y^2 & -8xy & & &\\
 									   +2x^2 & +2y^2 & +4xy & +2x& +2y &+ 2\\
 									   +2x^2 & +2y^2 & +4xy & -2x& -2y  & +2 \end{array} \]
@@ -123,7 +123,7 @@ Our proof of this lemma is essentiall the same as the preceeding one. We constru
 
 \begin{proof}
 We use the same definition for $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ 
-\[ \Phi(f) = \sum_{x,y} f(x,y)(x+y)^2, \]
+\[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2, \]
 and evaluate $\Phi(SE(f)) - \Phi(f)$. Suppose $SE$ effected square $(x_0,y_0)$ and its neighbors, then
 \begin{align}
 \Phi(SE(f)) - \Phi(f) =\sum_{x,y} SE(f(x,y))(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
