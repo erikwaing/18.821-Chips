@@ -1,0 +1,204 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx}    % needed for including graphics e.g. EPS, PS
+\topmargin -1.5cm        % read Lamport p.163
+\oddsidemargin -0.04cm   % read Lamport p.163
+\evensidemargin -0.04cm  % same as oddsidemargin but for left-hand pages
+\textwidth 16.59cm
+\textheight 21.94cm 
+%\pagestyle{empty}       % Uncomment if don't want page numbers
+\parskip 7.2pt           % sets spacing between paragraphs
+%\renewcommand{\baselinestretch}{1.5} % Uncomment for 1.5 spacing between lines
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{verbatim}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\parindent 0pt		 % sets leading space for paragraphs
+\author{Perry Kleinhenz, Fermi Ma, and Erik Waingarten}
+\title{18.821 - Poker Chips Finite board configurations}
+
+
+\begin{document}
+
+\maketitle
+
+\section{$n$-Trees}
+Consider a semi-infinite $n$-tree. That is the graph with a parent node which has $n$ unique children. Those children each have $n$ unique children and so on. 
+
+We can join two semi infinite $n$-trees by an edge connecting their parent nodes. This forms a graph where every vertex has $n+1$ neighbors. We would like to adapt our description of chips and earthquakes to this graph. 
+
+\begin{definition} We define a coordinate system for our graph, with the following rules:
+\begin{enumerate}
+	\item $(0,0)$ and $(1,0)$ are valid coordinates and refer to the two parent nodes.
+	\item $(a,b)$ is a valid coordinate for $a<0$ if $0<b \leq n^{|a|}$
+	\item $(a,b)$ is a valid coordinate for $a>1$ if $0<b \leq n^{|a-1|}$
+\end{enumerate}
+We define the set of all valid coordinates $G_n$ as 
+\begin{equation}
+G_n := \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules above}\}
+\end{equation}
+\end{definition}
+
+\begin{definition}
+We define a tree to be a map from the set of valid coordinates to the nonnegative integers, that is 
+\begin{equation}
+f:  G\rightarrow \mathbb{Z}_{\geq 0}
+\end{equation}
+We write $\mathcal{T}_n$ to refer to the set of all joined $n$-tree's 
+\end{definition}
+
+\begin{definition}
+\label{bigearthquakedeftree}
+We define the big earthquake operator as  as a map from the set of all boards to the set of all boards and write $BE: \mathcal{T}_n \rightarrow \mathcal{T}_n$. 
+It transforms all of the nodes on the tree with the following rule.
+\begin{equation}
+BE(f(x,y)) = f(x,y) - (n+1)[[f(x,y) \geq n+1]] + [[f(x-k,y_0) \geq n+1]] +  \sum_{i=1}^{n} [[f(x-k,y_i) \geq n+1]] 
+\end{equation} 
+where $k$ is defined as 
+\begin{equation}
+k = \begin{cases}
+1 \text{ if } x\leq 0 \\
+-1 \text{ if } x \geq 1
+\end{cases}
+\end{equation}
+and $(x-k, y_j)$ refers to the $j$th child of $(x,y)$ and $[[A]]$ is defined as 
+\begin{equation}
+[[A]] = 
+\begin{cases} 
+1 \text{ if } A \text{ is true} \\ 
+0 \text{ if } A  \text{ is false}
+ \end{cases}.
+\end{equation}
+\end{definition}
+
+\begin{definition}
+ We define the small earthquake operator as a map from the set of all $n$-trees to the set of all $n$-trees and write $SE: \mathcal{T}_n \rightarrow \mathcal{T}_n$.
+It selects one valid node $(x,y)$ with $f(x,y) \geq n+1$ and transforms it and all of its neighbors with the following rule: 
+\begin{align*}
+SE( f( x, y ) ) = f( x , y )-n-1 \\
+SE( f( x + k, y)) = f( x + k, y )+1 \\
+SE( f(x-k, y_i) ) = f(x-k, y_j )+1 \\
+\end{align*}
+where $k$ is as defined above and $(x-k, y_j)$ refers to the $j$th child of $(x,y)$
+and leaves all other squares unchanged.
+\end{definition}
+
+\begin{definition}
+We say that a $n$-Tree is stable if its values are strictly less than $n+1$. This is equivalent to both of the earthquake maps having no effect on the board. 
+\end{definition}
+
+\begin{definition} 
+We say that a board is finite if the total number of chips on it is finite. That is a board $f$ is finite if the sum
+\begin{equation}
+S= \sum_{(x,y) \in G_n} f(x,y) 
+\end{equation}
+is finite. 
+We denote the set of finite boards as $\mathcal{T}_n^f$.
+\end{definition}
+
+As it turns out we can use a  method of proof nearly identical to the standard board case to show that the state of a tree under this process can never cycle.
+
+We once again define a potential function 
+\begin{definition} Let $\Phi: \mathcal{T}_n^f \rightarrow \mathbb{Z}_{\geq 0}$ be the  function
+\begin{equation}
+\Phi(f) = \sum_{(x,y) \in G_n} f(x,y)(|x|)^2
+\end{equation}
+Note that this is well defined for trees which contain a finite number of chips. 
+\end{definition} 
+
+\begin{lemma}
+If $SE(f) \neq f$, then $SE^n(f) \neq f$ for all $n > 0$.
+\end{lemma}
+
+\begin{proof}
+We will show that  if $SE$ acts on a board nontrivially then $\Phi(SE(f))$ will be strictly larger. That is  
+\begin{equation}
+SE(f) \neq f \Rightarrow \Phi(SE(f)) > \Phi(f)
+\end{equation}
+
+
+We can evaluate $\Phi(SE(f)) - \Phi(f)$.
+\begin{align}
+\Phi(SE(f))-\Phi(f) = \sum_{(x,y) \in G_n} SE(f)(x,y)(x)^2 - \sum_{(x,y) \in G_n} f(x,y)(x)^2 
+\end{align}
+Only one node call it $(x_0,y_0)$ and its neighbors are affected. Therefore the above expression simplifies to
+\begin{align*}
+\Phi(SE(f)-\Phi(f) = SE( f(x_0,y_0) )* (x_0)^2 + SE( (f(x_0+k, y_0) )* (|x_0+k|)^2 \\
++ \sum_{i} SE( f(x_0-k, y_i) ) * (|x_0-k|)^2 \\
+= -(n+1)*(|x_0|)^2 + (|x_0+k)^2 + n (|x_0-k|)^2 \\
+\geq-(n+1)*(|x_0|)^2 + (|x_0|-1)^2 + n (|x_0|+1)^2
+= -nx^2-x^2+x^2-2|x|+1+n(x^2+2|x|+1) \\
+= 2x(n-1)+n+1 > 0
+\end{align*}
+Where $(x_0-k,y_i)$ refers to the $j$th child of $(x_0,y_0)$ and $k$ is as defined in Definition \ref{bigearthquakedeftree}.
+\end{proof}
+
+\begin{lemma}
+If $BE(f) \neq f$, then $BE^n(f) \neq f$ for all $n > 0$.
+\end{lemma}
+
+\begin{proof}
+We will show that 
+\begin{equation}
+BE(f) \neq f \Rightarrow \Phi(BE(f)) > \Phi(f)
+\end{equation}
+This means that if there is an earthquake that changes things, then $\Phi(f)$ increases, which means that if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or that you never return to your original state.
+
+We can evaluate $\Phi(BE(f)) - \Phi(f)$.
+\begin{align}
+\Phi(BE(f))-\Phi(f) = \sum_{(x,y) \in G_n} BE(f)(x,y)(|x|)^2 - \sum_{(x,y) \in G_n} f(x,y)(|x|)^2 
+\end{align}
+Let $A$ be the set of active locations, or locations with $f(x,y) \geq (n+1)$, which is non-empty by assumption. 
+\begin{align*}
+\Phi(BE(f)) - \Phi(f) =  \sum_{(x,y) \in A}  BE(f(x,y))x^2 + BE(f(x+k,y))(|x+k|)^2 + \\
+\sum_{i} \left( BE(f(x-k,y_i))(|x-k|)^2 \right) -f(x,y)x^2 +f(x+k,y) (|x+k|)^2 +  \sum_{i} \left ( f(x-k,y_i) (|x-k|)^2 \right)  \\
+=\sum_{(x,y) \in A} -(n+1)x^2 + (|x+k|)^2 + n(|x-k|)^2 
+\end{align*}
+Where $(x-k,y_i)$ refers to the $j$th child of $(x,y)$ and $k$ is as defined in Definition \ref{bigearthquakedeftree}. We note that each term in this sum is positive by our proof of the lemma for small earthquakes and so the sum itself must be positive. That is 
+\begin{equation}
+\Phi(BE(f)) - \Phi(f) > 0
+\end{equation}
+
+\end{proof}
+
+\begin{lemma}
+\label{finiteextensiontree}
+Suppose $\sum_{x,y} f(x,y) = S$, and all chips are between the levels $[x_l, x_h]$. Then $BE^m(f)$ and $SE^m(f)$ only contain chips within the range $[x_l - 2S, x_h + 2S]$ for all $m$.
+\end{lemma}
+
+\begin{proof}
+It is obvious that a board with $S$ chips on level $l<0$ will have a lower $X_{min}$ than a board with $S$ chips on level 0, and the analogous statement for $X_{max}$ holds as well. 
+
+Now as a very crude lower bound we know that $S$ chips on a single node at level $l<0$ will have an $X_{min}$ no lower than $l-2S$ as there must be at least one chip on every other level, as chips only move one level at a time. 
+
+If we take any other arrangement of $S$ chips, with $X_{min}=l$ but not all $S$ chips are on a single node. We know that $X_{min}$ for this board is bounded below by $l-2S$. In order to have an $X_{min}$ below this at some point in time it would be possible to have $S$ chips on the same node on level $l$. But this cannot occur because in order to move a chip down a level, one chip must move up a level. Therefore if $X_{min}=x_l$, both $BE^m(f)$ and $SE^m(f)$ do not contain chips below level $x_l -2S$.
+
+An analogous argument shows that if $X_{max}=x_h$, both $BE^m(f)$ and $SE^m(f)$ do not contain chips above level $x_h+2S$.
+\end{proof}
+
+So now we are ready to prove the theorem that all finite boards will reach a stable state. 
+
+\begin{proof}
+(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie between levels  $[x_l, x_h]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $m$ all chips in $BE^m(f)$ and $SE^m(f)$ will lie in $R = [x_l - 2S, x_h + 2S]$
+
+We have restricted the size of the board to be finite, and the number of chips that can be placed on the board to be finite. 
+Thus the total number of ways that the chips can be arranged on the board is finite. 
+In particular there are fewer than $(x_h - x_l+1 + 4 S)$ levels and there are at most 
+\begin{equation}
+n^d,
+\end{equation}
+nodes at each level, where $d= \max(x_h, |x_l|)$. So there are at most 
+\begin{equation}
+N:=(x_h - x_l+1 + 4 S)n^d
+\end{equation}
+nodes that are potentially occupied. Therefore there are at most 
+\begin{equation}
+\binom{N+S-1}{N-1}
+\end{equation}
+possible boards $b \in \mathcal{T}_n^f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < \binom{N+S-1}{N-1}$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
+\end{proof}
+
+
+\end{document}
