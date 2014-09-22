@@ -72,11 +72,11 @@ So
 
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $E^n(f)$ only contains chips within the range $[x_l - \log S, x_h + \log S] \times [y_l-\log S, y_h+\log S]$ for all $n$.
+Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $E^n(f)$ only contains chips within the range $[x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l-\sqrt{S}, y_h+\sqrt{S}]$ for all $n$.
 \end{lemma}
 
 \begin{proof}
-For each chip that moves in one direction, there is another chip that moves in the opposite direction. Therefore, at each time, the number of chips that extend the range can be at most half of what extended before. This means that there are at most $\log S$ extensions on each side. 
+Let $A$ be an initial region of the board
 \end{proof}
 
 So now we are ready to prove the theorem that all finite boards will reach a stable state. 
