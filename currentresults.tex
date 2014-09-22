@@ -30,18 +30,26 @@ Let a \textbf{valid} earthquake be an earthquake that occurs on a square that, a
 For any board with finitely many chips that stabilizes after finitely many earthquakes, the order in which the earthquakes occur does not matter.
 \end{theorem}
 \begin{proof}
-The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final result. This technique will then uniquely (up to a point) specify an order in which the earthquakes will occur, which completes the proof.
+The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
 
 First, we need a lemma in order to do the rearrangements.
 
 \begin{lemma}
-Let $E_1,E_2,E_3,\dots, E_k$ be a sequence of earthquakes, where each $E_i$ specifies the location of a square hit. Then the sequence given by moving some earthquake $E_j$ forward in the sequence to a new spot where $E_j$ is still a valid earthquake gives the same final configuration.
+Let $E_1,E_2,E_3,\dots, E_k$ be a sequence of earthquakes, where each $E_i$ specifies the location of a square hit. Then the sequence given by moving some earthquake $E_j$ forward in the sequence to a new spot where $E_j$ is still a valid earthquake gives the same final configuration, and the sequence of earthquakes is still entirely valid.
 \end{lemma}
 \begin{proof}
 Will need to formalize this, but this is true because addition and subtraction are commutative, and that moving $E_j$ earlier up in the sequence can't hurt another other squares' ability to have an earthquake.
 \end{proof}
 
-Now, given the original configuration of the board, let $A_i$ be the number of chips on square $i$.
+Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least $\lfloor \frac{A_i}{4} \rfloor$ earthquakes or else it will not eventually stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquake events that correspond to square $i$. All these earthquakes can be moved to the front of the sequence. We do this for all squares $i$. By the lemma, the final positioning of the board does not change.
+
+The order of the earthquakes that have been moved to the front of the sequence can be in any order. This holds true because all these earthquakes could have happened with the initial values of the squares (maybe need to explain this better? but i think it's clear...).
+
+Now, find the point in the sequence that begins right after this point. Consider the board at this current point in time, and note that we have new values for all the squares. Then repeat this argument, moving a new set of earthquakes to the front. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
+
+
+
+
 
 \end{proof}
 \end{document}
