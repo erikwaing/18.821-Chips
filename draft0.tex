@@ -29,7 +29,7 @@ That is, the sum of all the chips on the board is finite.
 \section{Standard Board}
 
 \begin{definition} A board is a map from the integer lattice to the non-negative integers.
-That is a Board $f$ is an element of $\mathcal{B} := \text{Hom}(\mathbb{Z} \times \mathbb{Z}, \mathbb{Z}_{\geq 0})$.
+That is a Board $f$ is an element of $\mathcal{B} := \{ f: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}_{\geq 0} | f \text{ is a function }\}$.
 The input values of a board represent the coordinates on the integer lattice that the lower left hand corner of square occupies and the output value refers to the number of chips on that square. 
 A square is an element of $\mathbb{Z} \times \mathbb{Z}$. 
 \end{definition}
@@ -50,14 +50,14 @@ where $[[A]]$ is defined as
 \end{definition}
 
 \begin{definition}
- We define the small earthquake operator as a map from the set of all boards to the set of all boards and write $SE: \mathcal{B} \rightarrow \mathcal{B}$.
-It selects one square $(x,y)$ with $f(x,y) \geq 4$ and transforms it and all of its neighbors with the following rule: 
+ We define the small earthquake operator as a map from the set of all boards and locations to the set of all boards and write $SE: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$.
+If $f(x,y) \leq 4$, then $SE(f, (x,y)) = f$, otherwise,  
 \begin{align*}
-SE( f(x,y)) = f(x,y)-4 \\
-SE( f(x+1,y)) = f(x+1,y)+1 \\
-SE( f(x-1,y)) = f(x-1,y)+1 \\
-SE( f(x,y+1)) = f(x,y+1)+1 \\
-SE( f(x,y-1)) = f(x,y-1)+1,
+SE( f(x,y), (x,y)) = f(x,y)-4 \\
+SE( f(x+1,y), (x,y)) = f(x+1,y)+1 \\
+SE( f(x-1,y), (x,y)) = f(x-1,y)+1 \\
+SE( f(x,y+1), (x,y)) = f(x,y+1)+1 \\
+SE( f(x,y-1), (x,y)) = f(x,y-1)+1,
 \end{align*}
 and leaves all other squares unchanged.
 \end{definition}
@@ -90,7 +90,7 @@ If the initial board has a finite number of chips, there exists an $N$ and $M$ s
 
 We will first show that finite boards cannot return to a previous state. We will then show that for a given finite board there is a maximum nunmber of states that a board can occupy. This shows that all finite boards 
 
-So a restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ and $M$ such that for all $m \in \mathbb{Z}$, $BE^N(f) = BE^{N+m}(f)$ and for all $k \in \mathbb{Z}$, $SE^{M}(f) = SE^{M+k}(f)$
+So a restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ and $M$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $BE^N(f) = BE^{N+m}(f)$ and for all $k \in \mathbb{Z}_{\geq 0}$, $SE^{M}(f) = SE^{M+k}(f)$
 
 \begin{lemma}
 If $BE(f) \neq f$, then $BE^n(f) \neq f$ for all $n > 0$.
@@ -141,19 +141,21 @@ And because at least two of the neighbors of $(x_0, y_0)$ are one unit farther f
 
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $BE^n(f)$ and $SE^n(f)$ only contain chips within the range $[x_l - \log S, x_h + \log S] \times [y_l-\log S, y_h+\log S]$ for all $n$.
+Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $BE^n(f)$ and $SE^n(f)$ only contain chips within the range $[x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l-\sqrt{S}, y_h+\sqrt{S}]$ for all $n$.
 \end{lemma}
 
 \begin{proof}
-For each chip that moves in one direction, there is another chip that moves in the opposite direction. Therefore, at each time, the number of chips that extend the range can be at most half of what extended before. This means that there are at most $\log S$ extensions on each side. 
+The most compact stable state of a board with $S$ chips is to have $3$ chips on each square adjacent to each other. This happens in a square $\sqrt{S/3} \times \sqrt{S/3}$. Similarly, a connected component of chips can only extend by a certain amount, where there are no two 0s adjacent to each other. This means that the most spread board which started with a connected component of $S$ chips can be $2\sqrt{S} \times 2\sqrt{S}$. 
+
+If we do this for each initial connected component and take the total area of the board, we get the desired bound.
 \end{proof}
 
 So now we are ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
-(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie within the locations $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that all $E^n(f)$ will lie in $R = [x_l - \log S, x_h + \log S] \times [y_l - \log S, y_h + \log S]$. 
+(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie within the locations $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that all $E^n(f)$ will lie in $R = [x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l - \sqrt{S}, y_h + \sqrt{S}]$. 
 
-There exists less than $(x_h - x_l + 2\log S)(y_h - y_l + 2\log S)S$ possible boards $b \in \mathcal{B}$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < (x_h - x_l + 2\log S)(y_h - y_l + 2\log S)S$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
+There exists less than $(x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ possible boards $b \in \mathcal{B}$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < (x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
 \end{proof}
 
 
