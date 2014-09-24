@@ -403,4 +403,87 @@ Now, find the point in the sequence that begins right after this point. Consider
 
 \end{proof}
 
+\section{Computing with Chips}
+
+In this section, we show how we can compute different boolean functions with chips. We will show how we can build circuits and prove some impossibility results for certain circuits. This might seem similar to computation with Game of Life; however, we note that these two are inherently different since Chips will always terminate with a finite board, whereas Game of Life might not.
+
+\subsection{Model of Computation}
+
+Our model of computation is as follows: we assume a finite board with finitely many chips. The inputs are designated by each two squares, one apart one is the ``clock" square and other the bit square. Likewise, the outputs each have a ``clock" square and a bit square. The ``clock" squares are set the value 4 and the bit squres are set to 4 if they are 1 and 0 otherwise. A computation is done by a series of earthquakes, when an output has the clock square active, then the bit square is read, and that output bit is considered read. 
+
+\subsection{Example}
+
+A simple example is given by a board that computes the identity.
+
+\[ \begin{array}{cccccc} 0 & 0 & 0 & 0 & 0 & 0 \\
+				     4_c & 3 & 3 & 3 & 3 & 3_e \\
+				     0 & 0 & 0 & 0 & 0 & 0 \\
+				     i  & 3 & 3 & 3 & 3 & 3_o \\
+				     0 & 0 & 0 & 0 & 0 & 0 \end{array} \]
+Where the subscript $c$ indicates the clock, the subscript $e$ indicates the output clock square. $i$ indicates the bit square, and $o$ indicates the output bit. 
+
+One can see that $e$ will become active after 5 earthquakes since it will take that many earthquakes for $c$ to reach $e$. Also, if $i$ is initially inactive, then $o$ will be inactive, and if $i$ is active, then $o$ will be active. Therefore, we can compute the identity. 
+
+This circuit also shows how to make a ``wire" in the circuit. We will represent a wire as two parralel arrows, one containing the clock path and the other carrying the input. 
+
+\subsection{Turner}
+
+Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $e$ is the output clock and $o$ is the output bit.
+
+\[ \begin{array}{cccccc} 0 & 0 & e & 0 & o \\
+				     0 & 3 & 2 & 0 & 3 \\
+			            0 & 2 & 3 & 0 & 3 \\
+				    0 & 3 & 2 & 0 & 3 \\
+				    0 & 2 & 3 & 0 & 3 \\
+				    c & 3 & 3 & 0 & 3 \\
+				    0 & 0 & 0 & 0 & 3 \\
+				    i & 3 & 3 & 3 & 3 \end{array} \]	
+Since the clock snakes along the path while $i$ takes the shorter path. 
+Likewise, we can perform a clockwise path by making $i$ snakes while the clock takes a straight path. 
+
+\subsection{Synchronize}
+
+We can synchronize the inputs so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
+\[ \begin{array}{cccccccc} c & 3 & 3 & 3 & 3 & 3 & 3 & 0 \\
+					 0 & 0 & 0 & 0 & 3 & 0 & 3 & 0 \\
+					 i  & 3 & 3 & 3 & 1 & 3 & 3 & 3 \\
+					 0 & 0 & 0 & 0 & 3 & 0 & 0 & 3 \\
+					 0 & 0 & 0 & 0 & o & 0 & e & 3 \end{array} \]
+Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
+
+\subsection{Boolean circuits}
+
+Now we can show how to compute some basic boolean functions and since we have turns and synchronizers, we can assume that we have synchronized the inputs already. The following can compute the AND of two inputs. 
+
+\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
+					   &    & 3   & 2 &  3    &    &  \\
+					   &    &    & 3 &    & 3 & c_2 \\
+					o & 3 & 3 & 2 & 3 & 2 & 	    \\
+					   &    &    &    &    & 3 & i_2 \end{array} \]
+Where we can make the $c_1$ and $c_2$ snake around before hand to guarantee that they are synchronized, and then we can make $c_1$ snake around so that it becomes the clock of the output. So in this case, $o = i_1$ AND $i_2$.
+
+Similarly, we can compute the OR of two circuits with a very simple modification:
+\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
+					   &    & 3   & 2 &  3    &    &  \\
+					   &    &    & 3 &    & 3 & c_2 \\
+					o & 3 & 3 & 3 & 3 & 2 & 	    \\
+					   &    &    &    &    & 3 & i_2 \end{array} \]
+And we can do a similar set up to synchronize the clocks. 
+
+So currently, we can compute any boolean circuit which can be drawn in a planar graph with only ANDs and ORs. So the question is whether we can compute the NOT? We argue that this is not possible. 
+
+\begin{theorem}
+There does not exists any board configuration which computes the NOT operator in the above model of computation.
+\end{theorem}
+
+\begin{proof}
+Suppose we have a board configuration $B$ with input squares $c$, $i$ and output squares $e, o$ that computes the NOT function. Then we can make another board $B'$ that synchronizes the final clock with the input so that we do not need to worry about timing of the clock. That is, we can guarantee that if $o$ is active, then $o$ is active at the same time $e$ is active.
+
+Now lets make $B'$ an infinite board by putting 0s on the sides. So we have a finite board with finitely many chips. Let $S_{c_0i_0}$ be the set of squares which were active (had an earthquake affect them) during the execution of $B$ with the input value $i = i_0$ and $c = c_0$. 
+
+The first claim to make is that $S_{c_0i_0} \subset S_{c_1i_1}$ if $c_0 \leq c_1$ and $i_0 \leq i_1$. This is clearly true since the order of redistribution does not matter. In fact, we can do the earthquakes by first doing the earthquakes on $c$ and $i$ until the value decreases past $c_0$ and $i_0$, then simulate the computation of $c = c_0$ and $i = i_0$ with small earthquakes.
+
+However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{11}$. Therefore, computing NOT with a board is not possible.
+\end{proof}
+
 \end{document}
