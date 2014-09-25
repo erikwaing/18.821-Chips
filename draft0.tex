@@ -13,6 +13,7 @@
 %\usepackage{cite}
 \usepackage{hyperref}
 \usepackage{url}
+\setlength{\parindent}{0cm}
 \urlstyle{same}
 \newcommand{\keywords}[1]{\par\addvspace\baselineskip
 \noindent\keywordname\enspace\ignorespaces#1}
@@ -27,7 +28,7 @@
 \def\endproof{\hspace*{\fill}$\Box$\realendproof}
 
 
-\begin{document}         
+\begin{document}
 
 \title{Computing with an Angry Poker Player}
 \titlerunning{Computing with an Angry Poker Player}
@@ -46,20 +47,20 @@
 
 \section{Introduction}
 
-Written by Fermi Ma, edited by Erik Waingarten and Perry Kleinhenz.
+\emph{Written by Fermi Ma, edited by Erik Waingarten and Perry Kleinhenz.}\\
 
 In this paper, we investigate the following problem set up:
 
 \vbox{
 \noindent
 \begin{quote}
-Each square of an infinite chess board contains some nonnegative number of poker chips. An earthquake hits one square that has at least four chips and redistributes them so that one chip moves in each of the four cardinal directions. 
+Each square of an infinite chess board contains some nonnegative number of poker chips. An earthquake hits one square that has at least four chips and redistributes them so that one chip moves in each of the four cardinal directions. Does this process reach a stable state (with fewer than four chips on every square)? Is it independent of the order of redistribution? What can be said about the steady state?
 \end{quote}
 }
-We also consider extensions of this problem set up where the earthquake hits all squares on the board at once. We refer to the former type of earthquake as $\textbf{local earthquakes}$ and earthquakes that hit the entire board as $\textbf{global earthquakes}$.
-\section{Standard Board}
+We also consider extensions of this problem set up where the earthquake hits all squares on the board at once. We refer to the former type of earthquake as $\textbf{local earthquakes}$ and earthquakes that hit the entire board as $\textbf{global earthquakes}$. 
+\section{Definitions and Notation}
 
-Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz
+\emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}\\
 
 \begin{definition} A board is a map from the integer lattice to the non-negative integers.
 That is a Board $f$ is an element of $\mathcal{B} := \{ f: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}_{\geq 0} | f \text{ is a function }\}$.
@@ -67,10 +68,10 @@ The input values of a board represent the coordinates on the integer lattice tha
 A square is an element of $\mathbb{Z} \times \mathbb{Z}$. 
 \end{definition}
 
-\begin{definition} We define the big earthquake operator as a map from the set of all boards to the set of all boards and write $BE: \mathcal{B} \rightarrow \mathcal{B}$. 
+\begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
 It transforms all of the squares on the board with the following rule.
 \begin{equation}
-BE(f(x,y)) = f(x,y) - 4[[f(x,y) \geq 4]] + [[f(x-1,y) \geq 4]] + [[f(x+1,y) \geq 4]] + [[f(x,y-1) \geq 4]] + [[f(x,y+1) \geq 4]],
+GE(f(x,y)) = f(x,y) - 4[[f(x,y) \geq 4]] + [[f(x-1,y) \geq 4]] + [[f(x+1,y) \geq 4]] + [[f(x,y-1) \geq 4]] + [[f(x,y+1) \geq 4]],
 \end{equation}
 where $[[A]]$ is defined as 
 \begin{equation}
@@ -83,14 +84,14 @@ where $[[A]]$ is defined as
 \end{definition}
 
 \begin{definition}
- We define the small earthquake operator as a map from the set of all boards and locations to the set of all boards and write $SE: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$.
-If $f(x,y) \leq 4$, then $SE(f, (x,y)) = f$, otherwise,  
+ We define the local earthquake operator as a map from the set of all boards and locations to the set of all boards and write $LE: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$.
+If $f(x,y) \leq 4$, then $LE(f, (x,y)) = f$, otherwise,  
 \begin{align*}
-SE( f(x,y), (x,y)) = f(x,y)-4 \\
-SE( f(x+1,y), (x,y)) = f(x+1,y)+1 \\
-SE( f(x-1,y), (x,y)) = f(x-1,y)+1 \\
-SE( f(x,y+1), (x,y)) = f(x,y+1)+1 \\
-SE( f(x,y-1), (x,y)) = f(x,y-1)+1,
+LE( f(x,y), (x,y)) = f(x,y)-4 \\
+LE( f(x+1,y), (x,y)) = f(x+1,y)+1 \\
+LE( f(x-1,y), (x,y)) = f(x-1,y)+1 \\
+LE( f(x,y+1), (x,y)) = f(x,y+1)+1 \\
+LE( f(x,y-1), (x,y)) = f(x,y-1)+1,
 \end{align*}
 and leaves all other squares unchanged.
 \end{definition}
@@ -116,34 +117,38 @@ n(x,y) = \{ (x+1, y), (x-1, y), (x, y-1), (x, y+1) \}
 This function takes in a square and returns its neighbors. 
 \end{definition}
 
+\section{Stability of Finite Boards}
+\emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
+
 \begin{theorem}
 \label{finitestability}
-If the initial board has a finite number of chips, there exists an $N$ and $M$ such that after $N$ big earthquakes or $M$ small earthquakes the resultant board will be stable.
+If the initial board has a finite number of chips, there exists an $N$ and $M$ such that after $N$ global earthquakes or $M$ local earthquakes the resultant board will be stable.
 \end{theorem}
 
 We will first show that finite boards cannot return to a previous state. We will then show that for a given finite board there is a maximum nunmber of states that a board can occupy. This shows that all finite boards 
 
-So a restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ and $M$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $BE^N(f) = BE^{N+m}(f)$ and for all $k \in \mathbb{Z}_{\geq 0}$, $SE^{M}(f) = SE^{M+k}(f)$
+So a restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ and $M$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $GE^N(f) = GE^{N+m}(f)$ and for all $k \in \mathbb{Z}_{\geq 0}$, $LE^{M}(f) = LE^{M+k}(f)$
 
+\subsection{A Potential Function}
 \begin{lemma}
-If $BE(f) \neq f$, then $BE^n(f) \neq f$ for all $n > 0$.
+If $GE(f) \neq f$, then $GE^n(f) \neq f$ for all $n > 0$.
 \end{lemma}
 
 \begin{proof}
 Let $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ be the following function
 \[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2 \]
 Note that this is well-defined since the boards contain a finite number of chips. We will show that 
-\[ BE(f) \neq f \Rightarrow \Phi(BE(f)) > \Phi(f) \]
+\[ GE(f) \neq f \Rightarrow \Phi(GE(f)) > \Phi(f) \]
 This means that if there is an earthquake that changes things, then $\Phi(f)$ increases, which means that if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or that you never return to your original state.
 
-We can evaluate $\Phi(BE(f)) - \Phi(f)$.
-\[ \Phi(BE(f)) = \sum_{x,y} BE(f(x,y)) (|x|+|y|)^2 \]
+We can evaluate $\Phi(GE(f)) - \Phi(f)$.
+\[ \Phi(GE(f)) = \sum_{x,y} GE(f(x,y)) (|x|+|y|)^2 \]
 \[ = \sum_{x,y} \left(f(x,y) + \sum_{l \in n(x,y)} [[f(t) \geq 4]] - 4[[f(x,y) \geq 4]]\right) (|x|+|y|)^2 \]
 Suppose location $f(x,y) \geq 4$, then the number of chips in location $(x,y)$ will have decreased after applying $E$. For each decrease in the number of chips atlocation $(x,y)$ of $4$, there is an increase in its four neighbors neighbors by $1$. 
 
 Let $A$ be the set of active locations, or locations which $f(x,y) \geq 4$, which is non-empty by assumption. 
 So
-\[ \Phi(BE(f)) - \Phi(f) \geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
+\[ \Phi(GE(f)) - \Phi(f) \geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
 \[ \geq \sum_{(x,y) \in A} \begin{array}{cccccc} -4x^2 & -4y^2 & -8xy & & &\\
 									   +2x^2 & +2y^2 & +4xy & +2x& +2y &+ 2\\
 									   +2x^2 & +2y^2 & +4xy & -2x& -2y  & +2 \end{array} \]
@@ -151,17 +156,17 @@ So
 \end{proof}
 
 \begin{lemma}
-If $SE(f) \neq f$, then $SE^n(f) \neq f$ for all $n > 0$.
+If $LE(f) \neq f$, then $LE^n(f) \neq f$ for all $n > 0$.
 \end{lemma}
-Our proof of this lemma is essentiall the same as the preceeding one. We construct a potential function and show that if a small earthquake acts nontrivially on a board then the value of the potential function increases. 
+Our proof of this lemma is essentiall the same as the preceeding one. We construct a potential function and show that if a local earthquake acts nontrivially on a board then the value of the potential function increases. 
 
 \begin{proof}
 We use the same definition for $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ 
 \[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2, \]
-and evaluate $\Phi(SE(f)) - \Phi(f)$. Suppose $SE$ effected square $(x_0,y_0)$ and its neighbors, then
+and evaluate $\Phi(LE(f)) - \Phi(f)$. Suppose $LE$ effected square $(x_0,y_0)$ and its neighbors, then
 \begin{align}
-\Phi(SE(f)) - \Phi(f) =\sum_{x,y} SE(f(x,y))(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
-= SE(f(x_0,y_0))(|x_0|+|y_0|)^2 + \sum_{(x,y) \in n(x_0,y_0)} SE(f(x,y))(|x|+|y|)^2 \\- f(x_0,y_0)(|x_0|+|y_0|)^2 + \sum_{(x,y) \in n(x_0,y_0)} f(x,y)(|x|+|y|)^2 \\
+\Phi(LE(f)) - \Phi(f) =\sum_{x,y} LE(f(x,y))(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
+= LE(f(x_0,y_0))(|x_0|+|y_0|)^2 + \sum_{(x,y) \in n(x_0,y_0)} LE(f(x,y))(|x|+|y|)^2 \\- f(x_0,y_0)(|x_0|+|y_0|)^2 + \sum_{(x,y) \in n(x_0,y_0)} f(x,y)(|x|+|y|)^2 \\
 = 4(|x_0| + |y_0|)^2 +\sum_{(x,y) \in n(x_0, y_0)} (|x| + |y|)^2
 \end{align}
 And because at least two of the neighbors of $(x_0, y_0)$ are one unit farther from the origin than $(x_0, y_0)$ and at most two of the neighbors are one unit closer, and $(|x_0|+|y_0| +1)^2 > (|x_0|+|y_0| - 1)^2$, we can see,
@@ -171,10 +176,10 @@ And because at least two of the neighbors of $(x_0, y_0)$ are one unit farther f
 \end{align}
 \end{proof}
 
-
+\subsection{A Size Bound}
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $BE^n(f)$ and $SE^n(f)$ only contain chips within the range $[x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l-\sqrt{S}, y_h+\sqrt{S}]$ for all $n$.
+Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $GE^n(f)$ and $LE^n(f)$ only contain chips within the range $[x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l-\sqrt{S}, y_h+\sqrt{S}]$ for all $n$.
 \end{lemma}
 
 \begin{proof}
@@ -183,6 +188,7 @@ The most compact stable state of a board with $S$ chips is to have $3$ chips on 
 If we do this for each initial connected component and take the total area of the board, we get the desired bound.
 \end{proof}
 
+\subsection{Stability Result}
 So now we are ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
@@ -191,8 +197,16 @@ So now we are ready to prove the theorem that all finite boards will reach a sta
 There exists less than $(x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ possible boards $b \in \mathcal{B}$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < (x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
 \end{proof}
 
+\section{Acyclicity of Infinite Boards}
 
-\section{$n$-Trees}
+\emph{written by Fermi Ma, edited by Erik Waingarten and Perry Kleinhenz.}\\
+
+It turns out that a potential function argument can also show that infinite boards with a bounded number of chips on each square can never cycle.
+
+
+\section{Board Variants: $n$-Trees}
+\emph{written by Perry Kleinhenz, edited by Fermi Ma and Erik Waingarten.}\\
+
 Consider a semi-infinite $n$-tree. That is the graph with a parent node which has $n$ unique children. Those children each have $n$ unique children and so on. 
 
 We can join two semi infinite $n$-trees by an edge connecting their parent nodes. This forms a graph where every vertex has $n+1$ neighbors. We would like to adapt our description of chips and earthquakes to this graph. 
@@ -219,10 +233,10 @@ We write $\mathcal{T}_n$ to refer to the set of all joined $n$-tree's
 
 \begin{definition}
 \label{bigearthquakedeftree}
-We define the big earthquake operator as  as a map from the set of all $n$ trees to the set of all $n$ trees and write $BE_T: \mathcal{T}_n \rightarrow \mathcal{T}_n$. 
+We define the global earthquake operator as  as a map from the set of all $n$ trees to the set of all $n$ trees and write $GE_T: \mathcal{T}_n \rightarrow \mathcal{T}_n$. 
 It transforms all of the nodes on the tree with the following rule.
 \begin{equation}
-BE_T(f(x,y)) = f(x,y) - (n+1)[[f(x,y) \geq n+1]] + [[f(x-k,y_0) \geq n+1]] +  \sum_{i=1}^{n} [[f(x-k,y_i) \geq n+1]] 
+GE_T(f(x,y)) = f(x,y) - (n+1)[[f(x,y) \geq n+1]] + [[f(x-k,y_0) \geq n+1]] +  \sum_{i=1}^{n} [[f(x-k,y_i) \geq n+1]] 
 \end{equation} 
 where $k$ is defined as 
 \begin{equation}
@@ -242,12 +256,12 @@ and $(x-k, y_j)$ refers to the $j$th child of $(x,y)$ and $[[A]]$ is defined as
 \end{definition}
 
 \begin{definition}
- We define the small earthquake operator as a map from the set of all $n$-trees to the set of all $n$-trees and write $SE_T: \mathcal{T}_n \rightarrow \mathcal{T}_n$.
+ We define the local earthquake operator as a map from the set of all $n$-trees to the set of all $n$-trees and write $LE_T: \mathcal{T}_n \rightarrow \mathcal{T}_n$.
 It selects one valid node $(x,y)$ with $f(x,y) \geq n+1$ and transforms it and all of its neighbors with the following rule: 
 \begin{align*}
-SE_T( f( x, y ) ) = f( x , y )-n-1 \\
-SE_T( f( x + k, y)) = f( x + k, y )+1 \\
-SE_T( f(x-k, y_i) ) = f(x-k, y_j )+1 \\
+LE_T( f( x, y ) ) = f( x , y )-n-1 \\
+LE_T( f( x + k, y)) = f( x + k, y )+1 \\
+LE_T( f(x-k, y_i) ) = f(x-k, y_j )+1 \\
 \end{align*}
 where $k$ is as defined above and $(x-k, y_j)$ refers to the $j$th child of $(x,y)$
 and leaves all other squares unchanged.
@@ -277,24 +291,24 @@ Note that this is well defined for trees which contain a finite number of chips.
 \end{definition} 
 
 \begin{lemma}
-If $SE_T(f) \neq f$, then $SE_T^n(f) \neq f$ for all $n > 0$.
+If $LE_T(f) \neq f$, then $LE_T^n(f) \neq f$ for all $n > 0$.
 \end{lemma}
 
 \begin{proof}
-We will show that  if $SE$ acts on a board nontrivially then $\Phi(SE(f))$ will be strictly larger. That is  
+We will show that  if $LE$ acts on a board nontrivially then $\Phi(LE(f))$ will be strictly larger. That is  
 \begin{equation}
-SE(f) \neq f \Rightarrow \Phi(SE(f)) > \Phi(f)
+LE(f) \neq f \Rightarrow \Phi(LE(f)) > \Phi(f)
 \end{equation}
 
 
-We can evaluate $\Phi(SE(f)) - \Phi(f)$.
+We can evaluate $\Phi(LE(f)) - \Phi(f)$.
 \begin{align}
-\Phi(SE_T(f))-\Phi(f) = \sum_{(x,y) \in G_n} SE_T(f)(x,y)(x)^2 - \sum_{(x,y) \in G_n} f(x,y)(x)^2 
+\Phi(LE_T(f))-\Phi(f) = \sum_{(x,y) \in G_n} LE_T(f)(x,y)(x)^2 - \sum_{(x,y) \in G_n} f(x,y)(x)^2 
 \end{align}
 Only one node call it $(x_0,y_0)$ and its neighbors are affected. Therefore the above expression simplifies to
 \begin{align*}
-\Phi(SE_T(f)-\Phi(f) = SE_T( f(x_0,y_0) )* (x_0)^2 + SE_T( (f(x_0+k, y_0) )* (|x_0+k|)^2 \\
-+ \sum_{i} SE_T( f(x_0-k, y_i) ) * (|x_0-k|)^2 \\
+\Phi(LE_T(f)-\Phi(f) = LE_T( f(x_0,y_0) )* (x_0)^2 + LE_T( (f(x_0+k, y_0) )* (|x_0+k|)^2 \\
++ \sum_{i} LE_T( f(x_0-k, y_i) ) * (|x_0-k|)^2 \\
 = -(n+1)*(|x_0|)^2 + (|x_0+k)^2 + n (|x_0-k|)^2 \\
 \geq-(n+1)*(|x_0|)^2 + (|x_0|-1)^2 + n (|x_0|+1)^2
 = -nx^2-x^2+x^2-2|x|+1+n(x^2+2|x|+1) \\
@@ -304,36 +318,36 @@ Where $(x_0-k,y_i)$ refers to the $j$th child of $(x_0,y_0)$ and $k$ is as defin
 \end{proof}
 
 \begin{lemma}
-If $BE_T(f) \neq f$, then $BE_T^n(f) \neq f$ for all $n > 0$.
+If $GE_T(f) \neq f$, then $GE_T^n(f) \neq f$ for all $n > 0$.
 \end{lemma}
 
 \begin{proof}
 We will show that 
 \begin{equation}
-BE_T(f) \neq f \Rightarrow \Phi(BE_T(f)) > \Phi(f)
+GE_T(f) \neq f \Rightarrow \Phi(GE_T(f)) > \Phi(f)
 \end{equation}
 This means that if there is an earthquake that changes things, then $\Phi(f)$ increases, which means that if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or that you never return to your original state.
 
-We can evaluate $\Phi(BE_T(f)) - \Phi(f)$.
+We can evaluate $\Phi(GE_T(f)) - \Phi(f)$.
 \begin{align}
-\Phi(BE_T(f))-\Phi(f) = \sum_{(x,y) \in G_n} BE_T(f)(x,y)(|x|)^2 - \sum_{(x,y) \in G_n} f(x,y)(|x|)^2 
+\Phi(GE_T(f))-\Phi(f) = \sum_{(x,y) \in G_n} GE_T(f)(x,y)(|x|)^2 - \sum_{(x,y) \in G_n} f(x,y)(|x|)^2 
 \end{align}
 Let $A$ be the set of active locations, or locations with $f(x,y) \geq (n+1)$, which is non-empty by assumption. 
 \begin{align*}
-\Phi(BE_T(f)) - \Phi(f) =  \sum_{(x,y) \in A}  BE_T(f(x,y))x^2 + BE_T(f(x+k,y))(|x+k|)^2 + \\
-\sum_{i} \left( BE_T(f(x-k,y_i))(|x-k|)^2 \right) -f(x,y)x^2 +f(x+k,y) (|x+k|)^2 +  \sum_{i} \left ( f(x-k,y_i) (|x-k|)^2 \right)  \\
+\Phi(GE_T(f)) - \Phi(f) =  \sum_{(x,y) \in A}  GE_T(f(x,y))x^2 + GE_T(f(x+k,y))(|x+k|)^2 + \\
+\sum_{i} \left( GE_T(f(x-k,y_i))(|x-k|)^2 \right) -f(x,y)x^2 +f(x+k,y) (|x+k|)^2 +  \sum_{i} \left ( f(x-k,y_i) (|x-k|)^2 \right)  \\
 =\sum_{(x,y) \in A} -(n+1)x^2 + (|x+k|)^2 + n(|x-k|)^2 
 \end{align*}
-Where $(x-k,y_i)$ refers to the $j$th child of $(x,y)$ and $k$ is as defined in Definition \ref{bigearthquakedeftree}. We note that each term in this sum is positive by our proof of the lemma for small earthquakes and so the sum itself must be positive. That is 
+Where $(x-k,y_i)$ refers to the $j$th child of $(x,y)$ and $k$ is as defined in Definition \ref{bigearthquakedeftree}. We note that each term in this sum is positive by our proof of the lemma for local earthquakes and so the sum itself must be positive. That is 
 \begin{equation}
-\Phi(BE_T(f)) - \Phi(f) > 0
+\Phi(GE_T(f)) - \Phi(f) > 0
 \end{equation}
 
 \end{proof}
 
 \begin{lemma}
 \label{finiteextensiontree}
-Suppose $\sum_{x,y} f(x,y) = S$, and all chips are between the levels $[x_l, x_h]$. Then $BE_T^m(f)$ and $SE_T^m(f)$ only contain chips within the range $[x_l - 2S, x_h + 2S]$ for all $m$.
+Suppose $\sum_{x,y} f(x,y) = S$, and all chips are between the levels $[x_l, x_h]$. Then $GE_T^m(f)$ and $LE_T^m(f)$ only contain chips within the range $[x_l - 2S, x_h + 2S]$ for all $m$.
 \end{lemma}
 
 \begin{proof}
@@ -341,15 +355,15 @@ It is obvious that a board with $S$ chips on level $l<0$ will have a lower $X_{m
 
 Now as a very crude lower bound we know that $S$ chips on a single node at level $l<0$ will have an $X_{min}$ no lower than $l-2S$ as there must be at least one chip on every other level, as chips only move one level at a time. 
 
-If we take any other arrangement of $S$ chips, with $X_{min}=l$ but not all $S$ chips are on a single node. We know that $X_{min}$ for this board is bounded below by $l-2S$. In order to have an $X_{min}$ below this at some point in time it would be possible to have $S$ chips on the same node on level $l$. But this cannot occur because in order to move a chip down a level, one chip must move up a level. Therefore if $X_{min}=x_l$, both $BE_T^m(f)$ and $SE_T^m(f)$ do not contain chips below level $x_l -2S$.
+If we take any other arrangement of $S$ chips, with $X_{min}=l$ but not all $S$ chips are on a single node. We know that $X_{min}$ for this board is bounded below by $l-2S$. In order to have an $X_{min}$ below this at some point in time it would be possible to have $S$ chips on the same node on level $l$. But this cannot occur because in order to move a chip down a level, one chip must move up a level. Therefore if $X_{min}=x_l$, both $GE_T^m(f)$ and $LE_T^m(f)$ do not contain chips below level $x_l -2S$.
 
-An analogous argument shows that if $X_{max}=x_h$, both $BE_T^m(f)$ and $SE_T^m(f)$ do not contain chips above level $x_h+2S$.
+An analogous argument shows that if $X_{max}=x_h$, both $GE_T^m(f)$ and $LE_T^m(f)$ do not contain chips above level $x_h+2S$.
 \end{proof}
 
 So now we are ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
-(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie between levels  $[x_l, x_h]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $m$ all chips in $BE_T^m(f)$ and $SE_T^m(f)$ will lie in $R = [x_l - 2S, x_h + 2S]$
+(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie between levels  $[x_l, x_h]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $m$ all chips in $GE_T^m(f)$ and $LE_T^m(f)$ will lie in $R = [x_l - 2S, x_h + 2S]$
 
 We have restricted the size of the board to be finite, and the number of chips that can be placed on the board to be finite. 
 Thus the total number of ways that the chips can be arranged on the board is finite. 
@@ -373,13 +387,13 @@ possible boards $b \in \mathcal{T}_n^f$ that satisfy this. We know that there ar
 written by Fermi Ma and Perry Kleinhenz, edited by Erik Waingarten.
 
 \begin{definition}
-We define a valid earthquake to be a small earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips.
+We define a valid earthquake to be a local earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips.
 
-We say that a sequence of small earthquakes $SE_1, SE_2, \ldots$ to be a valid sequence of earthquakes if each earthquake is valid.
+We say that a sequence of local earthquakes $LE_1, LE_2, \ldots$ to be a valid sequence of earthquakes if each earthquake is valid.
 \end{definition}
 
 \begin{theorem}
-Let $B$ be an initial board state that becomes a stable board $B_s$ after $N$ small earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $B_s$.
+Let $B$ be an initial board state that becomes a stable board $B_s$ after $N$ local earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $B_s$.
 \end{theorem}
 
 \begin{proof}
@@ -387,48 +401,48 @@ The general idea is that we can recursively specify a sequence of earthquakes th
 
 First, we need a lemma in order to do the rearrangements.
 
-\begin{lemma} Let $SE_1$ and $SE_2$ be small earthquakes. If $SE_1, SE_2$ is a valid sequence and $SE_2$ is a valid earthquake then when before $SE_1$ then $SE_2, SE_1$ is also a valid sequence of earthquakes and $SE_2( SE_1 ( B ) ) = SE_1( SE_2 ( B ) )$
+\begin{lemma} Let $LE_1$ and $LE_2$ be local earthquakes. If $LE_1, LE_2$ is a valid sequence and $LE_2$ is a valid earthquake then when before $LE_1$ then $LE_2, LE_1$ is also a valid sequence of earthquakes and $LE_2( LE_1 ( B ) ) = LE_1( LE_2 ( B ) )$
 \end{lemma}
 \begin{proof}
-Suppose $SE_1$ affects the square $(x_1, y_1)$ and its neighbors, and $SE_2$ affects the square $(x_2, y_2)$ and its neighbors. Suppose  $SE_2, SE_1$ was an invalid sequence, that is $SE_2(B)(x_1, y_1)<4$, but since $SE_1$ is a valid earthquake we know $B(x_1, y_1)\geq 4$. Therefore we must have $B(x_1, y_1)=4$ and $(x_2, y_2)=(x_1,y_1)$. But then $SE_1(B)(x_1, y_1)=3$ which means $SE_1, SE_2$ would not be a valid sequence of earthquakes. Thus $SE_2, SE_1$ is a valid sequence. 
+Suppose $LE_1$ affects the square $(x_1, y_1)$ and its neighbors, and $LE_2$ affects the square $(x_2, y_2)$ and its neighbors. Suppose  $LE_2, LE_1$ was an invalid sequence, that is $LE_2(B)(x_1, y_1)<4$, but since $LE_1$ is a valid earthquake we know $B(x_1, y_1)\geq 4$. Therefore we must have $B(x_1, y_1)=4$ and $(x_2, y_2)=(x_1,y_1)$. But then $LE_1(B)(x_1, y_1)=3$ which means $LE_1, LE_2$ would not be a valid sequence of earthquakes. Thus $LE_2, LE_1$ is a valid sequence. 
 
-Now consider $SE_2( SE_1 ( B ) )(u,v)$ for some $(u,v) \in \mathbb{Z} \times \mathbb{Z}$. Applying the definition of the small earthquake we see that 
+Now consider $LE_2( LE_1 ( B ) )(u,v)$ for some $(u,v) \in \mathbb{Z} \times \mathbb{Z}$. Applying the definition of the local earthquake we see that 
 \begin{align*}
-SE_1 ( B )(u,v) =  B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)]] \\ 
-SE_2 ( SE_1 (B)) (u,v) = SE_1(B)(u,v)  + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] \\
+LE_1 ( B )(u,v) =  B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)]] \\ 
+LE_2 ( LE_1 (B)) (u,v) = LE_1(B)(u,v)  + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] \\
 = B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]]  \\
 = B(u,v) + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
-= SE_2(B)(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
-= SE_1 (SE_2 (B))(u,v) 
+= LE_2(B)(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
+= LE_1 (LE_2 (B))(u,v) 
 \end{align*}
-The critical step in this proof is recognizing that because $SE_1$ and $SE_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
+The critical step in this proof is recognizing that because $LE_1$ and $LE_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
 \end{proof}
 
 
 \begin{lemma}
-Let $SE_1,SE_2,SE_3,\dots, SE_k$ be a sequence of earthquakes, where $SE_i$ hits the square $(x_i, y_i)$. Consider  the sequence given by moving some earthquake $SE_j$ to position $m<j$ in the sequence, such that $SE_j$ is a valid earthquake for all positions between $m$ and $j$. 
+Let $LE_1,LE_2,LE_3,\dots, LE_k$ be a sequence of earthquakes, where $LE_i$ hits the square $(x_i, y_i)$. Consider  the sequence given by moving some earthquake $LE_j$ to position $m<j$ in the sequence, such that $LE_j$ is a valid earthquake for all positions between $m$ and $j$. 
 This sequence is valid and produces the same final board configuration.
 \end{lemma}
 \begin{proof}
 It is sufficient for us to show that the first $j$ earthquakes of each sequences are valid and that the board arrangement will be the same for both sequences after $j$ earthquakes. In fact we can also ignore the first $m-1$ terms, because their order is not changed they will all be valid and the board state will be identical after $m-1$ terms for both sequences. Let us call this board state $B_{m-1}$
 
-Therefore we must show that the sequence $SE_j, SE_m, SE_{m+1}, \ldots, SE_{j-1}$ applied to $B_{m-1}$ is valid and produces the same board as the sequence $SE_m, SE_{m+1}, \ldots, SE_{j-1}, SE_j$ applied to $B_{m-1}$. 
+Therefore we must show that the sequence $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$ applied to $B_{m-1}$ is valid and produces the same board as the sequence $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ applied to $B_{m-1}$. 
 
 We can show this by inducting on the length of the sequence $l=j-m+1$. The base case of $l=2$ is shown in the above lemma. Let us assume the result holds for sequences of length $l=p$ and suppose our sequence has length $l=p+1$. So our sequence is 
 \begin{equation*}
-SE_m, SE_{m+1}, \ldots, SE_{j-1}, SE_j
+LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j
 \end{equation*}
-where $p+1=j-m+1$. Then if we set $B_{m} = SE_{m} (B_{m-1})$ by applying our inductive step we have that the two sequences 
+where $p+1=j-m+1$. Then if we set $B_{m} = LE_{m} (B_{m-1})$ by applying our inductive step we have that the two sequences 
 \begin{align*}
-SE_{m+1}, \ldots, SE_{j-1}, SE_{j} \\ 
-SE_{j}, SE_{m+1}, \ldots,  SE_{j-1} 
+LE_{m+1}, \ldots, LE_{j-1}, LE_{j} \\ 
+LE_{j}, LE_{m+1}, \ldots,  LE_{j-1} 
 \end{align*}
 are both valid and produce the same final board configuration. Now if we consider the board state $B_{m-1}$ by our above Lemma we know that the two sequences 
 \begin{align*}
-SE_{m}, SE_{j} \\
-SE_{j}, SE_{m}
+LE_{m}, LE_{j} \\
+LE_{j}, LE_{m}
 \end{align*}
-are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $SE_j, SE_m, SE_{m+1}, \ldots, SE_{j-1}$  and $SE_m, SE_{m+1}, \ldots, SE_{j-1}, SE_j$ both applied to $B_{m-1}$ are valid and produce the same board. 
+are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$  and $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ both applied to $B_{m-1}$ are valid and produce the same board. 
 \end{proof}
 
 Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least $\lfloor \frac{A_i}{4} \rfloor$ earthquakes or else it will not eventually stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquake events that correspond to square $i$. All these earthquakes can be moved to the front of the sequence. We do this for all squares $i$. By the lemma, the final positioning of the board does not change.
@@ -441,7 +455,7 @@ Now, find the point in the sequence that begins right after this point. Consider
 
 \section{Computing with Chips}
 
-written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz
+\emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}
 
 In this section, we show how we can compute different boolean functions with chips. We will show how we can build circuits and prove some impossibility results for certain circuits. This might seem similar to computation with Game of Life; however, we note that these two are inherently different since Chips will always terminate with a finite board, whereas Game of Life might not.
 
@@ -519,7 +533,7 @@ Suppose we have a board configuration $B$ with input squares $c$, $i$ and output
 
 Now lets make $B'$ an infinite board by putting 0s on the sides. So we have a finite board with finitely many chips. Let $S_{c_0i_0}$ be the set of squares which were active (had an earthquake affect them) during the execution of $B$ with the input value $i = i_0$ and $c = c_0$. 
 
-The first claim to make is that $S_{c_0i_0} \subset S_{c_1i_1}$ if $c_0 \leq c_1$ and $i_0 \leq i_1$. This is clearly true since the order of redistribution does not matter. In fact, we can do the earthquakes by first doing the earthquakes on $c$ and $i$ until the value decreases past $c_0$ and $i_0$, then simulate the computation of $c = c_0$ and $i = i_0$ with small earthquakes.
+The first claim to make is that $S_{c_0i_0} \subset S_{c_1i_1}$ if $c_0 \leq c_1$ and $i_0 \leq i_1$. This is clearly true since the order of redistribution does not matter. In fact, we can do the earthquakes by first doing the earthquakes on $c$ and $i$ until the value decreases past $c_0$ and $i_0$, then simulate the computation of $c = c_0$ and $i = i_0$ with local earthquakes.
 
 However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{11}$. Therefore, computing NOT with a board is not possible.
 \end{proof}
