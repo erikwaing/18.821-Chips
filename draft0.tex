@@ -577,14 +577,14 @@ So solving for $T$ is a solution to a discrete version of the Laplacian. We were
 \caption{Number of global earthquakes until stability}
 \label{fig:growthofT}
 \end{figure}
-By looking at Figure~\ref{fig:growthofT} seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(n)$ seems to be the correct approach, since by experimental evidence, we believe that $T'(n) = \Theta(n\log n)$.
+By looking at Figure~\ref{fig:growthofT} seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(n)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(n) = \Theta(n\log n)$.
 
 \begin{figure}[!ht]
 \centering
 \subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes]{\includegraphics[width=0.4\linewidth]{centerearthquakes}\label{fig:case1}} \qquad
 \subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes divided by $n$]{\includegraphics[width=0.4\linewidth]{centerearthquakesdividedbyn}\label{fig:case2}}
 \caption{Number of local earthquakes in center until stability}
-\label{fig:growthofT}
+\label{fig:growthofT'}
 \end{figure}
 
 \end{document}
