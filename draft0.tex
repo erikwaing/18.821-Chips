@@ -57,10 +57,17 @@ In this paper, we investigate the following problem set up:
 Each square of an infinite chess board contains some nonnegative number of poker chips. An earthquake hits one square that has at least four chips and redistributes them so that one chip moves in each of the four cardinal directions. Does this process reach a stable state (with fewer than four chips on every square)? Is it independent of the order of redistribution? What can be said about the steady state?
 \end{quote}
 }
+<<<<<<< HEAD
 We also consider extensions of this problem set up where the earthquake hits all squares on the board at once. We refer to the former type of earthquake as $\textbf{local earthquakes}$ and earthquakes that hit the entire board as $\textbf{global earthquakes}$. 
 \section{Definitions and Notation}
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}\\
+=======
+We also consider extensions of this problem set up where the earthquake hits all squares on the board at once. We refer to the former type of earthquake as $\textbf{small earthquakes}$ and earthquakes that hit the entire board as $\textbf{big earthquakes}$.
+\section{Standard Board}
+
+Written by Erik Waingarten and Perry Kleinhenz, edited by Fermi Ma
+>>>>>>> 3c0ff89f43d12d793e71858c071194622ad23251
 
 \begin{definition} A board is a map from the integer lattice to the non-negative integers.
 That is a Board $f$ is an element of $\mathcal{B} := \{ f: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}_{\geq 0} | f \text{ is a function }\}$.
@@ -94,6 +101,8 @@ LE( f(x,y+1), (x,y)) = f(x,y+1)+1 \\
 LE( f(x,y-1), (x,y)) = f(x,y-1)+1,
 \end{align*}
 and leaves all other squares unchanged.
+
+We use the notation $SE^n(f, \{(x_i,y_i)\})$ to refer to the application of $SE$ to the board $f$, $n$ times to the squares $(x_1, y_1), \ldots (x_{n}, y_{n})$ respectively. 
 \end{definition}
 
 \begin{definition}
@@ -122,12 +131,12 @@ This function takes in a square and returns its neighbors.
 
 \begin{theorem}
 \label{finitestability}
-If the initial board has a finite number of chips, there exists an $N$ and $M$ such that after $N$ global earthquakes or $M$ local earthquakes the resultant board will be stable.
+If the initial board has a finite number of chips, there exists an $N$ such that after $N$ big earthquakes or $N$ small earthquakes the resultant board will be stable.
 \end{theorem}
 
-We will first show that finite boards cannot return to a previous state. We will then show that for a given finite board there is a maximum nunmber of states that a board can occupy. This shows that all finite boards 
+We will first show that finite boards cannot return to a previous state. We will then show that for a given finite board there is a maximum nunmber of states that a board can occupy. This shows that all finite boards eventually become stable.
 
-So a restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ and $M$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $GE^N(f) = GE^{N+m}(f)$ and for all $k \in \mathbb{Z}_{\geq 0}$, $LE^{M}(f) = LE^{M+k}(f)$
+A restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $BE^N(f) = BE^{N+m}(f)$ and $SE^{M}(f) = SE^{M+k}(f)$
 
 \subsection{A Potential Function}
 \begin{lemma}
@@ -138,41 +147,47 @@ If $GE(f) \neq f$, then $GE^n(f) \neq f$ for all $n > 0$.
 Let $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ be the following function
 \[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2 \]
 Note that this is well-defined since the boards contain a finite number of chips. We will show that 
-\[ GE(f) \neq f \Rightarrow \Phi(GE(f)) > \Phi(f) \]
-This means that if there is an earthquake that changes things, then $\Phi(f)$ increases, which means that if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or that you never return to your original state.
+
+\[ BE(f) \neq f \Rightarrow \Phi(BE(f)) > \Phi(f) \]
+That is if big earthquake changes the state of the board, then $\Phi(f)$ increases, therefore if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or in other words that you never return to your original state.
 
 We can evaluate $\Phi(GE(f)) - \Phi(f)$.
 \[ \Phi(GE(f)) = \sum_{x,y} GE(f(x,y)) (|x|+|y|)^2 \]
 \[ = \sum_{x,y} \left(f(x,y) + \sum_{l \in n(x,y)} [[f(t) \geq 4]] - 4[[f(x,y) \geq 4]]\right) (|x|+|y|)^2 \]
-Suppose location $f(x,y) \geq 4$, then the number of chips in location $(x,y)$ will have decreased after applying $E$. For each decrease in the number of chips atlocation $(x,y)$ of $4$, there is an increase in its four neighbors neighbors by $1$. 
+
+Suppose $f(x_0,y_0) \geq 4$ for some location $(x_0, y_0)$, then the number of chips in location $(x_0,y_0)$ will have decreased by $4$ after applying $BE$. 
+For each decrease in the number of chips at location $(x_0,y_0)$ of $4$, the number of chips at the location $(y,z)$ increases by $1$, for each $(y,z) \in n(x_0,y_0)$.
 
 Let $A$ be the set of active locations, or locations which $f(x,y) \geq 4$, which is non-empty by assumption. 
 So
-\[ \Phi(GE(f)) - \Phi(f) \geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
+\[ \Phi(BE(f)) - \Phi(f) = \sum_{(x,y) \in A} \left((-4)(|x|+|y|)^2 + \sum_{(v,w) \in n(x,y)} (|v| + |w|)^2 \right) \]
+\[\geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
+
 \[ \geq \sum_{(x,y) \in A} \begin{array}{cccccc} -4x^2 & -4y^2 & -8xy & & &\\
 									   +2x^2 & +2y^2 & +4xy & +2x& +2y &+ 2\\
 									   +2x^2 & +2y^2 & +4xy & -2x& -2y  & +2 \end{array} \]
 \[ \geq 4 > 0 \] 
+where the first inequality holds because at most two of the neighbors of $(x,y)$ are one unit closer to the origin then $(x,y)$ and at least two are one unit farther away and $(|x|+|y|+1)^2 > 2(|x|+|y|-1)^2$
 \end{proof}
 
 \begin{lemma}
-If $LE(f) \neq f$, then $LE^n(f) \neq f$ for all $n > 0$.
+If $SE(f, (x_1, y_1)) \neq f$, then $SE^n(f, \{(x_n,y_n)\}) \neq f$ for all $n > 0$ and all sequences $\{(x_n, y_n)\}$.
 \end{lemma}
 Our proof of this lemma is essentiall the same as the preceeding one. We construct a potential function and show that if a local earthquake acts nontrivially on a board then the value of the potential function increases. 
 
 \begin{proof}
 We use the same definition for $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ 
 \[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2, \]
-and evaluate $\Phi(LE(f)) - \Phi(f)$. Suppose $LE$ effected square $(x_0,y_0)$ and its neighbors, then
+and evaluate $\Phi(SE(f, (x_1,y_1))) - \Phi(f)$:
 \begin{align}
-\Phi(LE(f)) - \Phi(f) =\sum_{x,y} LE(f(x,y))(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
-= LE(f(x_0,y_0))(|x_0|+|y_0|)^2 + \sum_{(x,y) \in n(x_0,y_0)} LE(f(x,y))(|x|+|y|)^2 \\- f(x_0,y_0)(|x_0|+|y_0|)^2 + \sum_{(x,y) \in n(x_0,y_0)} f(x,y)(|x|+|y|)^2 \\
-= 4(|x_0| + |y_0|)^2 +\sum_{(x,y) \in n(x_0, y_0)} (|x| + |y|)^2
+\Phi(SE(f), (x_1, y_1)) - \Phi(f) =\sum_{x,y} SE(f(x,y), (x_1, y_1))(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
+= SE(f(x_1,y_1), (x_1, y_1))(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1,y_1)} SE(f(x,y), (x_1, y_1))(|x|+|y|)^2 \\- f(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1, y_1)} f(x,y)(|x|+|y|)^2 \\
+= 4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2
 \end{align}
-And because at least two of the neighbors of $(x_0, y_0)$ are one unit farther from the origin than $(x_0, y_0)$ and at most two of the neighbors are one unit closer, and $(|x_0|+|y_0| +1)^2 > (|x_0|+|y_0| - 1)^2$, we can see,
+And because at least two of the neighbors of $(x_1, y_1)$ are one unit farther from the origin than $(x_1, y_1)$ and at most two of the neighbors are one unit closer, and $(|x_1|+|y_1| +1)^2 > (|x_1|+|y_1| - 1)^2$, we can see,
 \begin{align}
-4(|x_0| + |y_0|)^2 +\sum_{(x,y) \in n(x_0, y_0)} (|x| + |y|)^2  \\ 
-\geq 4(|x_0| + |y_0|)^2 + 2 (|x_0| + |y_0|+1)^2 + 2 (|x_0| + |y_0|-1)^2 = 4 >0
+4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2  \\ 
+\geq 4(|x_1| + |y_1|)^2 + 2 (|x_1| + |y_1|+1)^2 + 2 (|x_1| + |y_1|-1)^2 = 4 >0
 \end{align}
 \end{proof}
 
@@ -192,9 +207,9 @@ If we do this for each initial connected component and take the total area of th
 So now we are ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
-(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie within the locations $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that all $E^n(f)$ will lie in $R = [x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l - \sqrt{S}, y_h + \sqrt{S}]$. 
+(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}_f$, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie within the locations $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that for all $n$ all chips on $SE^n(f)$ and $BE^n(f)$ will lie in $R = [x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l - \sqrt{S}, y_h + \sqrt{S}]$. 
 
-There exists less than $(x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ possible boards $b \in \mathcal{B}$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < (x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
+There exists less than $(x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ possible boards $b \in \mathcal{B}_f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < (x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ such that $SE^N(f) = SE^{N+m}(f)$ and $BE^N(f)=BE^{N+m}$ for all $m \geq 0$.
 \end{proof}
 
 \section{Acyclicity of Infinite Boards}
@@ -207,6 +222,12 @@ It turns out that a potential function argument can also show that infinite boar
 \section{Board Variants: $n$-Trees}
 \emph{written by Perry Kleinhenz, edited by Fermi Ma and Erik Waingarten.}\\
 
+<<<<<<< HEAD
+=======
+\section{$n$-Trees}
+Written by Perry Kleinhenz, edited by Fermi Ma and Erik Waingarten
+
+>>>>>>> 3c0ff89f43d12d793e71858c071194622ad23251
 Consider a semi-infinite $n$-tree. That is the graph with a parent node which has $n$ unique children. Those children each have $n$ unique children and so on. 
 
 We can join two semi infinite $n$-trees by an edge connecting their parent nodes. This forms a graph where every vertex has $n+1$ neighbors. We would like to adapt our description of chips and earthquakes to this graph. 
