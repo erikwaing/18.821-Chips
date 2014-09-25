@@ -121,6 +121,7 @@ This function takes in a square and returns its neighbors.
 \end{definition}
 
 \section{Stability of Finite Boards}
+\label{Stability of Finite Boards}
 \emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
 
 \begin{theorem}
@@ -393,12 +394,14 @@ possible boards $b \in \mathcal{T}_n^f$ that satisfy this. We know that there ar
 
 \section{Order of Redistribution}
 
-written by Fermi Ma and Perry Kleinhenz, edited by Erik Waingarten.
+\emph{written by Fermi Ma and Perry Kleinhenz, edited by Erik Waingarten.}\\
+
+Here, we address the following question posed in the original problem statement: does the order of redistribution matter? As there is no order associated with global earthquakes, this question is naturally restricted to the case of local earthquakes. More specifically, we consider some finite starting board and some sequence of local earthquakes that hit the board until it finally stabilizes (note that our results from Section~\ref{Stability of Finite Boards} imply that such a sequence of earthquakes exist). We will find that the exact sequence of local earthquakes does not matter, and that if we keep hitting the board with local earthquakes anywhere they are allowed to happen, the board will always stabilize to the same final configuration.\\
+
+First, we formalize the notion of earthquakes that are ``allowed to happen".
 
 \begin{definition}
-We define a valid earthquake to be a local earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips.
-
-We say that a sequence of local earthquakes $LE_1, LE_2, \ldots$ to be a valid sequence of earthquakes if each earthquake is valid.
+We define a valid earthquake to be a local earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips. We say that a sequence of local earthquakes $LE_1, LE_2, \ldots$ to be a valid sequence of earthquakes if each earthquake is valid.
 \end{definition}
 
 \begin{theorem}
