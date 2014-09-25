@@ -116,14 +116,14 @@ import Image,ImageDraw
 from random import randint as rint
 import pylab as pl
 
-def drawBoard(board, xrange, yrange, maxValue, recomputeMax=False):
+def drawBoard(board, xrange, yrange, maxValue, recomputeMax=False, showActive=False):
     if recomputeMax:
         maxValue = max(board.values())
     img = Image.new("RGB", (xrange, yrange), "#FFFFFF")
     draw = ImageDraw.Draw(img)
-    dr = 255./(maxValue/3)
-    dg = 255./(maxValue/3)
-    db = 255./(maxValue/3)
+    dr = 255./(maxValue/3. + 0.001)
+    dg = 255./(maxValue/3. + 0.001)
+    db = 255./(maxValue/3. + 0.001)
     for i in range(xrange):
         for j in range(yrange):
             try:
@@ -131,6 +131,8 @@ def drawBoard(board, xrange, yrange, maxValue, recomputeMax=False):
             except KeyError:
                 point = 0
             r, g, b = point*dr, 0, 0
+            if point >= 4 and showActive:
+                r, g, b = 0, 255, 0
             if r > 255:
                 r = 255
                 g = point*dg
@@ -140,15 +142,91 @@ def drawBoard(board, xrange, yrange, maxValue, recomputeMax=False):
             draw.point((i,j), fill=(int(r),int(g),int(b)))
     return img
 
-def showImage(board, xrange, yrange):
+def showImage(board, xrange, yrange, wait=False, showActive=False):
     maxValue = max(board.values())
-    img = drawBoard(board, xrange, yrange, maxValue)
+    img = drawBoard(board, xrange, yrange, maxValue, showActive=showActive)
     img = pl.imshow(img)
+    pl.pause(0.02)
+    pl.draw()
     changed = True
+    raw_input()
     while changed:
         changed = act(board)
-        img = drawBoard(board, xrange, yrange, maxValue, True)
+        img = drawBoard(board, xrange, yrange, maxValue, True, showActive=showActive)
         pl.imshow(img)
         pl.pause(0.02)
         pl.draw()
+        if wait:
+            raw_input()
     print "Done"
+
+def wire(x,y):
+    if y == 0:
+        return 3
+    else: 
+        return 0
+
+def showWireActing():
+    board = {}
+    for x in range(-10, 10):
+        for y in range(-5, 5):
+            board[(x,y)] = wire(x,y)
+    board[(-10, 0)] = 4
+    showImage(board, 22, 10, True, True)
+
+def sync(x,y):
+    if (x,y) == (0, -2):
+        return 3
+    if (x,y) == (-9, 2):
+        return 4
+    if (x,y) == (-4, 0):
+        return 4
+    if (x,y) == (0,0):
+        return 1
+    if x == 4 and y < 1 and y >= -2:
+        return 3
+    if (x,y) == (0, -2) or (x,y) == (2,-2):
+        return 3
+    if (x,y) == (0, 1) or (x,y) == (2, 1):
+        return 3
+    if (x,y) == (0, -1):
+        return 3
+    if y == 2:
+        return 3
+    if y == 0 and x > -4:
+        return 3
+    else:
+        return 0
+
+def showSynchronizer():
+    board = {}
+    for x in range(-10, 5):
+        for y in range(-3, 4):
+            board[(x,y)] = sync(x,y)
+    showImage(board, 20, 8, True, True)
+
+gatetemp = { (-7, 0): 3, (-6, 0): 3, (-5, 0): 3, (-4, 0): 3, (-3, 0): 3, (-2, 0): 3, (-1, 0): 3, (0, 0):2,
+         (0, -1): 3, (1, -1): 3, (2, -1): 3,
+         (-2, 1): 3, (0, 1): 3, (1, 1): 3, (2, 1): 4,
+         (-3, 2): 3, (-2, 2): 2, (-1, 2): 3,
+         (-3, 3): 3, (-1, 3): 3,
+         (-3, 4): 4, (-1, 4): 3
+}
+
+def showORGate(bit1, bit2):
+    gate = copy.deepcopy(gatetemp)
+    gate[(-2, 0)] = 3
+    if bit1 == True:
+        gate[(-1, 4)] = 4
+    if bit2 == True:
+        gate[(2, -1)] = 4
+    showImage(gate, 14, 12, True, True)
+
+def showANDGate(bit1, bit2):
+    gate = copy.deepcopy(gatetemp)
+    gate[(-2, 0)] = 2
+    if bit1 == True:
+        gate[(-1, 4)] = 4
+    if bit2 == True:
+        gate[(2, -1)] = 4
+    showImage(gate, 14, 12, True, True)
