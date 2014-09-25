@@ -523,6 +523,8 @@ We can synchronize the inputs so that the input signal waits for the clock to ar
 					 0 & 0 & 0 & 0 & o & 0 & e & 3 \end{array} \]
 Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
 
+The fact that we have a synchronizer means that the model of computation is equivalent to one where there is only one clock for all input bits. 
+
 \subsection{Boolean circuits}
 
 Now we can show how to compute some basic boolean functions and since we have turns and synchronizers, we can assume that we have synchronized the inputs already. The following can compute the AND of two inputs. 
@@ -557,6 +559,8 @@ The first claim to make is that $S_{c_0i_0} \subset S_{c_1i_1}$ if $c_0 \leq c_1
 
 However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{11}$. Therefore, computing NOT with a board is not possible.
 \end{proof}
+
+What does this mean? Well, in particular, it means that we cannot do much. In particular, we can't add, since $x + 1$ will act as the NOT operator on the lowest order bit. We can only compute boolean circuits in planar graphs. 
 
 \section{Time until Stability}
 
