@@ -170,17 +170,17 @@ Our proof of this lemma is essentiall the same as the preceeding one. We constru
 \begin{proof}
 We use the same definition for $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ 
 \[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2, \]
-and evaluate $\Phi(LE(f, (x_1,y_1))) - \Phi(f)$:
-\begin{align}
-\Phi(LE(f), (x_1, y_1)) - \Phi(f) =\sum_{x,y} LE(f(x,y), (x_1, y_1))(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
-= LE(f(x_1,y_1), (x_1, y_1))(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1,y_1)} LE(f(x,y), (x_1, y_1))(|x|+|y|)^2 \\- f(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1, y_1)} f(x,y)(|x|+|y|)^2 \\
-= 4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2
-\end{align}
-And because at least two of the neighbors of $(x_1, y_1)$ are one unit farther from the origin than $(x_1, y_1)$ and at most two of the neighbors are one unit closer, and $(|x_1|+|y_1| +1)^2 > (|x_1|+|y_1| - 1)^2$, we can see,
-\begin{align}
+and evaluate $\Phi(LE(f, (x_1,y_1))) - \Phi(f)$, recalling that $LE(f, (x_1, y_1))(x,y)$ refers to the value of  $f$ at $(x,y)$ after a Local earthquake effected $(x_1, y_1)$.
+\begin{align*}
+\Phi(LE(f), (x_1, y_1)) - \Phi(f) =\sum_{x,y} LE(f, (x_1, y_1))(x,y)(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
+= LE(f, (x_1, y_1))(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1,y_1)} LE(f, (x_1, y_1)) (x,y) (|x|+|y|)^2 \\- f(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1, y_1)} f(x,y)(|x|+|y|)^2 \\
+= 4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2,
+\end{align*}
+Because at most two of the neighbors of $(x,y)$ are a taxi cab distance $(|x|+|y|-1)^2$ from the origin and at least two of the neighbors are a taxi cab distance $(|x|+|y|+1)^2$ from the origin and $(|x|+|y|+1)^2 > (|x|+|y|-1)^2$ we have that 
+\begin{align*}
 4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2  \\ 
-\geq 4(|x_1| + |y_1|)^2 + 2 (|x_1| + |y_1|+1)^2 + 2 (|x_1| + |y_1|-1)^2 = 4 >0
-\end{align}
+\geq 4(|x_1| + |y_1|)^2 + 2 (|x_1| + |y_1|+1)^2 + 2 (|x_1| + |y_1|-1)^2 = 4 >0.
+\end{align*}
 \end{proof}
 
 \subsection{A Size Bound}
