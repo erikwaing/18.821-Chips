@@ -110,7 +110,7 @@ We say that a board is finite if the total number of chips on it is finite. That
 S= \sum_{(x,y) \in \mathbb{Z} \times \mathbb{Z}} f(x,y) 
 \end{equation}
 is finite. 
-We denote the set of finite boards as $\mathcal{B}_f$.
+We denote the set of finite boards as $\mathcal{B}_F$.
 \end{definition}
 
 In order to keep our notation compact we define a function that takes in the coordinate of a square and returns the coordinates of its neighbors in a set. 
@@ -125,13 +125,13 @@ n(x,y) = \{ (x+1, y), (x-1, y), (x, y-1), (x, y+1) \}
 \label{Stability of Finite Boards}
 \emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
 
-In this section we show that any board with a finite number of chips on it will reach a stable state after applying finitely many local or global earthquakes. 
-We do so by showing first that if a local or global earthquake changes the state of a board then no sequence of local or global earthquakes can transform the output board back into the original board. 
-We will then show that for a given finite board there is a maximum number of states that local or global earthquakes can transform it into. 
-Together these show that all finite boards eventually become stable. 
+In this section we show that any finite board will reach a stable state after finitely many local or global earthquakes. 
+We do so by showing that if a local or global earthquake changes the state of a board then no sequence of local or global earthquakes can transform the output board back into the original board. 
+We will then bound the maximum number of configurations that local or global earthquakes can transform it into. 
+Together these show that all finite boards stabilize. 
 \begin{theorem}
 \label{finitestability}
-If the initial board has a finite number of chips, there exists an $N$ such that after $N$ global earthquakes or $N$ local earthquakes the resultant board will be stable.
+If $f \in B_F$, there exists $N, M > 0$ such that after $N$ global earthquakes or $M$ local earthquakes the resultant board will be stable, or for all $m > 0$, $GE^{N+m}(f) = GE^N(f)$, and $LE^{M+m}(f, X_1 \cup X_2) = LE^M(f, X_1)$.
 \end{theorem}
 
 A restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $GE^N(f) = GE^{N+m}(f)$ and $LE^{M}(f) = LE^{M+m}(f)$
