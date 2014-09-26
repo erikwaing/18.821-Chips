@@ -218,6 +218,109 @@ There exists less than $(x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ possibl
 
 It turns out that a potential function argument can also show that infinite boards with a bounded number of chips on each square can never cycle.
 
+\section{Order of Redistribution}
+\label{Order of Redistribution}
+
+\emph{written by Fermi Ma and Perry Kleinhenz, edited by Erik Waingarten.}\\
+
+Here, we address the following question posed in the original problem statement: does the order of redistribution matter? As there is no order associated with global earthquakes, this question is naturally restricted to the case of local earthquakes. More specifically, we consider some finite starting board and some sequence of local earthquakes that hit the board until it finally stabilizes (note that our results from Section~\ref{Stability of Finite Boards} imply that such a sequence of earthquakes exist). We will find that the exact sequence of local earthquakes does not matter, and that if we keep hitting the board with local earthquakes anywhere they are allowed to happen, the board will always stabilize to the same final configuration.\\
+
+First, we formalize the notion of earthquakes that are ``allowed to happen".
+
+\begin{definition}
+We define a valid earthquake to be a local earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips. We say that a sequence of local earthquakes $LE_1, LE_2, \ldots$ to be a valid sequence of earthquakes if each earthquake is valid.
+\end{definition}
+
+\begin{theorem}
+Let $B$ be an initial board state that becomes a stable board $B_s$ after $N$ local earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $B_s$.
+\end{theorem}
+
+\begin{proof}
+The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
+
+First, we need a lemma in order to do the rearrangements.
+
+\begin{lemma} Let $LE_1$ and $LE_2$ be local earthquakes. If $LE_1, LE_2$ is a valid sequence and $LE_2$ is a valid earthquake then when before $LE_1$ then $LE_2, LE_1$ is also a valid sequence of earthquakes and $LE_2( LE_1 ( B ) ) = LE_1( LE_2 ( B ) )$
+\end{lemma}
+\begin{proof}
+Suppose $LE_1$ affects the square $(x_1, y_1)$ and its neighbors, and $LE_2$ affects the square $(x_2, y_2)$ and its neighbors. Suppose  $LE_2, LE_1$ was an invalid sequence, that is $LE_2(B)(x_1, y_1)<4$, but since $LE_1$ is a valid earthquake we know $B(x_1, y_1)\geq 4$. Therefore we must have $B(x_1, y_1)=4$ and $(x_2, y_2)=(x_1,y_1)$. But then $LE_1(B)(x_1, y_1)=3$ which means $LE_1, LE_2$ would not be a valid sequence of earthquakes. Thus $LE_2, LE_1$ is a valid sequence. 
+
+Now consider $LE_2( LE_1 ( B ) )(u,v)$ for some $(u,v) \in \mathbb{Z} \times \mathbb{Z}$. Applying the definition of the local earthquake we see that 
+\begin{align*}
+LE_1 ( B )(u,v) =  B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)]] \\ 
+LE_2 ( LE_1 (B)) (u,v) = LE_1(B)(u,v)  + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] \\
+= B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]]  \\
+= B(u,v) + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
+= LE_2(B)(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
+= LE_1 (LE_2 (B))(u,v) 
+\end{align*}
+The critical step in this proof is recognizing that because $LE_1$ and $LE_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
+\end{proof}
+
+
+\begin{lemma}
+Let $LE_1,LE_2,LE_3,\dots, LE_k$ be a sequence of earthquakes, where $LE_i$ hits the square $(x_i, y_i)$. Consider  the sequence given by moving some earthquake $LE_j$ to position $m<j$ in the sequence, such that $LE_j$ is a valid earthquake for all positions between $m$ and $j$. 
+This sequence is valid and produces the same final board configuration.
+\end{lemma}
+\begin{proof}
+It is sufficient for us to show that the first $j$ earthquakes of each sequences are valid and that the board arrangement will be the same for both sequences after $j$ earthquakes. In fact we can also ignore the first $m-1$ terms, because their order is not changed they will all be valid and the board state will be identical after $m-1$ terms for both sequences. Let us call this board state $B_{m-1}$
+
+Therefore we must show that the sequence $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$ applied to $B_{m-1}$ is valid and produces the same board as the sequence $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ applied to $B_{m-1}$. 
+
+We can show this by inducting on the length of the sequence $l=j-m+1$. The base case of $l=2$ is shown in the above lemma. Let us assume the result holds for sequences of length $l=p$ and suppose our sequence has length $l=p+1$. So our sequence is 
+\begin{equation*}
+LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j
+\end{equation*}
+where $p+1=j-m+1$. Then if we set $B_{m} = LE_{m} (B_{m-1})$ by applying our inductive step we have that the two sequences 
+\begin{align*}
+LE_{m+1}, \ldots, LE_{j-1}, LE_{j} \\ 
+LE_{j}, LE_{m+1}, \ldots,  LE_{j-1} 
+\end{align*}
+are both valid and produce the same final board configuration. Now if we consider the board state $B_{m-1}$ by our above Lemma we know that the two sequences 
+\begin{align*}
+LE_{m}, LE_{j} \\
+LE_{j}, LE_{m}
+\end{align*}
+are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$  and $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ both applied to $B_{m-1}$ are valid and produce the same board. 
+\end{proof}
+
+Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least $\lfloor \frac{A_i}{4} \rfloor$ earthquakes or else it will not eventually stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquake events that correspond to square $i$. All these earthquakes can be moved to the front of the sequence. We do this for all squares $i$. By the lemma, the final positioning of the board does not change.
+
+The order of the earthquakes that have been moved to the front of the sequence can be in any order. This holds true because all these earthquakes could have happened with the initial values of the squares (maybe need to explain this better? but i think it's clear...).
+
+Now, find the point in the sequence that begins right after this point. Consider the board at this current point in time, and note that we have new values for all the squares. Then repeat this argument, moving a new set of earthquakes to the front. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
+
+\end{proof}
+
+\section{Time until Stability}
+\label{Time until Stability}
+
+We want to be able to bound the number of global earthquakes that it takes for a finite board to reach a stable state. We will first focus on the case of the board with only one stack containing $n$ chips. Without loss of generality, lets assume that the board contains $n$ chips at location $(0,0)$. We define $T: \mathbb{Z} \rightarrow \mathbb{Z}$ where $T(n)$ denotes the number of global earthquakes needed until the board with one stack of $n$ chips stabilizes. We also let $T':\mathbb{Z} \rightarrow \mathbb{Z}$ where $T'(n)$ denotes the local earthquakes that must hit $(0,0)$ in order for the board to stabilize. Its clear that $T(n) \geq T'(n)$. We also know that $T'(n) \geq \lfloor \frac{n}{4}\rfloor$. 
+
+One can get another trivial upper bound for $T(n)$ by looking at the maximum value of the potential function. Remember that the board will only contain chips in the areas denotes by locations in $[-\sqrt{n}, \sqrt{n}] \times [-\sqrt{n}, \sqrt{n}]$. So we know that when the board is stable at some $f'$, 
+\[ \Phi(f') \leq \sum_{x,y} f'(x,y)(|x| + |y|)^2 \leq 4n*3*4n = O(n^2) \]
+And since $\Phi(f) = 0$ and we know that $\Phi$ increases by at least $4$ in each global earthquake, 
+\[ T(n) = O(n^2) \]
+We can get tighter bounds by looking at the number of earthquakes more carefully. Lets let $T(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. Suppose $(x,y) \neq (0,0)$, then the number of earthquakes required to hit location $(x,y)$ will be the total number of chips entering location $(x,y)$ divided by 4 (taking floors ofcourse). In particular,
+\[ T(x,y) = \left\{ \begin{array}{cc} \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor & (x,y) \neq (0,0) \\
+ \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor & (x,y) = (0,0) \end{array} \right. \]
+So solving for $T$ is a solution to a discrete version of the Laplacian. We were able to experiment different scenarious to understand the growth of $T(n)$. 
+\begin{figure}[!ht]
+\centering
+\subfigure[Global earthquakes until stable. Horizontal axis is $n$ and vertical axis is the number of global earthquakes]{\includegraphics[width=0.4\linewidth]{TimeUntilStabilizeWithOnePeak}\label{fig:case1}} \qquad
+\subfigure[Global earthquakes until stable. Horizontal axis is $n$ and vertical axis is the number of global earthquakes divided by $n$]{\includegraphics[width=0.4\linewidth]{Timeuntilstabledividedbyn}\label{fig:case2}}
+\caption{Number of global earthquakes until stability}
+\label{fig:growthofT}
+\end{figure}
+By looking at Figure~\ref{fig:growthofT} seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(n)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(n) = \Theta(n\log n)$.
+
+\begin{figure}[!ht]
+\centering
+\subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes]{\includegraphics[width=0.4\linewidth]{centerearthquakes}\label{fig:case1}} \qquad
+\subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes divided by $n$]{\includegraphics[width=0.4\linewidth]{centerearthquakesdividedbyn}\label{fig:case2}}
+\caption{Number of local earthquakes in center until stability}
+\label{fig:growthofT'}
+\end{figure}
 
 \section{Board Variants: $n$-Trees}
 \label{Board Variants: n-Trees}
@@ -398,79 +501,6 @@ nodes that are potentially occupied. Therefore there are at most
 possible boards $b \in \mathcal{T}_n^f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < \binom{N+S-1}{N-1}$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
 \end{proof}
 
-\section{Order of Redistribution}
-\label{Order of Redistribution}
-
-\emph{written by Fermi Ma and Perry Kleinhenz, edited by Erik Waingarten.}\\
-
-Here, we address the following question posed in the original problem statement: does the order of redistribution matter? As there is no order associated with global earthquakes, this question is naturally restricted to the case of local earthquakes. More specifically, we consider some finite starting board and some sequence of local earthquakes that hit the board until it finally stabilizes (note that our results from Section~\ref{Stability of Finite Boards} imply that such a sequence of earthquakes exist). We will find that the exact sequence of local earthquakes does not matter, and that if we keep hitting the board with local earthquakes anywhere they are allowed to happen, the board will always stabilize to the same final configuration.\\
-
-First, we formalize the notion of earthquakes that are ``allowed to happen".
-
-\begin{definition}
-We define a valid earthquake to be a local earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips. We say that a sequence of local earthquakes $LE_1, LE_2, \ldots$ to be a valid sequence of earthquakes if each earthquake is valid.
-\end{definition}
-
-\begin{theorem}
-Let $B$ be an initial board state that becomes a stable board $B_s$ after $N$ local earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $B_s$.
-\end{theorem}
-
-\begin{proof}
-The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
-
-First, we need a lemma in order to do the rearrangements.
-
-\begin{lemma} Let $LE_1$ and $LE_2$ be local earthquakes. If $LE_1, LE_2$ is a valid sequence and $LE_2$ is a valid earthquake then when before $LE_1$ then $LE_2, LE_1$ is also a valid sequence of earthquakes and $LE_2( LE_1 ( B ) ) = LE_1( LE_2 ( B ) )$
-\end{lemma}
-\begin{proof}
-Suppose $LE_1$ affects the square $(x_1, y_1)$ and its neighbors, and $LE_2$ affects the square $(x_2, y_2)$ and its neighbors. Suppose  $LE_2, LE_1$ was an invalid sequence, that is $LE_2(B)(x_1, y_1)<4$, but since $LE_1$ is a valid earthquake we know $B(x_1, y_1)\geq 4$. Therefore we must have $B(x_1, y_1)=4$ and $(x_2, y_2)=(x_1,y_1)$. But then $LE_1(B)(x_1, y_1)=3$ which means $LE_1, LE_2$ would not be a valid sequence of earthquakes. Thus $LE_2, LE_1$ is a valid sequence. 
-
-Now consider $LE_2( LE_1 ( B ) )(u,v)$ for some $(u,v) \in \mathbb{Z} \times \mathbb{Z}$. Applying the definition of the local earthquake we see that 
-\begin{align*}
-LE_1 ( B )(u,v) =  B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)]] \\ 
-LE_2 ( LE_1 (B)) (u,v) = LE_1(B)(u,v)  + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] \\
-= B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]]  \\
-= B(u,v) + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
-= LE_2(B)(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
-= LE_1 (LE_2 (B))(u,v) 
-\end{align*}
-The critical step in this proof is recognizing that because $LE_1$ and $LE_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
-\end{proof}
-
-
-\begin{lemma}
-Let $LE_1,LE_2,LE_3,\dots, LE_k$ be a sequence of earthquakes, where $LE_i$ hits the square $(x_i, y_i)$. Consider  the sequence given by moving some earthquake $LE_j$ to position $m<j$ in the sequence, such that $LE_j$ is a valid earthquake for all positions between $m$ and $j$. 
-This sequence is valid and produces the same final board configuration.
-\end{lemma}
-\begin{proof}
-It is sufficient for us to show that the first $j$ earthquakes of each sequences are valid and that the board arrangement will be the same for both sequences after $j$ earthquakes. In fact we can also ignore the first $m-1$ terms, because their order is not changed they will all be valid and the board state will be identical after $m-1$ terms for both sequences. Let us call this board state $B_{m-1}$
-
-Therefore we must show that the sequence $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$ applied to $B_{m-1}$ is valid and produces the same board as the sequence $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ applied to $B_{m-1}$. 
-
-We can show this by inducting on the length of the sequence $l=j-m+1$. The base case of $l=2$ is shown in the above lemma. Let us assume the result holds for sequences of length $l=p$ and suppose our sequence has length $l=p+1$. So our sequence is 
-\begin{equation*}
-LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j
-\end{equation*}
-where $p+1=j-m+1$. Then if we set $B_{m} = LE_{m} (B_{m-1})$ by applying our inductive step we have that the two sequences 
-\begin{align*}
-LE_{m+1}, \ldots, LE_{j-1}, LE_{j} \\ 
-LE_{j}, LE_{m+1}, \ldots,  LE_{j-1} 
-\end{align*}
-are both valid and produce the same final board configuration. Now if we consider the board state $B_{m-1}$ by our above Lemma we know that the two sequences 
-\begin{align*}
-LE_{m}, LE_{j} \\
-LE_{j}, LE_{m}
-\end{align*}
-are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$  and $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ both applied to $B_{m-1}$ are valid and produce the same board. 
-\end{proof}
-
-Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least $\lfloor \frac{A_i}{4} \rfloor$ earthquakes or else it will not eventually stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquake events that correspond to square $i$. All these earthquakes can be moved to the front of the sequence. We do this for all squares $i$. By the lemma, the final positioning of the board does not change.
-
-The order of the earthquakes that have been moved to the front of the sequence can be in any order. This holds true because all these earthquakes could have happened with the initial values of the squares (maybe need to explain this better? but i think it's clear...).
-
-Now, find the point in the sequence that begins right after this point. Consider the board at this current point in time, and note that we have new values for all the squares. Then repeat this argument, moving a new set of earthquakes to the front. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
-
-\end{proof}
 
 \section{Computing with Chips}
 \label{Computing with Chips}
@@ -562,34 +592,5 @@ However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{1
 
 What does this mean? Well, in particular, it means that we cannot do much. In particular, we can't add, since $x + 1$ will act as the NOT operator on the lowest order bit. We can only compute boolean circuits in planar graphs. 
 
-\section{Time until Stability}
-\label{Time until Stability}
-
-We want to be able to bound the number of global earthquakes that it takes for a finite board to reach a stable state. We will first focus on the case of the board with only one stack containing $n$ chips. Without loss of generality, lets assume that the board contains $n$ chips at location $(0,0)$. We define $T: \mathbb{Z} \rightarrow \mathbb{Z}$ where $T(n)$ denotes the number of global earthquakes needed until the board with one stack of $n$ chips stabilizes. We also let $T':\mathbb{Z} \rightarrow \mathbb{Z}$ where $T'(n)$ denotes the local earthquakes that must hit $(0,0)$ in order for the board to stabilize. Its clear that $T(n) \geq T'(n)$. We also know that $T'(n) \geq \lfloor \frac{n}{4}\rfloor$. 
-
-One can get another trivial upper bound for $T(n)$ by looking at the maximum value of the potential function. Remember that the board will only contain chips in the areas denotes by locations in $[-\sqrt{n}, \sqrt{n}] \times [-\sqrt{n}, \sqrt{n}]$. So we know that when the board is stable at some $f'$, 
-\[ \Phi(f') \leq \sum_{x,y} f'(x,y)(|x| + |y|)^2 \leq 4n*3*4n = O(n^2) \]
-And since $\Phi(f) = 0$ and we know that $\Phi$ increases by at least $4$ in each global earthquake, 
-\[ T(n) = O(n^2) \]
-We can get tighter bounds by looking at the number of earthquakes more carefully. Lets let $T(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. Suppose $(x,y) \neq (0,0)$, then the number of earthquakes required to hit location $(x,y)$ will be the total number of chips entering location $(x,y)$ divided by 4 (taking floors ofcourse). In particular,
-\[ T(x,y) = \left\{ \begin{array}{cc} \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor & (x,y) \neq (0,0) \\
- \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor & (x,y) = (0,0) \end{array} \right. \]
-So solving for $T$ is a solution to a discrete version of the Laplacian. We were able to experiment different scenarious to understand the growth of $T(n)$. 
-\begin{figure}[!ht]
-\centering
-\subfigure[Global earthquakes until stable. Horizontal axis is $n$ and vertical axis is the number of global earthquakes]{\includegraphics[width=0.4\linewidth]{TimeUntilStabilizeWithOnePeak}\label{fig:case1}} \qquad
-\subfigure[Global earthquakes until stable. Horizontal axis is $n$ and vertical axis is the number of global earthquakes divided by $n$]{\includegraphics[width=0.4\linewidth]{Timeuntilstabledividedbyn}\label{fig:case2}}
-\caption{Number of global earthquakes until stability}
-\label{fig:growthofT}
-\end{figure}
-By looking at Figure~\ref{fig:growthofT} seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(n)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(n) = \Theta(n\log n)$.
-
-\begin{figure}[!ht]
-\centering
-\subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes]{\includegraphics[width=0.4\linewidth]{centerearthquakes}\label{fig:case1}} \qquad
-\subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes divided by $n$]{\includegraphics[width=0.4\linewidth]{centerearthquakesdividedbyn}\label{fig:case2}}
-\caption{Number of local earthquakes in center until stability}
-\label{fig:growthofT'}
-\end{figure}
 
 \end{document}
