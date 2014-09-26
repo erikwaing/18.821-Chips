@@ -68,48 +68,39 @@ For the remainder of the paper, we consider other approaches and extensions of t
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}\\
 
-First, we formalize the board of poker chips. We can overlay the grid on the $xy$ plane so that each grid square is a $1$ by $1$ square, and each grid intersection point is at a coordinate $(a,b)$ where $a,b \in \mathbb{Z}$. Then, the coordinate of a given grid square is just the coordinate of the grid intersection point of its lower left corner. 
+First, we formalize the board of poker chips. We can overlay the grid on the $xy$ plane so that each grid square is a $1$ by $1$ square, and each grid intersection point is at a coordinate $(a,b)$ where $a,b \in \mathbb{Z}$. The coordinate of a given grid square is the coordinate of the grid intersection point of its lower left corner. 
 
 \begin{definition} A board is a function $f: \mathbb{Z} \times \mathbb{Z} \to \mathbb{Z}_{\geq 0}$.
 The inputs to this function correspond to coordinates of grid squares and the output is the number of chips on that square. Let $\mathcal{B}$ denote the set of all boards.
 \end{definition}
 
-Recall from the introduction that local earthquakes (abbreviated as $LE$) are operations that hit one square with $\geq 4$ chips and redistributes 1 chip to each adjacent square. We define this operation in terms of $f$.
+Recall from the introduction that local earthquakes (abbreviated as $LE$) are operations that hit one square with more than $4$ chips and redistributes 1 chip to each cardinal neighbor. We define this operation in terms of $f$.
 
 \begin{definition}
 A local earthquake takes as input a board and the coordinates of a grid square and outputs a board, so we write $LE: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$. If $f(x,y) \geq 4$,
 \begin{align*}
-LE( f(x,y), (x,y)) = f(x,y)-4 \\
-LE( f(x+1,y), (x,y)) = f(x+1,y)+1 \\
-LE( f(x-1,y), (x,y)) = f(x-1,y)+1 \\
-LE( f(x,y+1), (x,y)) = f(x,y+1)+1 \\
-LE( f(x,y-1), (x,y)) = f(x,y-1)+1,
+LE(f, (x,y))(x,y) = f(x,y)-4 \\
+LE( f, (x,y))(x+1, y) = f(x+1,y)+1 \\
+LE( f, (x,y))(x-1, y) = f(x-1,y)+1 \\
+LE( f, (x,y))(x, y+1) = f(x,y+1)+1 \\
+LE( f, (x,y))(x, y-1) = f(x,y-1)+1,
 \end{align*}
-Otherwise if $f(x,y) \leq 4$, then $LE(f(x,y)) = f$, as the earthquake does not change the board.
+Otherwise if $f(x,y) \leq 4$, then $LE(f) = f$, as the local earthquake does not move any chips.
 \end{definition}
 We use the notation $LE^n(f, \{(x_i,y_i)\})$ to denote the application of $LE$ to the board $f$, $n$ times to the squares $(x_1, y_1), \ldots (x_{n}, y_{n})$ respectively. 
 
-Recall that a global earthquake (abbreviated as $GE$) is equivalent to a local earthquake hitting every square on the board.
+A global earthquake (abbreviated as $GE$) is similar to a local earthquake applied to every square on the board simultaneously.
 
 \begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
 It transforms all of the squares on the board with the following rule.
 \begin{align*}
-GE(f(x,y)) = &f(x,y) - 4[[f(x,y) \geq 4]] + [[f(x-1,y) \geq 4]] + [[f(x+1,y) \geq 4]] + \\
-&[[f(x,y-1) \geq 4]] + [[f(x,y+1) \geq 4]],
+GE(f) = \sum_{i, j \in \mathbb{Z}\times \mathbb{Z}} LE(f, (i,j))
 \end{align*}
-where $[[A]]$ is defined as 
-\begin{equation}
-[[A]] = 
-\begin{cases} 
-1 \text{ if } A \text{ is true} \\ 
-0 \text{ if } A  \text{ is false}
- \end{cases}.
-\end{equation}
 \end{definition}
 
 Now that we have formalized the earthquake operators we would also like to make a precise definition of stability of a board.
 \begin{definition}
-We say that a board is stable if its values are strictly less than 4. This is equivalent to both of the earthquake maps having no effect on the board. 
+We say that a board is stable if all squares contain values strictly less than 4. This is equivalent to saying both earthquakes (local and global) have no effect on the board. 
 \end{definition}
 
 
