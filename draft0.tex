@@ -221,7 +221,19 @@ There exists less than $(x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ possibl
 
 \emph{written by Fermi Ma, edited by Erik Waingarten and Perry Kleinhenz.}\\
 
+%%This section needs to be fixed up
+
 It turns out that a potential function argument can also show that infinite boards with a bounded number of chips on each square can never cycle.
+
+Consider the following potential function
+\[ \Phi(f) = \sum_{x,y}\frac{f(x,y)}{4(|x|+|y|)\cdot4^{(|x|+|y|)}} \]
+First, we note that for $n$, there are exactly $4n$ squares $(x,y)$ such that $|x| + |y| = n$. If we assume that the maximum chip stack is $M$, then the potential function can be bounded:
+\begin{align*}
+\sum_{x,y}\frac{f(x,y)}{4(|x|+|y|)\cdot4^{(|x|+|y|)}} \leq \sum_{n=1}^\infty \frac{M}{4^n} = \frac{M}{3}
+\end{align*}
+If any square at distance $d$ is hit by a local earthquake, the value of the potential at that square decreases by $\frac{4}{4d\cdot 4^d}$. The potential increases on the four adjacent squares. In particular we know that one of the adjacent squares is at distance $d-1$, and has a potential increase of $\frac{1}{4(d-1)\cdot 4^{d-1}} = \frac{4}{4(d-1)\cdot 4^d}$ which is larger in magnitude than $\frac{4}{4d\cdot 4^d}$. So the potential strictly increases after any local earthquake.
+
+It follows that infinite boards hit with local earthquakes can never cycle back to a previous arrangement
 
 \section{Order of Redistribution}
 \label{Order of Redistribution}
