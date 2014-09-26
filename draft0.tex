@@ -68,17 +68,35 @@ For the remainder of the paper, we consider other approaches and extensions of t
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}\\
 
-\begin{definition} A board is a map from the integer lattice to the non-negative integers.
-That is a Board $f$ is an element of $\mathcal{B} := \{ f: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}_{\geq 0} | f \text{ is a function }\}$.
-The input values of a board represent the coordinates on the integer lattice that the lower left hand corner of square occupies and the output value refers to the number of chips on that square. 
-A square is an element of $\mathbb{Z} \times \mathbb{Z}$. 
+First, we formalize the board of poker chips. We can overlay the grid on the $xy$ plane so that each grid square is a $1$ by $1$ square, and each grid intersection point is at a coordinate $(a,b)$ where $a,b \in \mathbb{Z}$. Then, the coordinate of a given grid square is just the coordinate of the grid intersection point of its lower left corner. 
+
+\begin{definition} A board is a function $f: \mathbb{Z} \times \mathbb{Z} \to \mathbb{Z}_{\geq 0}$.
+The inputs to this function correspond to coordinates of grid squares and the output is the number of chips on that square. Let $\mathcal{B}$ denote the set of all boards.
 \end{definition}
+
+Recall from the introduction that local earthquakes (abbreviated as $LE$) are operations that hit one square with $\geq 4$ chips and redistributes 1 chip to each adjacent square. We define this operation in terms of $f$.
+
+\begin{definition}
+A local earthquake takes as input a board and the coordinates of a grid square and outputs a board, so we write $LE: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$. If $f(x,y) \geq 4$,
+\begin{align*}
+LE( f(x,y), (x,y)) = f(x,y)-4 \\
+LE( f(x+1,y), (x,y)) = f(x+1,y)+1 \\
+LE( f(x-1,y), (x,y)) = f(x-1,y)+1 \\
+LE( f(x,y+1), (x,y)) = f(x,y+1)+1 \\
+LE( f(x,y-1), (x,y)) = f(x,y-1)+1,
+\end{align*}
+Otherwise if $f(x,y) \leq 4$, then $LE(f(x,y)) = f$, as the earthquake does not change the board.
+\end{definition}
+We use the notation $LE^n(f, \{(x_i,y_i)\})$ to denote the application of $LE$ to the board $f$, $n$ times to the squares $(x_1, y_1), \ldots (x_{n}, y_{n})$ respectively. 
+
+Recall that a global earthquake (abbreviated as $GE$) is equivalent to a local earthquake hitting every square on the board.
 
 \begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
 It transforms all of the squares on the board with the following rule.
-\begin{equation}
-GE(f(x,y)) = f(x,y) - 4[[f(x,y) \geq 4]] + [[f(x-1,y) \geq 4]] + [[f(x+1,y) \geq 4]] + [[f(x,y-1) \geq 4]] + [[f(x,y+1) \geq 4]],
-\end{equation}
+\begin{align*}
+GE(f(x,y)) = &f(x,y) - 4[[f(x,y) \geq 4]] + [[f(x-1,y) \geq 4]] + [[f(x+1,y) \geq 4]] + \\
+&[[f(x,y-1) \geq 4]] + [[f(x,y+1) \geq 4]],
+\end{align*}
 where $[[A]]$ is defined as 
 \begin{equation}
 [[A]] = 
@@ -89,20 +107,6 @@ where $[[A]]$ is defined as
 \end{equation}
 \end{definition}
 
-\begin{definition}
- We define the local earthquake operator as a map from the set of all boards and locations to the set of all boards and write $LE: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$.
-If $f(x,y) \leq 4$, then $LE(f, (x,y)) = f$, otherwise,  
-\begin{align*}
-LE( f(x,y), (x,y)) = f(x,y)-4 \\
-LE( f(x+1,y), (x,y)) = f(x+1,y)+1 \\
-LE( f(x-1,y), (x,y)) = f(x-1,y)+1 \\
-LE( f(x,y+1), (x,y)) = f(x,y+1)+1 \\
-LE( f(x,y-1), (x,y)) = f(x,y-1)+1,
-\end{align*}
-and leaves all other squares unchanged.
-
-We use the notation $LE^n(f, \{(x_i,y_i)\})$ to refer to the application of $LE$ to the board $f$, $n$ times to the squares $(x_1, y_1), \ldots (x_{n}, y_{n})$ respectively. 
-\end{definition}
 
 \begin{definition}
 We say that a board is stable if its values are strictly less than 4. This is equivalent to both of the earthquake maps having no effect on the board. 
