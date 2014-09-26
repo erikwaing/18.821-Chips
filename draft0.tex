@@ -31,8 +31,8 @@
 
 \begin{document}
 
-\title{Computing with an Angry Poker Player}
-\titlerunning{Computing with an Angry Poker Player}
+\title{Poker Chips, Earthquakes, and Computation}
+\titlerunning{Poker Chips, Earthquakes, and Computation}
 
 \author{Perry Kleinhenz \and Fermi Ma \and Erik Waingarten}
 %
@@ -61,7 +61,7 @@ Each square of an infinite chess board contains some nonnegative number of poker
 
 We also consider extensions of this problem set up where the earthquake hits all squares on the board at once. We refer to the former type of earthquake as $\textbf{local earthquakes}$ and earthquakes that hit the entire board as $\textbf{global earthquakes}$. \\
 
-The paper is organized as follows. In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the game. In Section~\ref{Stability of Finite Boards}, we introduce the idea of a potential function defined on boards to prove that all boards with a finite number of starting chips eventually stabilize. We then modify the potential function to work for infinite boards and we explore its consequences in Section~\ref{Acyclicity of Infinite Boards}. In Section~\ref{Order of Redistribution}, we show that the order in which local earthquakes happens does not matter, thus answering a question in the original problem statement. We then shift our approach in Section ADDSECTIONNAME and present results from our simulations of repeated earthquakes. In particular, we look at the starting arrangement where $n$ chips all start on the same square, and we conjecture based on experimental evidence that such arragnements stabilize after $\Theta(n \log n)$ global earthquakes. In Section~\ref{Board Variants: n-Trees}, we consider what happens when alternative board setups are considered. Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the problem set up, and we show how to construct simple Boolean circuits with AND and OR gates. 
+The paper is organized as follows. In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the game. In Section~\ref{Stability of Finite Boards}, we introduce the idea of a potential function defined on boards to prove that all boards with a finite number of starting chips eventually stabilize. We then modify the potential function to work for infinite boards and we explore its consequences in Section~\ref{Acyclicity of Infinite Boards}. In Section~\ref{Order of Redistribution}, we show that the order in which local earthquakes happens does not matter, thus answering a question in the original problem statement. We then shift our approach in Section~\ref{Time until Stability} and present results from our simulations of repeated earthquakes. In particular, we look at the starting arrangement where $n$ chips all start on the same square, and we conjecture based on experimental evidence that such arragnements stabilize after $\Theta(n \log n)$ global earthquakes. In Section~\ref{Board Variants: n-Trees}, we consider what happens when alternative board setups are considered. Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the problem set up, and show how to construct simple Boolean circuits and prove some impossibility results. 
 \section{Definitions and Notation}
 \label{Definitions and Notation}
 
@@ -563,6 +563,7 @@ However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{1
 What does this mean? Well, in particular, it means that we cannot do much. In particular, we can't add, since $x + 1$ will act as the NOT operator on the lowest order bit. We can only compute boolean circuits in planar graphs. 
 
 \section{Time until Stability}
+\label{Time until Stability}
 
 We want to be able to bound the number of global earthquakes that it takes for a finite board to reach a stable state. We will first focus on the case of the board with only one stack containing $n$ chips. Without loss of generality, lets assume that the board contains $n$ chips at location $(0,0)$. We define $T: \mathbb{Z} \rightarrow \mathbb{Z}$ where $T(n)$ denotes the number of global earthquakes needed until the board with one stack of $n$ chips stabilizes. We also let $T':\mathbb{Z} \rightarrow \mathbb{Z}$ where $T'(n)$ denotes the local earthquakes that must hit $(0,0)$ in order for the board to stabilize. Its clear that $T(n) \geq T'(n)$. We also know that $T'(n) \geq \lfloor \frac{n}{4}\rfloor$. 
 
