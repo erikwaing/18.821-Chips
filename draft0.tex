@@ -107,10 +107,11 @@ where $[[A]]$ is defined as
 \end{equation}
 \end{definition}
 
-
+Now that we have formalized the earthquake operators we would also like to make a precise definition of stability of a board.
 \begin{definition}
 We say that a board is stable if its values are strictly less than 4. This is equivalent to both of the earthquake maps having no effect on the board. 
 \end{definition}
+
 
 \begin{definition} 
 We say that a board is finite if the total number of chips on it is finite. That is a board $f$ is finite if the sum
@@ -121,28 +122,31 @@ is finite.
 We denote the set of finite boards as $\mathcal{B}_f$.
 \end{definition}
 
+In order to keep our notation compact we define a function that takes in the coordinate of a square and returns the coordinates of its neighbors in a set. 
 \begin{definition}
 We define the function $n: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}^2 \times \mathbb{Z}^2 \times \mathbb{Z}^2 \times \mathbb{Z}^2 $ as 
 \begin{equation}
 n(x,y) = \{ (x+1, y), (x-1, y), (x, y-1), (x, y+1) \}
 \end{equation}
-This function takes in a square and returns its neighbors. 
 \end{definition}
 
 \section{Stability of Finite Boards}
 \label{Stability of Finite Boards}
 \emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
 
+In this section we show that any board with a finite number of chips on it will reach a stable state after applying finitely many local or global earthquakes. 
+We do so by showing first that if a local or global earthquake changes the state of a board then no sequence of local or global earthquakes can transform the output board back into the original board. 
+We will then show that for a given finite board there is a maximum number of states that local or global earthquakes can transform it into. 
+Together these show that all finite boards eventually become stable. 
 \begin{theorem}
 \label{finitestability}
 If the initial board has a finite number of chips, there exists an $N$ such that after $N$ global earthquakes or $N$ local earthquakes the resultant board will be stable.
 \end{theorem}
 
-We will first show that finite boards cannot return to a previous state. We will then show that for a given finite board there is a maximum nunmber of states that a board can occupy. This shows that all finite boards eventually become stable.
-
-A restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $GE^N(f) = GE^{N+m}(f)$ and $LE^{M}(f) = LE^{M+k}(f)$
+A restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $GE^N(f) = GE^{N+m}(f)$ and $LE^{M}(f) = LE^{M+m}(f)$
 
 \subsection{A Potential Function}
+In order to show that if the state of a finite board cannot cycle under local or global earthquakes we define a potential function that maps board states to the positive Reals and show that applying either kind of earthquake to a board increases the value of the function. 
 \begin{lemma}
 If $GE(f) \neq f$, then $GE^n(f) \neq f$ for all $n > 0$.
 \end{lemma}
