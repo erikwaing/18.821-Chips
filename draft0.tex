@@ -146,7 +146,7 @@ If the initial board has a finite number of chips, there exists an $N$ such that
 A restatement of the theorem is to say that for all $B \in \mathcal{B}_f$ there exists an $N$ such that for all $m \in \mathbb{Z}_{\geq 0}$, $GE^N(f) = GE^{N+m}(f)$ and $LE^{M}(f) = LE^{M+m}(f)$
 
 \subsection{A Potential Function}
-In order to show that if the state of a finite board cannot cycle under local or global earthquakes we define a potential function that maps board states to the positive Reals and show that applying either kind of earthquake to a board increases the value of the function. 
+In order to show that if the state of a finite board cannot cycle under local or global earthquakes we define a potential function that maps board states to the nonnegative integers and show that applying either kind of earthquake to a board increases the value of the function. 
 \begin{lemma}
 If $GE(f) \neq f$, then $GE^n(f) \neq f$ for all $n > 0$.
 \end{lemma}
@@ -154,28 +154,26 @@ If $GE(f) \neq f$, then $GE^n(f) \neq f$ for all $n > 0$.
 \begin{proof}
 Let $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ be the following function
 \[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2 \]
+we are taking a sum of the number of chips on each square with a weight of the taxi cab distance from the square to the origin.
 Note that this is well-defined since the boards contain a finite number of chips. We will show that 
 
 \[ GE(f) \neq f \Rightarrow \Phi(GE(f)) > \Phi(f) \]
-That is if global earthquake changes the state of the board, then $\Phi(f)$ increases, therefore if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or in other words that you never return to your original state.
+That is if global earthquake changes the state of the board, then $\Phi(f)$ increases. Therefore if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or in other words applying a series of earthquakes to a board can never produce a previous board state.
 
-We can evaluate $\Phi(GE(f)) - \Phi(f)$.
-\[ \Phi(GE(f)) = \sum_{x,y} GE(f(x,y)) (|x|+|y|)^2 \]
-\[ = \sum_{x,y} \left(f(x,y) + \sum_{l \in n(x,y)} [[f(t) \geq 4]] - 4[[f(x,y) \geq 4]]\right) (|x|+|y|)^2 \]
+We can evaluate $\Phi(GE(f)) - \Phi(f),$ 
+\[ \Phi(GE(f)) - \Phi(f) = \sum_{ (x,y)} (GE(f(x,y)) -f(x,y))(|x|+|y|)^2 \]
 
-Suppose $f(x_0,y_0) \geq 4$ for some location $(x_0, y_0)$, then the number of chips in location $(x_0,y_0)$ will have decreased by $4$ after applying $GE$. 
-For each decrease in the number of chips at location $(x_0,y_0)$ of $4$, the number of chips at the location $(y,z)$ increases by $1$, for each $(y,z) \in n(x_0,y_0)$.
+Let $A$ be the set of locations $(x,y)$ with $f(x,y) \geq 4$, which is non-empty by assumption. We call this the set of active squares. Then we know that $GE(f(x,y)) -f(x,y) \neq 0$ if $(x,y) \in A \cup \bigcup_{(x,y) \in A} n(x,y)$. That is the contribution from square $(x,y)$ to the sum is nonzero only if $(x,y)$ is an active square or it neighbors an active square. 
 
-Let $A$ be the set of active locations, or locations which $f(x,y) \geq 4$, which is non-empty by assumption. 
-So
-\[ \Phi(GE(f)) - \Phi(f) = \sum_{(x,y) \in A} \left((-4)(|x|+|y|)^2 + \sum_{(v,w) \in n(x,y)} (|v| + |w|)^2 \right) \]
-\[\geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
+For each $(x,y) \in A$ we know that four chips are removed from the square and one is placed on each of its four neighbors. Thus we have that 
+\[ \Phi(GE(f)) - \Phi(f)= \sum_{(x,y) \in A} \left((-4)(|x|+|y|)^2 + \sum_{(v,w) \in n(x,y)} (|v| + |w|)^2 \right) \]
+That is 
 
-\[ \geq \sum_{(x,y) \in A} \begin{array}{cccccc} -4x^2 & -4y^2 & -8xy & & &\\
+Now since at most two of the neighbors of $(x,y)$ are a taxi cab distance $(|x|+|y|-1)^2$ from the origin and at least two of the neighbors are a taxi cab distance $(|x|+|y|+1)^2$ from the origin and $(|x|+|y|+1)^2 > (|x|+|y|-1)^2,$ we have that 
+\[\sum_{(x,y) \in A} \left((-4)(|x|+|y|)^2 + \sum_{(v,w) \in n(x,y)} (|v| + |w|)^2 \right) \geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
+ \[ = \sum_{(x,y) \in A} \begin{array}{cccccc} -4x^2 & -4y^2 & -8xy & & &\\
 									   +2x^2 & +2y^2 & +4xy & +2x& +2y &+ 2\\
-									   +2x^2 & +2y^2 & +4xy & -2x& -2y  & +2 \end{array} \]
-\[ \geq 4 > 0 \] 
-where the first inequality holds because at most two of the neighbors of $(x,y)$ are one unit closer to the origin then $(x,y)$ and at least two are one unit farther away and $(|x|+|y|+1)^2 > 2(|x|+|y|-1)^2$
+									   +2x^2 & +2y^2 & +4xy & -2x& -2y  & +2 \end{array} = \sum_{(x,y) \in A} 4> 0 \] 
 \end{proof}
 
 \begin{lemma}
