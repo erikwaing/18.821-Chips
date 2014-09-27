@@ -9,6 +9,7 @@
 %\usepackage{amsfonts}
 %\usepackage{amsthm}
 \usepackage{subfigure}
+\usepackage{mathtools}
 %\usepackage{caption}
 %\usepackage{subcaption}
 %\usepackage{cite}
@@ -336,15 +337,33 @@ Now, find the point in the sequence that begins right after this point. Consider
 \section{Time until Stability}
 \label{Time until Stability}
 
-We want to be able to bound the number of global earthquakes that it takes for a finite board to reach a stable state. We will first focus on the case of the board with only one stack containing $n$ chips. Without loss of generality, lets assume that the board contains $n$ chips at location $(0,0)$. We define $T: \mathbb{Z} \rightarrow \mathbb{Z}$ where $T(n)$ denotes the number of global earthquakes needed until the board with one stack of $n$ chips stabilizes. We also let $T':\mathbb{Z} \rightarrow \mathbb{Z}$ where $T'(n)$ denotes the local earthquakes that must hit $(0,0)$ in order for the board to stabilize. Its clear that $T(n) \geq T'(n)$. We also know that $T'(n) \geq \lfloor \frac{n}{4}\rfloor$. 
 
-One can get another trivial upper bound for $T(n)$ by looking at the maximum value of the potential function. Remember that the board will only contain chips in the areas denotes by locations in $[-\sqrt{n}, \sqrt{n}] \times [-\sqrt{n}, \sqrt{n}]$. So we know that when the board is stable at some $f'$, 
-\[ \Phi(f') \leq \sum_{x,y} f'(x,y)(|x| + |y|)^2 \leq 4n*3*4n = O(n^2) \]
-And since $\Phi(f) = 0$ and we know that $\Phi$ increases by at least $4$ in each global earthquake, 
+Another question of interest is how many global earthquakes it would take for a finite board to reach a stable state. We will first focus on the case of the board with only one stack containing $n$ chips. 
+
+Without loss of generality, we can assume that the board contains $n$ chips at location $(0,0)$. We first make two definitions we will use in our discussion.
+\begin{definition}
+We define $T: \mathbb{Z} \rightarrow \mathbb{Z}$ where $T(n)$ denotes the number of global earthquakes needed until the board with one stack of $n$ chips stabilizes. We also define $T':\mathbb{Z} \rightarrow \mathbb{Z}$ where $T'(n)$ denotes the local earthquakes that must hit $(0,0)$ in order for the board to stabilize. 
+\end{definition}
+Its clear that $T(n) \geq T'(n)$. We also know that $T'(n) \geq \lfloor \frac{n}{4}\rfloor$, since that many earthquakes will reduce the number of chips on $(0,0)$ to less than $4$.
+
+We can get another upper bound for $T(n)$ by looking at the maximum value of the potential function. Recall that the board will be nonzero only in locations in the range $[-\sqrt{n}, \sqrt{n}] \times [-\sqrt{n}, \sqrt{n}]$. 
+So we know that when the board is stable at some $f'$, 
+\begin{equation*}
+\Phi(f') \leq \sum_{x,y} f'(x,y)(|x| + |y|)^2 \leq \sum_{x,y} 3*4n = 3*4n*4n= O(n^2)
+\end{equation*}
+We know that $\Phi(f) = 0$ and that $\Phi$ increases by at least $4$ after each global earthquake, so
 \[ T(n) = O(n^2) \]
-We can get tighter bounds by looking at the number of earthquakes more carefully. Lets let $T(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. Suppose $(x,y) \neq (0,0)$, then the number of earthquakes required to hit location $(x,y)$ will be the total number of chips entering location $(x,y)$ divided by 4 (taking floors ofcourse). In particular,
-\[ T(x,y) = \left\{ \begin{array}{cc} \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor & (x,y) \neq (0,0) \\
- \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor & (x,y) = (0,0) \end{array} \right. \]
+We can get tighter bounds by looking at the number of earthquakes more carefully.
+\begin{definition}
+ Let $T(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. 
+ \end{definition}
+ If $(x,y) \neq (0,0)$, then the number of earthquakes required to hit location $(x,y)$ will be the total number of chips entering location $(x,y)$ divided by 4 (after taking floors). For $(0,0)$ the number of earthquakes that must hit the square equals the number of chips entering $(x,y)$ divided by 4 (after taking floors) plus the number of earthquakes needed to clear the original $n$ chips off the square.
+ Since a chip only enters a square when an earthquake hits an adjacent square, we have the following formula
+\begin{equation*}
+T(x,y) = \begin{dcases} \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  (x,y) \neq (0,0) \\
+ \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  (x,y) = (0,0) .
+ \end{dcases}
+ \end{equation*}
 So solving for $T$ is a solution to a discrete version of the Laplacian. We were able to experiment different scenarious to understand the growth of $T(n)$. 
 \begin{figure}[!ht]
 \centering
@@ -353,7 +372,7 @@ So solving for $T$ is a solution to a discrete version of the Laplacian. We were
 \caption{Number of global earthquakes until stability}
 \label{fig:growthofT}
 \end{figure}
-By looking at Figure~\ref{fig:growthofT} seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(n)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(n) = \Theta(n\log n)$.
+By looking at Figure~\ref{fig:growthofT} it seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(n)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(n) = \Theta(n\log n)$.
 
 \begin{figure}[!ht]
 \centering
@@ -362,6 +381,8 @@ By looking at Figure~\ref{fig:growthofT} seems that $T(n) = \Theta(n\log n)$. Ou
 \caption{Number of local earthquakes in center until stability}
 \label{fig:growthofT'}
 \end{figure}
+
+
 
 \section{Board Variants: $n$-Trees}
 \label{Board Variants: n-Trees}
