@@ -156,11 +156,15 @@ Let $A$ be the set of locations $(x,y)$ with $f(x,y) \geq 4$. $A$ is non-empty b
 For each $(x,y) \in A$, four chips are removed from the square and one is placed on each of its four neighbors. Thus we have that 
 \[ \Phi(GE(f)) - \Phi(f)= \sum_{(x,y) \in A} \left((-4)(|x|+|y|)^2 + \sum_{(v,w) \in n(x,y)} (|v| + |w|)^2 \right) \]
 
-Since at most two of the neighbors of $(x,y)$ are a taxi cab distance $(|x|+|y|-1)^2$ from the origin and at least two of the neighbors are a taxi cab distance $(|x|+|y|+1)^2$ from the origin and $(|x|+|y|+1)^2 > (|x|+|y|-1)^2,$ we have that 
-\[\sum_{(x,y) \in A} \left((-4)(|x|+|y|)^2 + \sum_{(v,w) \in n(x,y)} (|v| + |w|)^2 \right) \geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2 + 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \]
- \[ = \sum_{(x,y) \in A} \begin{array}{cccccc} -4x^2 & -4y^2 & -8xy & & &\\
-									   +2x^2 & +2y^2 & +4xy & +2x& +2y &+ 2\\
-									   +2x^2 & +2y^2 & +4xy & -2x& -2y  & +2 \end{array} = \sum_{(x,y) \in A} 4> 0 \] 
+Since at most two of the neighbors of $(x,y)$ are a taxicab distance $(|x|+|y|-1)^2$ from the origin and at least two of the neighbors are a taxicab distance $(|x|+|y|+1)^2$ from the origin and $(|x|+|y|+1)^2 > (|x|+|y|-1)^2,$ we have that 
+\begin{align*}
+& \sum_{(x,y) \in A} \left((-4)(|x|+|y|)^2 + \sum_{(v,w) \in n(x,y)} (|v| + |w|)^2 \right) \\
+&\geq \sum_{(x,y) \in A} (-4)(|x|+|y|)^2+ 2(|x|+|y|+1)^2 + 2(|x|+|y|-1)^2 \\
+&= \sum_{(x,y) \in A} -4x^2 -4y^2 -8xy +2x^2 +2y^2 +4xy +2x + \\
+&\hspace{1.7cm} 2y + 2+2x^2 +2y^2 +4xy -2x -2y +2\\
+&= \sum_{(x,y) \in A} 4\\
+&> 0
+\end{align*}
 \end{proof}
 
 \begin{lemma}
@@ -177,7 +181,7 @@ and evaluate $\Phi(LE(f, (x_1,y_1))) - \Phi(f)$, recalling that $LE(f, (x_1, y_1
 = LE(f, (x_1, y_1))(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1,y_1)} LE(f, (x_1, y_1)) (x,y) (|x|+|y|)^2 \\- f(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1, y_1)} f(x,y)(|x|+|y|)^2 \\
 = 4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2,
 \end{align*}
-Because at most two of the neighbors of $(x,y)$ are a taxi cab distance $(|x|+|y|-1)^2$ from the origin and at least two of the neighbors are a taxi cab distance $(|x|+|y|+1)^2$ from the origin and $(|x|+|y|+1)^2 > (|x|+|y|-1)^2$ we have that 
+Because at most two of the neighbors of $(x,y)$ are a taxicab distance $(|x|+|y|-1)^2$ from the origin and at least two of the neighbors are a taxicab distance $(|x|+|y|+1)^2$ from the origin and $(|x|+|y|+1)^2 > (|x|+|y|-1)^2$ we have that 
 \begin{align*}
 4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2  \\ 
 \geq 4(|x_1| + |y_1|)^2 + 2 (|x_1| + |y_1|+1)^2 + 2 (|x_1| + |y_1|-1)^2 = 4 >0.
@@ -569,7 +573,11 @@ possible boards $b \in \mathcal{T}_n^f$ that satisfy this. We know that there ar
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}
 
-In this section, we show how we can compute different boolean functions with chips. We will show how we can build circuits and prove some impossibility results for certain circuits. This might seem similar to computation with Game of Life; however, we note that these two are inherently different since Chips will always terminate with a finite board, whereas Game of Life might not.
+In this section, we show how we can compute different Boolean functions using the poker chip board and the earthquake operator.
+
+A Boolean input is a number in $\{0,1\}$, and a Boolean function is a function that takes $k$ Boolean inputs and outputs a number in $\{0,1\}$. A simple Boolean function is the AND function that takes in 2 Boolean inputs, and returns a 1 if and only if both the input values are set to 1. Another Boolean function is the OR function, that takes in 2 Boolean inputs, and returns a 0 if and only if both input values are set to 0. If 0 is associated with ``false" and 1 is associated with '``true", then the AND function returns ``true" if both inputs are ``true", and the OR function returns ``true" if at least one input is true. More complicated Boolean functions can be made with more than 2 inputs and compositions of these inputs. Denoting an AND with $\vee$ an OR with $\wedge$, we can construct composite functions such as $b_1 \wedge (b_2 \vee b_3)$. 
+
+Boolean circuits are formed by using wires that transmit 0's and 1's, and feeding them through various \emph{gates}. For example, a wire carrying a 0 and a wire carrying a 1 can be fed through an OR gate, which will ``output" a wire carrying a 1. In this section, we construct circuits using the poker chips board that use AND an OR gates. 
 
 \subsection{Model of Computation}
 
