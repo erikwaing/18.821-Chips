@@ -186,7 +186,7 @@ Because at most two of the neighbors of $(x,y)$ are a taxi cab distance $(|x|+|y
 \subsection{A Size Bound}
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{x,y} f(x,y) = S$, and all chips are within the range $[x_l, x_h] \times [y_l, y_h]$. Then $GE^n(f)$ and $LE^n(f)$ only contain chips within the range $[x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l-\sqrt{S}, y_h+\sqrt{S}]$ for all $n$.
+Suppose $\sum_{x,y} f(x,y) = S$, and $f$ is nonzero only in the range $[x_l, x_h] \times [y_l, y_h]$. Then $GE^n(f)$ and $LE^n(f)$ are nonzero only in the range $[x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l-\sqrt{S}, y_h+\sqrt{S}]$ for all $n$.
 \end{lemma}
 
 \begin{proof}
@@ -196,12 +196,12 @@ If we do this for each initial connected component and take the total area of th
 \end{proof}
 
 \subsection{Stability Result}
-So now we are ready to prove the theorem that all finite boards will reach a stable state. 
+We are now ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
-(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}_f$, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie within the locations $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that for all $n$ all chips on $LE^n(f)$ and $GE^n(f)$ will lie in $R = [x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l - \sqrt{S}, y_h + \sqrt{S}]$. 
+(of Theorem~\ref{finitestability}) Recall that $f \in \mathcal{B}_f$, so $\sum_{x,y} f(x,y) = S$. Because $f$ is a finite board we know the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $f$ is nonzero only in the range $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that for all $n$ $LE^n(f)$ and $GE^n(f)$ are nonzero only in the range $R = [x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l - \sqrt{S}, y_h + \sqrt{S}]$. 
 
-There exists less than $(x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ possible boards $b \in \mathcal{B}_f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < (x_h - x_l + 2\sqrt{S})(y_h - y_l + 2\sqrt{S})S$ such that $LE^N(f) = LE^{N+m}(f)$ and $GE^N(f)=GE^{N+m}$ for all $m \geq 0$.
+There exists less than $\binom{R+S-1}{R-1}$ possible boards $b \in \mathcal{B}_f$ that satisfy this. We know that the state of the board cannot cycle, so there must be an $0 \leq N <\binom{R+S-1}{R-1}$ such that $LE^N(f) = LE^{N+m}(f)$ and $GE^N(f)=GE^{N+m}$ for all $m \geq 0$.
 \end{proof}
 
 \section{Acyclicity of Infinite Boards}
