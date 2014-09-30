@@ -55,63 +55,33 @@
 \vbox{
 \noindent
 \begin{quote}
-Each square of an infinite chess board contains some nonnegative number of poker chips. An earthquake hits one square that has at least four chips and redistributes them so that one chip moves in each of the four cardinal directions. Does this process reach a stable state (with fewer than four chips on every square)? Is it independent of the order of redistribution? What can be said about the steady state?
+Each square of an infinite chess board contains some nonnegative number of poker chips. An earthquake hits one square that has at least four chips and redistributes them so that one chip moves in each of the four cardinal directions. Does this process reach a stable state (with fewer than four chips on every square)? Is it independent of the order of redistribution? What can be said about the question when the underlying graph is different?
 \end{quote}
 }
 
 We also consider extensions of this problem where the earthquake hits all squares on the board at once. We will refer to earthquakes that hit only one square as $\emph{local earthquakes}$ and earthquakes that hit the entire board as $\emph{global earthquakes}$.
 
-The paper is organized so that purely mathematical results addressing the original problem statement come first. In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the problem. In particular, we formalize the effects of local and global earthquakes, as well as what it means for a board of chips to be finite or infinite. In Section~\ref{Stability of Finite Boards}, we introduce a potential function that maps finite board configurations to $\mathbb{R}$. We then use the fact that local earthquakes strictly increase the value of this potential function to show that finite boards cannot cycle back to previous configurations, from which we will conclude that all finite boards stabilize (reach a steady state). In Section~\ref{Acyclicity of Infinite Boards}, we modify the potential function so that it converges to a real number even for infinite boards. From this, we conclude that infinite boards with bounded chip stack size never cycle back to previous configurations. In Section~\ref{Order of Redistribution}, we show that the order in which local earthquakes happens does not matter, thus answering a question in the original problem statement.
+In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the problem. In particular, we formalize the effects of local earthquakes, as well as what it means for a board of chips to be finite or infinite. 
+In Section~\ref{Stability of Finite Boards}, we introduce a potential function that maps finite board configurations to $\mathbb{R}$. 
+We then use the fact that local earthquakes strictly increase the value of this potential function to show that finite boards cannot cycle back to previous configurations, from which we will conclude that all finite boards reach a steady state. 
+In Section~\ref{Acyclicity of Infinite Boards}, we modify the potential function so that it converges to a real number even for infinite boards, with bounded chip stack size. 
+From this, we conclude that such boards never cycle back to previous configurations. 
+In Section~\ref{Order of Redistribution}, we show that for a given board the number of times a particular square must be hit by a local earthquake in order for a board to stabilize is independent of the order in which the earthquakes occur. 
 
-For the remainder of the paper, we consider other approaches and extensions of the problem. In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square. We conjecture based on experimental evidence that such arragnements stabilize after $\Theta(n \log n)$ global earthquakes. In Section~\ref{Board Variants: n-Trees}, we generalize away from the chessboard set up, and consider what happens when a similar process happens on tree graphs of infinite size. Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the poker chip board and show how to construct simple Boolean circuits. We will also give impossibility results that show the limits of our model of computation.
+For the remainder of the paper, we consider other approaches and extensions of the problem. 
+In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square.
+We conjecture based on experimental evidence that such arragnements stabilize after $\Theta(n \log n)$ global earthquakes. 
+In Section~\ref{Board Variants: n-Trees}, we generalize away from the chessboard set up, and consider what happens when a similar process happens on tree graphs of infinite size. 
+Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the poker chip board and show how to construct simple Boolean circuits. We will also give impossibility results that show the limits of our model of computation.
 \section{Definitions and Notation}
 \label{Definitions and Notation}
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}\\
 
-First, we formalize the board of poker chips. We can overlay the grid on the $xy$ plane so that each grid square is a $1$ by $1$ square, and each grid intersection point is at a coordinate $(a,b)$ where $a,b \in \mathbb{Z}$. The coordinate of a given grid square is the coordinate of the grid intersection point of its lower left corner. 
+First, we formalize the board of poker chips. We consider the integer lattice $\mathbb{Z} \times \mathbb{Z}$ where each coordinate refers to an individual square.
 
-\begin{definition} A board is a function $f: \mathbb{Z} \times \mathbb{Z} \to \mathbb{Z}_{\geq 0}$.
+\begin{definition} A board is a function $b: \mathbb{Z} \times \mathbb{Z} \to \mathbb{Z}_{\geq 0}$.
 The inputs to this function correspond to coordinates of grid squares and the output is the number of chips on that square. Let $\mathcal{B}$ denote the set of all boards.
-\end{definition}
-
-Recall from the introduction that local earthquakes (abbreviated as $LE$) are operations that hit one square with more than $4$ chips and redistributes 1 chip to each cardinal neighbor. We define this operation in terms of $f$.
-
-\begin{definition}
-A local earthquake takes as input a board and the coordinates of a grid square and outputs a board, so we write $LE: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$. If $f(x,y) \geq 4$,
-\begin{align*}
-LE(f, (x,y))(x,y) = f(x,y)-4 \\
-LE( f, (x,y))(x+1, y) = f(x+1,y)+1 \\
-LE( f, (x,y))(x-1, y) = f(x-1,y)+1 \\
-LE( f, (x,y))(x, y+1) = f(x,y+1)+1 \\
-LE( f, (x,y))(x, y-1) = f(x,y-1)+1,
-\end{align*}
-Otherwise if $f(x,y) \leq 4$, then $LE(f) = f$, as the local earthquake does not move any chips.
-\end{definition}
-We use the notation $LE^n(f, \{(x_i,y_i)\})$ to denote the application of $LE$ to the board $f$, $n$ times to the squares $(x_1, y_1), \ldots (x_{n}, y_{n})$ respectively. 
-
-A global earthquake (abbreviated as $GE$) is similar to a local earthquake applied to every square on the board simultaneously.
-
-\begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
-It transforms all of the squares on the board with the following rule.
-\begin{align*}
-GE(f) = \sum_{i, j \in \mathbb{Z}\times \mathbb{Z}} LE(f, (i,j))
-\end{align*}
-\end{definition}
-
-Now that we have formalized the earthquake operators we would also like to make a precise definition of stability of a board.
-\begin{definition}
-We say that a board is stable if all squares contain values strictly less than 4. This is equivalent to saying both earthquakes (local and global) have no effect on the board. 
-\end{definition}
-
-
-\begin{definition} 
-We say that a board is finite if the total number of chips on it is finite. That is a board $f$ is finite if the sum
-\begin{equation}
-S= \sum_{(x,y) \in \mathbb{Z} \times \mathbb{Z}} f(x,y) 
-\end{equation}
-is finite. 
-We denote the set of finite boards as $\mathcal{B}_F$.
 \end{definition}
 
 In order to keep our notation compact we define a function that takes in the coordinate of a square and returns the coordinates of its neighbors in a set. 
@@ -121,6 +91,45 @@ We define the function $n: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}^2
 n(x,y) = \{ (x+1, y), (x-1, y), (x, y-1), (x, y+1) \}
 \end{equation}
 \end{definition}
+
+Recall from the introduction that local earthquakes (abbreviated as $E$) are operations that hit one square with more than $4$ chips and redistributes 1 chip to each neighbor. We define this operation in terms of $b$.
+
+\begin{definition}
+A local earthquake takes as input a board and the coordinates of a grid square and outputs a board, so we write $E: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$. If $b(x) \geq 4$, and $E$ effects square $x$ then 
+\begin{align*}
+LE[ b, x](x) = b(x)-4 \\
+LE[ b, x](y) = b(y)+1 \\
+\end{align*}
+for $ y \in n(x)$. Otherwise  $b(x,y) < 4$, and $E[b] = b$, as the local earthquake does not move any chips.
+\end{definition}
+We use the notation $E^n(f, \{x_i\})$ to denote the application of $E$ to the board $b$, $n$ times to the squares $x_1, \ldots x_{n}$ respectively. 
+
+%move stuff below somewhere else
+A global earthquake (abbreviated as $GE$) is similar to a local earthquake applied to every square on the board simultaneously.
+
+\begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
+It transforms all of the squares on the board with the following rule.
+\begin{align*}
+GE(f) = \sum_{i, j \in \mathbb{Z}\times \mathbb{Z}} LE(f, (i,j))
+\end{align*}
+\end{definition}
+%move stuff above somewhere else
+
+Now that we have formalized the earthquake operators we would also like to make a precise definition of stability of a board.
+\begin{definition}
+We say that a board is stable if all squares contain values strictly less than 4. This is equivalent to saying a local earthquake has no effect on the board. 
+\end{definition}
+
+
+\begin{definition} 
+We say that a board is finite if the total number of chips on it is finite. That is a board $f$ is finite if the sum
+\begin{equation}
+S= \sum_{(x,y) \in \mathbb{Z} \times \mathbb{Z}} f(x,y) 
+\end{equation}
+is finite. Otherwise we say a board is infinite. 
+We denote the set of finite boards as $\mathcal{B}_F$.
+\end{definition}
+
 
 \section{Stability of Finite Boards}
 \label{Stability of Finite Boards}
