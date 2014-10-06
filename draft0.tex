@@ -62,15 +62,15 @@ Each square of an infinite chess board contains some nonnegative number of poker
 We also consider extensions of this problem where the earthquake hits all squares on the board at once. We will refer to earthquakes that hit only one square as $\emph{local earthquakes}$ and earthquakes that hit the entire board as $\emph{global earthquakes}$.
 
 In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the problem. In particular, we formalize the effects of local earthquakes, as well as what it means for a board of chips to be finite or infinite. 
-In Section~\ref{Stability of Finite Boards}, we introduce a potential function that maps finite board configurations to $\mathbb{R}$. 
-We then use the fact that local earthquakes strictly increase the value of this potential function to show that finite boards cannot cycle back to previous configurations, from which we will conclude that all finite boards reach a steady state. 
-In Section~\ref{Acyclicity of Infinite Boards}, we modify the potential function so that it converges to a real number even for infinite boards, with bounded chip stack size. 
+In Section~\ref{Stability of Finite Boards}, we introduce a spread function that maps finite board configurations to $\mathbb{R}$. 
+We then use the fact that local earthquakes strictly increase the value of this spread function to show that finite boards cannot cycle back to previous configurations, from which we will conclude that all finite boards reach a steady state. 
+In Section~\ref{Acyclicity of Infinite Boards}, we modify the spread function so that it converges to a real number even for infinite boards, with bounded chip stack size. 
 From this, we conclude that such boards never cycle back to previous configurations. 
 In Section~\ref{Order of Redistribution}, we show that for a given board the number of times a particular square must be hit by a local earthquake in order for a board to stabilize is independent of the order in which the earthquakes occur. 
 
 For the remainder of the paper, we consider other approaches and extensions of the problem. 
 In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square.
-We conjecture based on experimental evidence that such arragnements stabilize after $\Theta(n \log n)$ global earthquakes. 
+We conjecture based on experimental evidence that such arrangements stabilize after $\Theta(n \log n)$ global earthquakes. 
 In Section~\ref{Board Variants: n-Trees}, we generalize away from the chessboard set up, and consider what happens when a similar process happens on tree graphs of infinite size. 
 Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the poker chip board and show how to construct simple Boolean circuits. We will also give impossibility results that show the limits of our model of computation.
 \section{Definitions and Notation}
@@ -92,39 +92,39 @@ n(x,y) = \{ (x+1, y), (x-1, y), (x, y-1), (x, y+1) \}
 \end{equation}
 \end{definition}
 
-Recall from the introduction that local earthquakes (abbreviated as $E$) are operations that hit one square with more than $4$ chips and redistributes 1 chip to each neighbor. We define this operation in terms of $b$.
+Recall from the introduction that an earthquake (abbreviated as $E$) is an operation that hits one square with more than $4$ chips and redistributes 1 chip to each neighbor. We define this operation in terms of $b$.
 
 \begin{definition}
-A local earthquake takes as input a board and the coordinates of a grid square and outputs a board, so we write $E: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$. If $b(x) \geq 4$, and $E$ effects square $x$ then 
+An earthquake takes as input a board and the coordinates of a grid square and outputs a board, so we write $E: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$. If $b(x) \geq 4$, then
 \begin{align*}
-LE[ b, x](x) = b(x)-4 \\
-LE[ b, x](y) = b(y)+1 \\
+E[ b, x](x) = b(x)-4 \\
+E[ b, x](y) = b(y)+1 \\
 \end{align*}
-for $ y \in n(x)$. Otherwise  $b(x,y) < 4$, and $E[b] = b$, as the local earthquake does not move any chips.
-\end{definition}
+for $ y \in n(x)$. Otherwise  $b(x,y) < 4$, and $E[b] = b$, as the earthquake does not move any chips.
 We use the notation $E^n(f, \{x_i\})$ to denote the application of $E$ to the board $b$, $n$ times to the squares $x_1, \ldots x_{n}$ respectively. 
+\end{definition}
 
 %move stuff below somewhere else
-A global earthquake (abbreviated as $GE$) is similar to a local earthquake applied to every square on the board simultaneously.
+A global earthquake (abbreviated as $GE$) is similar to a standard earthquake applied to every square on the board simultaneously.
 
 \begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
 It transforms all of the squares on the board with the following rule.
 \begin{align*}
-GE(f) = \sum_{i, j \in \mathbb{Z}\times \mathbb{Z}} LE(f, (i,j))
+GE(f) = \sum_{i, j \in \mathbb{Z}\times \mathbb{Z}} E(f, (i,j))
 \end{align*}
 \end{definition}
 %move stuff above somewhere else
 
-Now that we have formalized the earthquake operators we would also like to make a precise definition of stability of a board.
+Now that we have formalized the earthquake operator we would like to make a precise definition of stability of a board.
 \begin{definition}
-We say that a board is stable if all squares contain values strictly less than 4. This is equivalent to saying a local earthquake has no effect on the board. 
+We say that a board is stable if all squares contain values strictly less than 4. 
 \end{definition}
-
+This is equivalent to saying an earthquake has no effect on the board. We would also like to formalize the definition of a finite board. 
 
 \begin{definition} 
 We say that a board is finite if the total number of chips on it is finite. That is a board $f$ is finite if the sum
 \begin{equation}
-S= \sum_{(x,y) \in \mathbb{Z} \times \mathbb{Z}} f(x,y) 
+C= \sum_{(x,y) \in \mathbb{Z} \times \mathbb{Z}} f(x,y) 
 \end{equation}
 is finite. Otherwise we say a board is infinite. 
 We denote the set of finite boards as $\mathcal{B}_F$.
@@ -135,17 +135,47 @@ We denote the set of finite boards as $\mathcal{B}_F$.
 \label{Stability of Finite Boards}
 \emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
 
-In this section we show that any finite board will reach a stable state after finitely many local or global earthquakes. 
-We do so by showing that if a local or global earthquake changes the state of a board then no sequence of local or global earthquakes can transform the output board back into the original board. 
-We will then bound the maximum number of configurations that local or global earthquakes can transform it into. 
+In this section we show that any finite board will reach a stable state after finitely many earthquakes.
+We do so by showing that if a local earthquake changes the state of a board then no sequence of earthquakes can transform the output board back into the original board. 
+We will then give a bound for the maximum number of configurations that earthquakes can transform a given board into. 
 Together these show that all finite boards stabilize. 
 \begin{theorem}
 \label{finitestability}
-If $f \in B_F$, there exists $N, M > 0$ such that after $N$ global earthquakes or $M$ local earthquakes the resultant board will be stable, or for all $m > 0$, $GE^{N+m}(f) = GE^N(f)$, and $LE^{M+m}(f, X_1 \cup X_2) = LE^M(f, X_1)$.
+If $f \in B_F$, there exists $N> 0$ such that after $N$ earthquakes the resultant board will be stable, or for all $m > 0$, $E^{N+m}[b] = E^N[b]$.
 \end{theorem}
 
-\subsection{A Potential Function}
-In order to show finite boards do not cycle, we define a potential function mapping boards to nonnegative integers. We show that earthquakes increase the value of the function. We use the potential function to define a measure of how ``spread out" a board is. So we claim that spread always increases.
+In order to show finite boards do not cycle, we define a spread function that maps boards to nonnegative integers. The spread function should give some measure of how ``spread out" the chips on a board are. Earthquakes seem to ``spread out" the chips on a board and so we would like earthquakes to increase the value of the function. 
+
+\begin{lemma}
+Suppose $b \in B_F$. If $E[b, x] \neq b$, then $E^n[b, \{x_n\}] \neq b$ for all $n > 0$ and all sequences $\{x_n\}$.
+\end{lemma}
+
+\begin{proof}
+For ease of notation we use $x=(x_1, x_2)$. We define our spread function as $S: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ 
+\begin{equation*}
+S(f) = \sum_{i,j} b(i,j)(|i|+|j|)^2. 
+\end{equation*}
+We can think of $S(b)$ as the sum of the number of chips on each square weighted by the "taxi-cab" distance from the origin squared. This is well-defined since the total number of chips on the board is finite. We claim 
+\begin{equation*}
+E[f, x] \neq f \Rightarrow S(E[f, x]) > S(f)
+\end{equation*}
+That is if an earthquake changes the board, $S$ increases. This implies if $E[b, x] \neq b$, then $E^n[b, \{x_n\}] \neq b$ for all $n > 0$ and all sequences $\{x_n\}$ . In other words, a series of earthquakes applied to a finite board can never produce a previous board. 
+
+We evaluate $S(E[b, x]) - S(f)$, recalling that $E[b, x](i,j)$ refers to the value of $b$ at $(i,j)$ after an earthquake effected $x$.
+\begin{align*}
+&S(E[b, x]) - S(f) =\sum_{i,j} E[b, x](i,j)(|i|+|j|)^2 - \sum_{i,j} b(i,j)(|i|+|j|)^2 \\
+&= E[b, x](x_1,x_2)(|x_1|+|x_2|)^2 + \sum_{(i,j) \in n(x_1,x_2)} E[b, x] (i,j) (|i|+|j|)^2 \\
+&- b(x_1, x_2)(|x_1|+|x_2|)^2 + \qquad \;  \; \sum_{(i,j) \in n(x_1, x_2)} b(i,j)(|i|+|j|)^2 \\
+&= 4(|x_1| + |x_2|)^2 +\qquad \qquad \quad \; \; \sum_{(i,j) \in n(x_1, x_2)} (|i| + |j|)^2,
+\end{align*}
+At most two of the neighbors of $(x_1, x_2))$ are a taxicab distance $(|x_1|+|x_2|-1)^2$ from the origin and at least two of the neighbors are a taxicab distance $(|x_1|+|x_2|+1)^2$ from the origin and $(|x_1|+|x_2|+1)^2 > (|x_1|+|x_2|-1)^2$. Therefore 
+\begin{align*}
+&4(|x_1| + |x_2|)^2 +\sum_{(i,j) \in n(x_1, x_2)} (|i| + |j|)^2 \\
+& \geq 4(|x_1| + |x_2|)^2 + 2 (|x_1| + |x_2|+1)^2 + 2 (|x_1| + |x_2|-1)^2 = 4 >0.
+\end{align*}
+\end{proof}
+
+%Move stuff below somewhere else
 \begin{lemma}
 If $GE(f) \neq f$, then $GE^n(f) \neq f$ for all $n > 0$.
 \end{lemma}
@@ -175,32 +205,12 @@ Since at most two of the neighbors of $(x,y)$ are a taxicab distance $(|x|+|y|-1
 &> 0
 \end{align*}
 \end{proof}
+%Move stuff above somewhere else
 
-\begin{lemma}
-Suppose $f \in B_F$. If $LE(f, (x_1, y_1)) \neq f$, then $LE^n(f, \{(x_n,y_n)\}) \neq f$ for all $n > 0$ and all sequences $\{(x_n, y_n)\}$.
-\end{lemma}
-Our proof of this lemma is essentiall the same as the preceeding one. We construct a potential function and show that if a local earthquake acts nontrivially on a board then the value of the potential function increases. 
-
-\begin{proof}
-We use the same definition for $\Phi: \mathcal{B}_f \rightarrow \mathbb{Z}_{\geq 0}$ 
-\[ \Phi(f) = \sum_{x,y} f(x,y)(|x|+|y|)^2, \]
-and evaluate $\Phi(LE(f, (x_1,y_1))) - \Phi(f)$, recalling that $LE(f, (x_1, y_1))(x,y)$ refers to the value of  $f$ at $(x,y)$ after a Local earthquake effected $(x_1, y_1)$.
-\begin{align*}
-\Phi(LE(f), (x_1, y_1)) - \Phi(f) =\sum_{x,y} LE(f, (x_1, y_1))(x,y)(|x|+|y|)^2 - \sum_{x,y} f(x,y)(|x|+|y|)^2 \\
-= LE(f, (x_1, y_1))(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1,y_1)} LE(f, (x_1, y_1)) (x,y) (|x|+|y|)^2 \\- f(x_1,y_1)(|x_1|+|y_1|)^2 + \sum_{(x,y) \in n(x_1, y_1)} f(x,y)(|x|+|y|)^2 \\
-= 4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2,
-\end{align*}
-Because at most two of the neighbors of $(x,y)$ are a taxicab distance $(|x|+|y|-1)^2$ from the origin and at least two of the neighbors are a taxicab distance $(|x|+|y|+1)^2$ from the origin and $(|x|+|y|+1)^2 > (|x|+|y|-1)^2$ we have that 
-\begin{align*}
-4(|x_1| + |y_1|)^2 +\sum_{(x,y) \in n(x_1, y_1)} (|x| + |y|)^2  \\ 
-\geq 4(|x_1| + |y_1|)^2 + 2 (|x_1| + |y_1|+1)^2 + 2 (|x_1| + |y_1|-1)^2 = 4 >0.
-\end{align*}
-\end{proof}
-
-\subsection{A Size Bound}
+Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that any number of earthquakes can transform a given finite board into.
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{x,y} f(x,y) = S$, and $f$ is nonzero only in the range $[x_l, x_h] \times [y_l, y_h]$. Then $GE^n(f)$ and $LE^n(f)$ are nonzero only in the range $[x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l-\sqrt{S}, y_h+\sqrt{S}]$ for all $n$.
+Suppose $\sum_{x,y} b(x,y) = C$, and $f$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then   $E^n[b, \{x_n\}$ is nonzero only in the range $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$for all $n$ and for all sequences $\{x_n\}$ .
 \end{lemma}
 
 \begin{proof}
@@ -209,14 +219,18 @@ The most compact stable state of a board with $S$ chips is to have $3$ chips on 
 If we do this for each initial connected component and take the total area of the board, we get the desired bound.
 \end{proof}
 
-\subsection{Stability Result}
 We are now ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
-(of Theorem~\ref{finitestability}) Recall that $f \in \mathcal{B}_f$, so $\sum_{x,y} f(x,y) = S$. Because $f$ is a finite board we know the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $f$ is nonzero only in the range $[x_l, x_h] \times [y_l, y_h]$. Then by Lemma~\ref{finiteextension}, we have that for all $n$ $LE^n(f)$ and $GE^n(f)$ are nonzero only in the range $R = [x_l - \sqrt{S}, x_h + \sqrt{S}] \times [y_l - \sqrt{S}, y_h + \sqrt{S}]$. 
-
-There exists less than $\binom{R+S-1}{R-1}$ possible boards $b \in \mathcal{B}_f$ that satisfy this. We know that the state of the board cannot cycle, so there must be an $0 \leq N <\binom{R+S-1}{R-1}$ such that $LE^N(f) = LE^{N+m}(f)$ and $GE^N(f)=GE^{N+m}$ for all $m \geq 0$.
+(of Theorem~\ref{finitestability}) Recall that $b \in \mathcal{B}_f$, so $\sum_{x,y} f(x,y) = C$. Because $b$ is a finite board we know the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then by Lemma~\ref{finiteextension}, we have that $E^n[f, \{x_n\}]$ is nonzero only in the range $ R=[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$, for all $n>0$ and all sequences $\{ x_n \}$.
+If we set 
+\begin{equation*}
+D= |j_{max}-j_{min} + 2C|*|i_{max} - i_{min} + 2C|
+\end{equation*}
+then there are at most  $\binom{D+C-1}{D-1}$  boards that have exactly $C$ chips on them and are nonzero only in $R$,. We know that the state of the board cannot cycle, so there must be an $0 \leq N \leq \binom{D+C-1}{D-1}$ and some sequence $\{x_n\}$ such that $E^N[ f, \{x_n\}] = LE^{N+m}[f, \{x_n\}]$. 
 \end{proof}
+
+
 
 \section{Acyclicity of Infinite Boards}
 \label{Acyclicity of Infinite Boards}
