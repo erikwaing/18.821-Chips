@@ -176,10 +176,11 @@ and for at least two of the neighbors
 Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that any number of earthquakes can transform a given finite board into.
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{x,y} b(x,y) = C$, and $f$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then   $E^n[b, \{x_n\}$ is nonzero only in the range $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$for all $n$ and for all sequences $\{x_n\}$ .
+Suppose $\sum_{i,j} b(i,j) = C$, and $f$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then   $E^n[b, \{s_k\}]$ is nonzero only in the range $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$for all $n$ and for all sequences $\{s_k\}$ .
 \end{lemma}
 
 \begin{proof}
+%This proof needs to get fixed
 The most compact stable state of a board with $S$ chips is to have $3$ chips on each square adjacent to each other. This happens in a square $\sqrt{S/3} \times \sqrt{S/3}$. Similarly, a connected component of chips can only extend by a certain amount, where there are no two 0s adjacent to each other. This means that the most spread board which started with a connected component of $S$ chips can be $2\sqrt{S} \times 2\sqrt{S}$. 
 
 If we do this for each initial connected component and take the total area of the board, we get the desired bound.
@@ -200,16 +201,16 @@ then there are at most  $\binom{D+C-1}{D-1}$  boards that have exactly $C$ chips
 \label{Acyclicity of Infinite Boards}
 
 \emph{written by Fermi Ma, edited by Erik Waingarten and Perry Kleinhenz.}\\
-
-We can in fact show that an infinite board with a bounded number of chips on each square cannot cycle under local earthquakes. To show this we will mirror the previous section by defining a potential function on boards and then showing that the functions value only increases after a local earthquake has occurred.
+%Change this to reflect the proof given in the talk
+We can in fact show that infinite boards cannot cycle under earthquakes. To show this we will mirror the previous section by defining a potential function on boards and then showing that the functions value only increases after a local earthquake has occurred.
 
 We make the quick definition of the set of infinite boards
 \begin{definition}
-We say that a board is infinite if the total number of chips on it is finite. That is a board $f$ is infinite if the sum 
+We say that a board is infinite if the total number of chips on it is infinite. That is a board $f$ is infinite if the sum 
 \begin{equation*}
- \sum_{(x,y) \in \mathbb{Z} \times \mathbb{Z}} f(x,y)
+ \sum_{(i,j) \in \mathbb{Z} \times \mathbb{Z}} b(x,y)
 \end{equation*}
-does not converge. We denote the set of infinite boards as $\mathcal{B}_I$. We say that an infinite board $f \in \mathcal{B}_I$ is bounded if $\exists M \in \mathbb{Z}$ such that $f(x,y) \leq M$ for all $(x,y) \in \mathbb{Z} \times \mathbb{Z}$.  We denote the set of bounded infinite boards as $\mathcal{B}_B$
+does not converge. We say that an infinite board $b$ is bounded if there exists $M \in \mathbb{Z}$ such that $b(i,j) \leq M$ for all $(i,j) \in \mathbb{Z} \times \mathbb{Z}$.  We denote the set of bounded infinite boards as $\mathcal{B}_B$
 \end{definition}
 
 We once again define a potential function, although this time it is from bounded infinite boards to the positive reals. \begin{definition} Let $\Phi: \mathcal{B}_B \rightarrow \mathbb{R}_{\geq 0}$
@@ -256,78 +257,112 @@ It follows that infinite boards hit with local earthquakes can never cycle back 
 
 \emph{written by Fermi Ma and Perry Kleinhenz, edited by Erik Waingarten.}\\
 
-Here, we address the following question posed in the original problem statement: does the order of redistribution matter? As there is no order associated with global earthquakes, this question is naturally restricted to the case of local earthquakes. More specifically, we consider some finite starting board and some sequence of local earthquakes that hit the board until it finally stabilizes (note that our results from Section~\ref{Stability of Finite Boards} imply that such a sequence of earthquakes exist). We will find that the exact sequence of local earthquakes does not matter, and that if we keep hitting the board with local earthquakes anywhere they are allowed to happen, the board will always stabilize to the same final configuration.\\
+Now that we have shown that all finite boards will eventually reach a stable state we would like to know if the order in which these earthquakes occur matters? More specifically, we consider some finite starting board and some sequence of local earthquakes that stabilizes the board (note that our results from Section~\ref{Stability of Finite Boards} imply that such a sequence of earthquakes exist). We will find that the number of earthquakes that targets a particular square in order to stabilize the board is invariant of the order in which the earthquakes occur.\\
 
 First, we formalize the notion of earthquakes that are ``allowed to happen".
 
 \begin{definition}
-We define a valid earthquake to be a local earthquake that occurs on a square that, at the time of the earthquake, has at least 4 chips. We say that a sequence of local earthquakes $LE_1, LE_2, \ldots$ to be a valid sequence of earthquakes if each earthquake is valid.
+We say that an earthquake $E$ is valid if the square it targets has at least $4$ chips on it. 
+We say that a sequence of local earthquakes $E_1, E_2, \ldots E_n$ to be a valid sequence of earthquakes if each earthquake is valid in the order applied. That is 
+\begin{equation*}
+E^{m}[b, \{s_k\}](s_{m+1}  \geq 4
+\end{equation*}
+for all $1\geq m+1 \leq n$.
 \end{definition}
 
-\begin{theorem}
-Let $B$ be an initial board state that becomes a stable board $B_s$ after $N$ local earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $B_s$.
-\end{theorem}
 
-\begin{proof}
-The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
+For ease of notation we also introduce the notion of an indicator function
+\begin{definition}
+We define the indicator function $[[\cdot]]$ as 
+\begin{equation*}
+[[A]] = \begin{cases} 1 \text{ if A is true} \\ 0 \text{ if A is false} \end{cases}
+\end{equation*}
+\end{definition}
 
-First, we need a lemma in order to do the rearrangements.
-
-\begin{lemma} Let $LE_1$ and $LE_2$ be local earthquakes. If $LE_1, LE_2$ is a valid sequence and $LE_2$ is a valid earthquake then when before $LE_1$ then $LE_2, LE_1$ is also a valid sequence of earthquakes and $LE_2( LE_1 ( B ) ) = LE_1( LE_2 ( B ) )$
+Recalling that $n(s)$ refers to the set of neighbors of the square $s$ we note that if an earthquake $E$ is valid then we can write it in terms of this indicator function.
+\begin{lemma} 
+\label{earthquakeredefine}
+Consider a board $b$ if $E$ is a valid earthquake, then 
+\begin{equation*}
+E[b, s](x) = b(x) + 1[[ x \in n(s)]] - 4[[x =s]]
+\end{equation*}
 \end{lemma}
 \begin{proof}
-Suppose $LE_1$ affects the square $(x_1, y_1)$ and its neighbors, and $LE_2$ affects the square $(x_2, y_2)$ and its neighbors. Suppose  $LE_2, LE_1$ was an invalid sequence, that is $LE_2(B)(x_1, y_1)<4$, but since $LE_1$ is a valid earthquake we know $B(x_1, y_1)\geq 4$. Therefore we must have $B(x_1, y_1)=4$ and $(x_2, y_2)=(x_1,y_1)$. But then $LE_1(B)(x_1, y_1)=3$ which means $LE_1, LE_2$ would not be a valid sequence of earthquakes. Thus $LE_2, LE_1$ is a valid sequence. 
-
-Now consider $LE_2( LE_1 ( B ) )(u,v)$ for some $(u,v) \in \mathbb{Z} \times \mathbb{Z}$. Applying the definition of the local earthquake we see that 
-\begin{align*}
-LE_1 ( B )(u,v) =  B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)]] \\ 
-LE_2 ( LE_1 (B)) (u,v) = LE_1(B)(u,v)  + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] \\
-= B(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]]  \\
-= B(u,v) + [[ (u,v) \in n(x_2, y_2) ]] - 4[[ (u,v) = (x_2, y_2)]] + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
-= LE_2(B)(u,v) + [[ (u,v) \in n(x_1, y_1) ]] - 4[[ (u,v) = (x_1, y_1)] \\
-= LE_1 (LE_2 (B))(u,v) 
-\end{align*}
-The critical step in this proof is recognizing that because $LE_1$ and $LE_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
+This follows directly from the definition of an earthquake and a valid earthquake. 
 \end{proof}
 
+Now we can show that switching the order of two earthquakes with certain validity conditions does not affect the final board state.
+\begin{lemma}
+\label{swappinglemma}
+Consider a board $b$ and two earthquakes $E_1$ and $E_2$, affecting squares $s_1$ and $s_2$ respectively. If $E_1, E_2$ is a valid sequence and $E_2$ is a valid earthquake when applied before $E_1$ then $E_2, E_1$ is also a valid sequence of earthquakes and 
+\begin{equation*}
+E_2[E_1[b, s_1] s_2] = E_1[LE_2[b, s_2], s_1] 
+\end{equation*}
+\end{lemma}
+\begin{proof}
+We will first show that $E_2, E_1$ is a valid sequence and then use this to show that the order in which the earthquakes occur does not matter. 
+
+We demonstrate this by contradiction. Assume  $E_2, E_1$ is an invalid sequence, that is $E_2[B, s_2](s_1)<4$. Since $E_1$ is a valid earthquake when applied directly to $b$ we know $b(s_1) \geq 4 $. 
+Therefore we must have $b(s_1)<8$ and $s_2=s_1$. But then $E_1[b, s_1](s_1)<4$ and so $E_1, E_2$ would not be a valid sequence of earthquakes. This contradicts one our hypothesis and so $E_2, E_1$ is a valid sequence. 
+
+Now in order to demonstrate that the order in which the earthquakes are applied does not affect the final board state consider $E_2[ E_1[b, s_1], s_2](x)$ for some $(i,j) \in \mathbb{Z} \times \mathbb{Z}$. Applying Lemma ~\ref{earthquakeredefine} we have 
+\begin{align*}
+E_2[E_1[b, s_1], s_2](x) = E_1[b, s_1])(x)  + [[ x \in n(s_2) ]] - 4[[ x=s_2]] \\
+= b(x) + [[ x \in n(s_1) ]] - 4[[x = s_1] + [[ x \in n(s_2) ]] - 4[[ x= s_2)]]  \\
+= b(x) + [[ x \in n(s_2) ]] - 4[[x = s_2] + [[ x \in n(s_1) ]] - 4[[ x= s_1)]]\\
+= E_2[B, s_2](x) + [[ x \in n(s_1) ]] - 4[[ x = s_1]] \\
+= E_1[E_2 [b, s_2], s_1](x) 
+\end{align*}
+The critical step in this proof is recognizing that because $E_1$ and $E_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
+\end{proof}
 
 \begin{lemma}
-Let $LE_1,LE_2,LE_3,\dots, LE_k$ be a sequence of earthquakes, where $LE_i$ hits the square $(x_i, y_i)$. Consider  the sequence given by moving some earthquake $LE_j$ to position $m<j$ in the sequence, such that $LE_j$ is a valid earthquake for all positions between $m$ and $j$. 
+Let $E_1,E_2,E_3,\dots, E_n$ be a sequence of earthquakes, where $E_k$ hits the square $s_k$. Consider  the sequence given by moving some earthquake $E_j$ to position $m<j$ in the sequence, such that $E_j$ is a valid earthquake for all positions between $m$ and $j$, inclusive. 
 This sequence is valid and produces the same final board configuration.
 \end{lemma}
+\label{shiftlemma}
 \begin{proof}
-It is sufficient for us to show that the first $j$ earthquakes of each sequences are valid and that the board arrangement will be the same for both sequences after $j$ earthquakes. In fact we can also ignore the first $m-1$ terms, because their order is not changed they will all be valid and the board state will be identical after $m-1$ terms for both sequences. Let us call this board state $B_{m-1}$
+It is sufficient for us to show that the first $j$ earthquakes of each sequences are valid and that the board arrangement will be the same for both sequences after $j$ earthquakes. In fact we can also ignore the first $m-1$ terms, because their order is not changed so the board state will be identical after $m-1$ terms for both sequences. Let us call this board state $b_{m-1}$
 
-Therefore we must show that the sequence $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$ applied to $B_{m-1}$ is valid and produces the same board as the sequence $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ applied to $B_{m-1}$. 
+Therefore we must show that the sequence $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$ applied to $b_{m-1}$ is valid and produces the same board as the sequence $E_m, E_{m+1}, \ldots, E_{j-1}, LE_j$ applied to $b_{m-1}$. 
 
-We can show this by inducting on the length of the sequence $l=j-m+1$. The base case of $l=2$ is shown in the above lemma. Let us assume the result holds for sequences of length $l=p$ and suppose our sequence has length $l=p+1$. So our sequence is 
+We can show this by inducting on the length of the sequence $l=j-m+1$. The base case of $l=2$ is shown in lemma ~\ref{swappinglemma}. Let us assume the result holds for sequences of length $l=p$ and suppose our sequence has length $l=p+1$. So our sequence is 
 \begin{equation*}
-LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j
+E_m, E_{m+1}, \ldots, E_{j-1}, E_j
 \end{equation*}
-where $p+1=j-m+1$. Then if we set $B_{m} = LE_{m} (B_{m-1})$ by applying our inductive step we have that the two sequences 
+where $p+1=j-m+1$. Then if we set $b_{m} = E_{m} (b_{m-1})$ by applying our inductive step we have that the two sequences 
 \begin{align*}
-LE_{m+1}, \ldots, LE_{j-1}, LE_{j} \\ 
-LE_{j}, LE_{m+1}, \ldots,  LE_{j-1} 
+E_{m+1}, \ldots, E_{j-1}, E_{j} \\ 
+E_{j}, E_{m+1}, \ldots,  E_{j-1} 
 \end{align*}
-are both valid and produce the same final board configuration. Now if we consider the board state $B_{m-1}$ by our above Lemma we know that the two sequences 
+are both valid and produce the same final board configuration. Now if we consider the board state $b_{m-1}$ and once again apply Lemma ~\ref{swappinglemma} we know that the two sequences 
 \begin{align*}
-LE_{m}, LE_{j} \\
-LE_{j}, LE_{m}
+E_{m}, E_{j} \\
+E_{j}, E_{m}
 \end{align*}
-are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $LE_j, LE_m, LE_{m+1}, \ldots, LE_{j-1}$  and $LE_m, LE_{m+1}, \ldots, LE_{j-1}, LE_j$ both applied to $B_{m-1}$ are valid and produce the same board. 
+are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$  and $E_m, E_{m+1}, \ldots, E_{j-1}, E_j$ both applied to $b_{m-1}$ are valid and produce the same board. 
 \end{proof}
 
-Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least $\lfloor \frac{A_i}{4} \rfloor$ earthquakes or else it will not eventually stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquake events that correspond to square $i$. All these earthquakes can be moved to the front of the sequence. We do this for all squares $i$. By the lemma, the final positioning of the board does not change.
+The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
 
-The order of the earthquakes that have been moved to the front of the sequence can be in any order. This holds true because all these earthquakes could have happened with the initial values of the squares (maybe need to explain this better? but i think it's clear...).
+\begin{theorem}
+Let $b$ be a board that becomes a stable board $b$ after $N$ local earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $b$. Furthermore the number of times that a square $x$ is targeted is invariant of the order in which the earthquakes occur. 
+\end{theorem}
+\begin{proof}
+Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least $\lfloor \frac{A_i}{4} \rfloor$ earthquakes in order to stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquakes that target  square $i$. We note that these earthquakes will be valid in any position to the left of their original one because they are among the first $\lfloor \frac{A_i}{4} \rfloor$ to target a square that starts with $A_i$ chips on it. Thus using Lemma ~\ref{shiftlemma}, we can move these earthquakes to the front of the sequence without changing the final positioning of the board. We do this for all squares $i$. 
 
-Now, find the point in the sequence that begins right after this point. Consider the board at this current point in time, and note that we have new values for all the squares. Then repeat this argument, moving a new set of earthquakes to the front. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
+The earthquakes that have been moved to the front of the sequence can be in any order because all these earthquakes could have happened with the initial values of the squares. 
+
+Now, find the end of the sequence of moved earthquakes and consider the board at this current point in time, noting that we have new values for all the squares. We repeat this argument, moving a new set of earthquakes directly to the right of previously moved earthquakes. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
+
+Thus we have transformed our starting sequence into 
 
 \end{proof}
 
 \section{Global Earthquakes}
 \label{Global Earthquakes}
 \emph{written by Perry Kleinhenz, edited by Erik Waingarten and Fermi Ma}
+
 Now that we have shown that the order in which earthquakes occur does not matter we might wonder if the behavior of the system changes when all possible earthquakes occur at the \emph{same} time. In this section we will formalize this notion and show that all finite boards stabilize under such earthquakes as well.
 
 We will call these earthquakes global earthquakes. A global earthquake (abbreviated as $GE$) is esentially to a standard earthquake applied to every square on the board simultaneously.
@@ -342,17 +377,17 @@ That is the value of the board at a square after applying a global earthquake is
 In order to prove that finite boards stabilize under global earthquakes we will first show that global earthquakes are equivalent to some finite sequence of standard earthquakes. Before doing so we will introduce a definition to refer to the squares a global earthquake can effect.
 
 \begin{definition} The active sites $A_b$ of a board $b$ are all those squares which have at least 4 chips on them or written symbolically
-\begin{definition}
+\begin{equation*}
 A_b=\{ (i,j); b(i,j) \geq 4 \}
 \end{equation*}
 \end{definition}
 
 We now show that a global earthquake is equivalent to applying standard earthquakes to each of the active sites on a board in any order.
-\begin{lemma} Suppose $b$ is a finite board. If we let arrange the terms of $A_b$ into a sequence $\{a_k}$ with $N$ elements then 
+\begin{lemma} Suppose $b$ is a finite board. If we let arrange the terms of $A_b$ into a sequence $\{a_k\}$ with $N$ elements then 
 \begin{equation*}
 GE[b] = E^N[b, \{a_k\}]
 \end{equation*}
-\end{llemma}
+\end{lemma}
 \begin{proof} 
 A standard earthquake is nontrivial only if the square it targets is contained in $A_b$. That is $E[b, s] = b$  if $s \notin A_b$. Therefore $GE[b](i,j)$ becomes
 \begin{equation*}
@@ -369,14 +404,15 @@ E^N[b, \{a_k\}](i,j) = b(i,j) + \sum_{a_k \in A_b} (E[b, a_k](i,j) - b(i,j)),
 but this is the same expression as the value at $(i,j)$ after a global earthquake effects the board $b$. 
 \end{proof}
 
-\begin{myth} Suppose $b$ is a finite board, then there exists $N$ such that for all $m>0$ 
+\begin{theorem} Suppose $b$ is a finite board, then there exists $N$ such that for all $m>0$ 
 \begin{equation*}
 GE^{N+m}[b] = GE^{N}[b]
 \end{equation*}
-\end{myth}
+\end{theorem}
 \begin{proof}
 Assume otherwise. That is for some board $b, GE^N[b]$ always has at least one square with at least four chips on it. But applying a global earthquake is equivalent to applying a sequence of standard earthquakes and so we have a board which does not stabilize under standard earthquakes which is a contradiction.  
 \end{proof}
+
 
 \section{Time until Stability}
 \label{Time until Stability}
