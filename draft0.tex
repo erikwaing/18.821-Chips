@@ -59,14 +59,14 @@ Each node of an infinite chess board contains some nonnegative number of poker c
 \end{quote}
 }
 
-We also consider extensions of this problem where the earthquake hits all squares on the board at once. We will refer to earthquakes that hit only one square as $\emph{local earthquakes}$ and earthquakes that hit the entire board as $\emph{global earthquakes}$.
+We also consider extensions of this problem where the earthquake hits all squares on the board at once. We will refer to earthquakes that hit only one square as $\emph{earthquakes}$ and earthquakes that hit the entire board as $\emph{global earthquakes}$.
 
-In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the problem. In particular, we formalize the effects of local earthquakes, as well as what it means for a board of chips to be finite or infinite. 
+In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the problem. In particular, we formalize the effects of earthquakes, as well as what it means for a board of chips to be finite or infinite. 
 In Section~\ref{Stability of Finite Boards}, we introduce a spread function that maps finite board configurations to $\mathbb{R}$. 
-We then use the fact that local earthquakes strictly increase the value of this spread function to show that finite boards cannot cycle back to previous configurations, from which we will conclude that all finite boards reach a steady state. 
+We then use the fact that earthquakes strictly increase the value of this spread function to show that finite boards cannot cycle back to previous configurations, from which we will conclude that all finite boards reach a steady state. 
 In Section~\ref{Acyclicity of Infinite Boards}, we modify the spread function so that it converges to a real number even for infinite boards, with bounded chip stack size. 
 From this, we conclude that such boards never cycle back to previous configurations. 
-In Section~\ref{Order of Redistribution}, we show that for a given board the number of times a particular square must be hit by a local earthquake in order for a board to stabilize is independent of the order in which the earthquakes occur. 
+In Section~\ref{Order of Redistribution}, we show that for a given board the number of times a particular square must be hit by a earthquake in order for a board to stabilize is independent of the order in which the earthquakes occur. 
 
 For the remainder of the paper, we consider other approaches and extensions of the problem. 
 In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square.
@@ -125,7 +125,7 @@ We denote the set of finite boards as $\mathcal{B}_F$.
 \emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
 
 In this section we show that any finite board will reach a stable state after finitely many earthquakes.
-We do so by showing that if a local earthquake changes the state of a board then no sequence of earthquakes can transform the output board back into the original board. 
+We do so by showing that if a earthquake changes the state of a board then no sequence of earthquakes can transform the output board back into the original board. 
 We will then give a bound for the maximum number of configurations that earthquakes can transform a given board into. 
 Together these show that all finite boards stabilize. 
 \begin{theorem}
@@ -202,7 +202,7 @@ then there are at most  $\binom{D+C-1}{D-1}$  boards that have exactly $C$ chips
 
 \emph{written by Fermi Ma, edited by Erik Waingarten and Perry Kleinhenz.}\\
 %Change this to reflect the proof given in the talk
-We can in fact show that infinite boards cannot cycle under earthquakes. To show this we will mirror the previous section by defining a potential function on boards and then showing that the functions value only increases after a local earthquake has occurred.
+We can in fact show that infinite boards cannot cycle under earthquakes. To show this we will mirror the previous section by defining a potential function on boards and then showing that the functions value only increases after an earthquake has occurred.
 
 We make the quick definition of the set of infinite boards
 \begin{definition}
@@ -248,8 +248,8 @@ and since $LE(f, (x,y))(x_0,y_0)>f(x,y)$ for $(x,y) \in n(x_0,y_0)$ we have
 Furthermore we know that one of the adjacent squares is at distance $d-1$, and that 
 \begin{equation*}
 \frac{LE(f, (x,y))(x_0,y_0)-f(x,y)}{4(|x|+|y|+1)\cdot4^{(|x|+|y|)}}  = \frac{1}{4(d)\cdot 4^{d-1}} = \frac{4}{4(d)\cdot 4^d}
-\end{equation*}which is larger in magnitude than $\frac{4}{4(d+1)\cdot 4^d}$. Therefore the value of $\Phi$ strictly increases after any local earthquake.
-It follows that infinite boards hit with local earthquakes can never cycle back to a previous arrangement.
+\end{equation*}which is larger in magnitude than $\frac{4}{4(d+1)\cdot 4^d}$. Therefore the value of $\Phi$ strictly increases after any earthquake.
+It follows that infinite boards hit with earthquakes can never cycle back to a previous arrangement.
 \end{proof}
 
 \section{Order of Redistribution}
@@ -257,13 +257,15 @@ It follows that infinite boards hit with local earthquakes can never cycle back 
 
 \emph{written by Fermi Ma and Perry Kleinhenz, edited by Erik Waingarten.}\\
 
-Now that we have shown that all finite boards will eventually reach a stable state we would like to know if the order in which these earthquakes occur matters? More specifically, we consider some finite starting board and some sequence of local earthquakes that stabilizes the board (note that our results from Section~\ref{Stability of Finite Boards} imply that such a sequence of earthquakes exist). We will find that the number of earthquakes that targets a particular square in order to stabilize the board is invariant of the order in which the earthquakes occur.\\
+Now that we have shown that all finite boards will eventually reach a stable state we would like to know if the order in which these earthquakes occur matters. More specifically, if we consider some finite starting board and two sequences of earthquakes that stabilizes the board, we would like to know if the resultant board is the same for both sequences. 
+
+In fact we are able to show that not only is this final board the same but that the number of earthquakes that target a particular square in order to stabilize the board is invariant of the order in which the earthquakes occur. We do so by first describing conditions under which the position of an Earthquake in a sequence can change without effecting the final state. We then define a process that rearranges a sequence of earthquakes without changing the final board state and produces the same sequence for any board.\\
 
 First, we formalize the notion of earthquakes that are ``allowed to happen".
 
 \begin{definition}
 We say that an earthquake $E$ is valid if the square it targets has at least $4$ chips on it. 
-We say that a sequence of local earthquakes $E_1, E_2, \ldots E_n$ to be a valid sequence of earthquakes if each earthquake is valid in the order applied. That is 
+We say that a sequence of earthquakes $E_1, E_2, \ldots E_n$ to be a valid sequence of earthquakes if each earthquake is valid in the order applied. That is 
 \begin{equation*}
 E^{m}[b, \{s_k\}](s_{m+1}  \geq 4
 \end{equation*}
@@ -271,7 +273,7 @@ for all $1\geq m+1 \leq n$.
 \end{definition}
 
 
-For ease of notation we also introduce the notion of an indicator function
+For ease of notation we also introduce an indicator function
 \begin{definition}
 We define the indicator function $[[\cdot]]$ as 
 \begin{equation*}
@@ -316,6 +318,7 @@ E_2[E_1[b, s_1], s_2](x) = E_1[b, s_1])(x)  + [[ x \in n(s_2) ]] - 4[[ x=s_2]] \
 The critical step in this proof is recognizing that because $E_1$ and $E_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
 \end{proof}
 
+We can use this lemma along with a simple induction to show that under appropriate conditions we can move an earthquake earlier in the sequence without affecting the final board state.
 \begin{lemma}
 Let $E_1,E_2,E_3,\dots, E_n$ be a sequence of earthquakes, where $E_k$ hits the square $s_k$. Consider  the sequence given by moving some earthquake $E_j$ to position $m<j$ in the sequence, such that $E_j$ is a valid earthquake for all positions between $m$ and $j$, inclusive. 
 This sequence is valid and produces the same final board configuration.
@@ -343,20 +346,24 @@ E_{j}, E_{m}
 are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$  and $E_m, E_{m+1}, \ldots, E_{j-1}, E_j$ both applied to $b_{m-1}$ are valid and produce the same board. 
 \end{proof}
 
+Now that we have developed a tool that will allow us to move earthquakes in a sequence without changing the final board we can show that the number of earthquakes hitting a square for a given board is the same regardless of order. 
 The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
 
 \begin{theorem}
-Let $b$ be a board that becomes a stable board $b$ after $N$ local earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $b$. Furthermore the number of times that a square $x$ is targeted is invariant of the order in which the earthquakes occur. 
+Let $b$ be a board that becomes a stable board $b$ after $N$ earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $b$. Furthermore the number of times that a square $x$ is targeted is invariant of the order in which the earthquakes occur. 
 \end{theorem}
 \begin{proof}
-Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least $\lfloor \frac{A_i}{4} \rfloor$ earthquakes in order to stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquakes that target  square $i$. We note that these earthquakes will be valid in any position to the left of their original one because they are among the first $\lfloor \frac{A_i}{4} \rfloor$ to target a square that starts with $A_i$ chips on it. Thus using Lemma ~\ref{shiftlemma}, we can move these earthquakes to the front of the sequence without changing the final positioning of the board. We do this for all squares $i$. 
+Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least 
+\begin{equation*}
+\lfloor \frac{A_i}{4} \rfloor
+\end{equation*}
+earthquakes in order to stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquakes that target  square $i$. We note that these earthquakes will be valid in any position to the left of their original one because they are among the first $\lfloor \frac{A_i}{4} \rfloor$ to target a square that starts with $A_i$ chips on it. Thus using Lemma ~\ref{shiftlemma}, we can move these earthquakes to the front of the sequence without changing the final positioning of the board. We do this for all squares $i$. 
 
 The earthquakes that have been moved to the front of the sequence can be in any order because all these earthquakes could have happened with the initial values of the squares. 
 
-Now, find the end of the sequence of moved earthquakes and consider the board at this current point in time, noting that we have new values for all the squares. We repeat this argument, moving a new set of earthquakes directly to the right of previously moved earthquakes. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
+Now, we find the end of the sequence of moved earthquakes and consider the board at this point, noting that we have new values for all the squares. We repeat this argument, moving a new set of earthquakes directly to the right of previously moved earthquakes. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
 
-Thus we have transformed our starting sequence into 
-
+Thus we have transformed our starting sequence into canonical sequence that is completely determined by the state of the initial board. Therefore we can do this for any other sequence that stabilizes the board and get the same sequence. This shows not only that the order in which the earthquakes occur does not change the final state of the board but also that a given square is targeted by the same number of valid earthquakes regardless of the order of the earthquakes (we know this because our process only shifts the order of valid earthquakes it never adds or removes them). 
 \end{proof}
 
 \section{Global Earthquakes}
@@ -412,7 +419,6 @@ GE^{N+m}[b] = GE^{N}[b]
 \begin{proof}
 Assume otherwise. That is for some board $b, GE^N[b]$ always has at least one square with at least four chips on it. But applying a global earthquake is equivalent to applying a sequence of standard earthquakes and so we have a board which does not stabilize under standard earthquakes which is a contradiction.  
 \end{proof}
-
 
 \section{Time until Stability}
 \label{Time until Stability}
