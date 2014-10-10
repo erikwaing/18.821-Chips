@@ -133,6 +133,8 @@ def drawBoard(board, xrange, yrange, maxValue, recomputeMax=False, showActive=Fa
             r, g, b = point*dr, 0, 0
             if point >= 4 and showActive:
                 r, g, b = 0, 255, 0
+            if point > 1:
+                g = 100
             if r > 255:
                 r = 255
                 g = point*dg
@@ -154,10 +156,11 @@ def showImage(board, xrange, yrange, wait=False, showActive=False):
         changed = act(board)
         img = drawBoard(board, xrange, yrange, maxValue, True, showActive=showActive)
         pl.imshow(img)
-        pl.pause(0.02)
+        if not wait:
+            pl.pause(0.02)
         pl.draw()
-        if wait:
-            raw_input()
+    #    if wait:
+    #        raw_input()
     print "Done"
 
 def wire(x,y):
@@ -230,3 +233,22 @@ def showANDGate(bit1, bit2):
     if bit2 == True:
         gate[(2, -1)] = 4
     showImage(gate, 14, 12, True, True)
+
+def present():
+    showImage({(0,0):30}, 10, 10)
+    print "Press to go on"
+    raw_input()
+    showImage({(0,0):100}, 15, 15)
+    print "Press to go on"
+    raw_input()
+    showWireActing()
+    print "Press to go on"
+    raw_input()
+    showSynchronizer()
+    raw_input()
+    showORGate(True, False)
+    showORGate(False, False)
+    print "Press to go on"
+    raw_input()
+    showANDGate(True, False)
+    showANDGate(True, True)
