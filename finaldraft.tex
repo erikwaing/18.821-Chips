@@ -75,18 +75,22 @@ Finally, in Section~\ref{Computing with Chips} we present a model of computation
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}\\
 
-First, we formalize the board of poker chips. We consider the integer lattice $\mathbb{Z} \times \mathbb{Z}$ as the set of nodes, indexed by the corresponding coordinate. We made the two nodes have an edge between them if they are a distance of 1 apart.
+First, we formalize the definition of a board. The board is an infinite grid graph with a nonnegative number of chips placed at each node
+\begin{center}
+\includegraphics[scale=0.5]{grid1.png}
+\end{center}
 
-\begin{definition} A board is a function $b: \mathbb{Z} \times \mathbb{Z} \to \mathbb{Z}_{\geq 0}$.
-The input to this function correspond to the nodes and the output is the number of chips on that node. Let $\mathcal{B}$ denote the set of all boards.
+We can coordinatize the grid graph by labeling it like the standard Cartesian grid, where we fix one node to be the origin $(0,0)$, and we index all other nodes by integer coordinates $(i,j)$. We will define the board as a function from the Cartesian grid to the nonnegative integers.
+
+\begin{definition} We write boards as functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
 \end{definition}
 
-In order to keep our notation compact we let $n(i,j)$ be the set of neighbors of node $(i,j)$.
-\begin{definition}
-We define the function $n: \mathbb{Z} \times \mathbb{Z} \rightarrow \mathbb{Z}^2 \times \mathbb{Z}^2 \times \mathbb{Z}^2 \times \mathbb{Z}^2 $ as 
-\begin{equation}
+This function maps node labels given as integer coordinates to chip stack sizes. For example, if a board $b$ has 15 chips at the node with coordinate $(5,4)$, then $b(5,4) = 15$.
+
+\begin{definition} We define $n(i,j)$ to be the set of neighbors of node $(i,j)$
+\begin{equation*}
 n(i,j) = \{ (i+1, j), (i-1, j), (i, j-1), (i, j+1) \}.
-\end{equation}
+\end{equation*}
 \end{definition}
 
 Recall from the introduction that an earthquake (abbreviated as $E$) is an operation that hits one node with more than $4$ chips and redistributes 1 chip to each neighbor. We define this operation in terms of $b$.
