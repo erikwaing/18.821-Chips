@@ -622,6 +622,8 @@ There does not exists a board which computes $f(x) = \neg x$.
 
 \begin{proof}
 Suppose for contradiction that we have a board $b$ with one input $i$ and one output $o$ which computes NOT. Then we know that there exists some node which initially has over $4$ chips, since otherwise, the board would be stable and so the output never gets activated. 
+
+Let $A(0)$ be the set of nodes that get activated when $i = 0$ and $A(1)$ be the set of nodes that get activated when $i=1$. Then we claim that $A(0) \subset A(1)$. This would yield a contradiction since $o \in A(0)$ but $o \notin A(1)$. 
 \end{proof}
 
 Our model of computation is as follows: we assume a finite board with finitely many chips. The inputs are designated by each two squares, one apart one is the ``clock" square and other the bit square. Likewise, the outputs each have a ``clock" square and a bit square. The ``clock" squares are set the value 4 and the bit squres are set to 4 if they are 1 and 0 otherwise. A computation is done by a series of earthquakes, when an output has the clock square active, then the bit square is read, and that output bit is considered read. 
