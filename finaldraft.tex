@@ -80,12 +80,15 @@ First, we formalize the definition of a board. The board is an infinite grid gra
 \includegraphics[scale=0.5]{grid1.png}
 \end{center}
 
+\begin{center}
+\includegraphics[scale=0.8]{cartesiangrid.png}
+\end{center}
 We can coordinatize the grid graph by labeling it like the standard Cartesian grid, where we fix one node to be the origin $(0,0)$, and we index all other nodes by integer coordinates $(i,j)$. We will define the board as a function from the Cartesian grid to the nonnegative integers.
 
 \begin{definition} We write boards as functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
 \end{definition}
 
-This function maps node labels given as integer coordinates to chip stack sizes. For example, if a board $b$ has 15 chips at the node with coordinate $(5,4)$, then $b(5,4) = 15$.
+This function maps node labels given as integer coordinates to chip stack sizes. For example, FIGUREREFERENCE if a board $b$ has 8 chips at the node with coordinate $(3,1)$, then $b(3,1) = 8$.
 
 \begin{definition} We define $n(i,j)$ to be the set of neighbors of node $(i,j)$
 \begin{equation*}
@@ -93,31 +96,29 @@ n(i,j) = \{ (i+1, j), (i-1, j), (i, j-1), (i, j+1) \}.
 \end{equation*}
 \end{definition}
 
-Recall from the introduction that an earthquake (abbreviated as $E$) is an operation that hits one node with more than $4$ chips and redistributes 1 chip to each neighbor. We define this operation in terms of $b$.
+We now formally define the earthquake operation. Recall that an earthquake hits a node that has 4 or more chips and moves 1 chip to each of the node's 4 neighbors. 
 
 \begin{definition}
-An earthquake takes as input a board and a node and outputs a board, so we write $E: \mathcal{B} \times (\mathbb{Z} \times \mathbb{Z}) \rightarrow \mathcal{B}$. If $b(s) \geq 4$, then
+An earthquake hits a board $b$ at node $s$, and the resulting board is denoted $E_sb$. If $b(s) \geq 4$, then
 \begin{align*}
-E[b, s](s) &= b(s)-4 \\
-E[b, s](t) &= b(t)+1, \\
+E_sb(s) &= b(s)-4,\\
+E_sb(t) &= b(t)+1 \hspace{.5cm} \forall t \in n(s).\\
 \end{align*}
-for $ t \in n(s)$. Otherwise  $b(s) < 4$, and $E[b, s] = b$, as the earthquake does not move any chips.
-We use the notation $E^n[b, \{s_k\}]$ to denote the application of $E$ to the board $b$ $n$ times, to the squares $s_1, \ldots s_{n}$ respectively. 
+if $b(s) < 4$, the earthquake has no effect and $E_sb = b$. 
 \end{definition}
 
-Now that we have formalized the earthquake operator we would like to make a precise definition of stability of a board.
+Often, a number of earthquakes will hit a board $b$. We represent the result of multiple earthquakes by a composition of the earthquake functions. For example, if an earthquake hits node 1, then node 2, and finally node 3, the resulting board is written as $E_3E_2E_1b$.
+
+Now that we have formalized the earthquake operator, we make precise the definition of stability.
 \begin{definition}
 We say that a board is stable if all nodes contain values strictly less than 4. 
 \end{definition}
-This is equivalent to saying all earthquakes have no effect on the board. We would also to have a formal definition for a finite board. 
+This definition corresponds with the intuitive notion of a process that has stabilized, as stable boards can no longer be affected by earthquake operations.
+
+Finally, we formalize the notion of $\emph{finite}$ and $\emph{infinite}$ boards, a distinction we will refer to extensively throughout this paper.
 
 \begin{definition} 
-We say that a board is finite if the total number of chips on it is finite. That is a board $b$ is finite if the sum
-\begin{equation}
-C= \sum_{s \in \mathbb{Z} \times \mathbb{Z}} b(s), 
-\end{equation}
-is finite. Otherwise we say a board is infinite. 
-We denote the set of finite boards as $\mathcal{B}_F$.
+We say that a board is finite if the total number of chips on it is finite. Otherwise we say a board is infinite. 
 \end{definition}
 
 \section{Stability of Finite Boards}
