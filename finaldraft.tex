@@ -318,6 +318,7 @@ Now that we have developed a tool that will allow us to move earthquakes in a se
 The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
 
 \begin{theorem}
+\label{thm:order}
 Let $b$ be a board that becomes a stable board $b$ after $N$ earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $b$. Furthermore the number of times that a square $x$ is targeted is invariant of the order in which the earthquakes occur. 
 \end{theorem}
 \begin{proof}
@@ -626,6 +627,21 @@ Suppose for contradiction that we have a board $b$ with one input $i$ and one ou
 
 Let $A(0)$ be the set of nodes that get activated when $i = 0$ and $A(1)$ be the set of nodes that get activated when $i=1$. Then we claim that $A(0) \subset A(1)$. This would yield a contradiction since $o \in A(0)$ but $o \notin A(1)$. 
 \end{proof}
+
+\begin{lemma}
+Let $A(i)$ be the set of active nodes in an execution of board $b$ with input node $i$. Then $A(0) \subset A(1)$.
+\end{lemma}
+
+\begin{proof}
+By Theorem~\ref{thm:order}, we can simulate an execution of the board with input be 0 before we apply earthquakes to the input node. We start with a board $b$ where the input is 1, so it has 4 chips. We simulate by applying earthquakes to the active nodes that are not the input. If the input node ever receives more than $8$ chips, we apply one earthquake to the input node. This way, we guarantee that the input node always contains more than $4$ chips. In addition, the input node does not contain more than $7$ chips for more than one consecutive earthquake.
+We do this until every node except the input node has less than 4 chips.
+
+Note that this execution is indistinguishable from the execution with input set to 0. This means that all nodes activated in the execution with input 0 are the same as the nodes activated in the above mentioned execution. 
+
+Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
+\end{proof}
+
+\subsection{More powerful model}
 
 Our model of computation is as follows: we assume a finite board with finitely many chips. The inputs are designated by each two squares, one apart one is the ``clock" square and other the bit square. Likewise, the outputs each have a ``clock" square and a bit square. The ``clock" squares are set the value 4 and the bit squres are set to 4 if they are 1 and 0 otherwise. A computation is done by a series of earthquakes, when an output has the clock square active, then the bit square is read, and that output bit is considered read. 
 
