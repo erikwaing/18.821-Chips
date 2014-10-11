@@ -1,4 +1,4 @@
-documentclass[runningheads,a4paper]{llncs}
+\documentclass[runningheads,a4paper]{llncs}
 
 \usepackage{amssymb}
 \setcounter{tocdepth}{3}
@@ -113,6 +113,15 @@ E_sb(t) &= b(t)+1 \hspace{.5cm} \forall t \in n(s).\\
 \end{align*}
 if $b(s) < 4$, the earthquake has no effect and $E_sb = b$. 
 \end{definition}
+
+\begin{figure}
+\centering
+\subfigure[Board before earthquake.]{\includegraphics[width=0.25\linewidth]{action1.pdf}\label{fig:boardbeforeearthquake}}
+\qquad\qquad
+\subfigure[Board after earthquake to active square]{\includegraphics[width=0.25\linewidth]{action2.pdf}\label{fig:boardafterequarthquake}}
+\caption{Earthquake applied to board. Green signifies active nodes}
+\label{fig:earthquakeexample}
+\end{figure}
 
 Often, a number of earthquakes will hit a board $b$. We represent the result of multiple earthquakes by a composition of the earthquake functions. For example, if an earthquake hits node 1, then node 2, and finally node 3, the resulting board is written as $E_3E_2E_1b$.
 
