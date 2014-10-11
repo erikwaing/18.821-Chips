@@ -123,6 +123,8 @@ if $b(s) < 4$, the earthquake has no effect and $E_sb = b$.
 \label{fig:earthquakeexample}
 \end{figure}
 
+Generally, when we refer to an earthquake, we restrict our attention to earthquakes that actually change the state of the board. 
+
 Often, a number of earthquakes will hit a board $b$. We represent the result of multiple earthquakes by a composition of the earthquake functions. For example, if an earthquake hits node 1, then node 2, and finally node 3, the resulting board is written as $E_3E_2E_1b$.
 
 Now that we have formalized the earthquake operator, we make precise the definition of stability.
@@ -141,10 +143,17 @@ A board is finite if the total number of chips on it is finite. Otherwise we say
 \label{Stability of Finite Boards}
 \emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
 
-In this section we show that any finite board will reach a stable state after finitely many earthquakes.
-We do so by showing that if a earthquake changes the state of a board then no sequence of earthquakes can transform the output board back into the original board. 
-We will then give a bound for the maximum number of configurations that earthquakes can transform a given board into. 
-Together these show that all finite boards stabilize. 
+In this section, we show that any finite board will eventually become stable after a finite number of earthquakes. We first introduce a spread function that maps boards to positive numbers. We demonstrate that the spread function strictly increases after earthquakes are applied, which will imply that an earthquake irreversably changes a board configuration. In other words, we can never return to a given board arrangement.
+
+We then give a bound on the maximum number of board configurations a finite board can ever reach. We will argue that since a finite number of boards are reachable and board states are never revisited, that eventually this process must terminate. Thus, we eventually reach a stable board where no earthquakes are allowable.
+
+To define the spread function, we fix one coordinate on a board $b$ as the origin $(0,0)$, and we define the \emph{taxicab distance} $d(s)$ of a node $s$ on the board to be $|s_x| + |s_y|$, where $s_x$ is the $x$ coordinate of node $s$, and $s_y$ is the $y$ coordinate of node $s$. Then the spread function is
+\[ \psi(b) = \sum_{\text{all nodes }s}b(s)d(s)^2 \]
+
+The motivation for this definition is that the spread function should give a measure of how ``spread out" the chips on a board are. Intuitvely, earthquakes have the function of moving chips that are condensed in a single piile and spreading them out over a greater area. This function, which sums up the chip stack sizes weighted by the taxicab distance squared to the origin, sufficiently captures the idea of spread.
+
+
+
 \begin{theorem}
 \label{finitestability}
 If a board $b$ is finite then there exists $N>0$ such that after applying a $N$ earthquakes the resultant board will be stable.
@@ -391,7 +400,6 @@ Thus we have transformed our starting sequence into canonical sequence that is c
 
 \section{Time until Stability}
 \label{Time until Stability}
-
 
 Another question of interest is how many global earthquakes it would take for a finite board to reach a stable state. We will first focus on the case of the board with only one stack containing $n$ chips. 
 
