@@ -530,37 +530,135 @@ We note that exactly $d-1$ of the neighbors of $s$ are a distance $|s_1 +1|$ fro
 
 \begin{lemma}
 \label{finiteextensiontree}
-Suppose $\sum_{x,y} f(x,y) = S$, and all chips are between the levels $[x_l, x_h]$. Then $GE_T^m(f)$ and $LE_T^m(f)$ only contain chips within the range $[x_l - 2S, x_h + 2S]$ for all $m$.
+Suppose $\sum_{x,y} f(x,y) = C$, and the first coordinate of all nodes which are nonzero are in $[i_{min}, i_{max}]$. Then $E^r[b, \{s_k\}]$ only contain chips within the range $[i_{min} - 2C, i_{max} + 2C]$ for all $r>0$ and all sequences $\{s_k\}$ of length $r$.
 \end{lemma}
 
 \begin{proof}
-It is obvious that a board with $S$ chips on level $l<0$ will have a lower $X_{min}$ than a board with $S$ chips on level 0, and the analogous statement for $X_{max}$ holds as well. 
+It is obvious that a board with $C$ chips on nodes with first coordinate $l<0$ will have a lower $i_{min}$ than a board with $S$ chips on level 0, and the analogous statement for $i_{max}$ holds as well. 
 
-Now as a very crude lower bound we know that $S$ chips on a single node at level $l<0$ will have an $X_{min}$ no lower than $l-2S$ as there must be at least one chip on every other level, as chips only move one level at a time. 
+Now because chips cannot be transferred between two nodes whose first coordinate differs by more than 1, we know that $C$ chips on a single node with first coordinate $l<0$ will have an $i_{min}$ no lower than $l-2C$ as there must be at least one chip on every other level. 
 
-If we take any other arrangement of $S$ chips, with $X_{min}=l$ but not all $S$ chips are on a single node. We know that $X_{min}$ for this board is bounded below by $l-2S$. In order to have an $X_{min}$ below this at some point in time it would be possible to have $S$ chips on the same node on level $l$. But this cannot occur because in order to move a chip down a level, one chip must move up a level. Therefore if $X_{min}=x_l$, both $GE_T^m(f)$ and $LE_T^m(f)$ do not contain chips below level $x_l -2S$.
+If we take any other arrangement of $C$ chips, with $i_{min}=l$ but not all $C$ chips are on a single node. We know that $i_{min}$ for this board is bounded below by $l-2C$. In order to have an $i_{min}$ below this at some point in time it would be possible to have $C$ chips on the same node on level $l$. But this cannot occur because in order to move a chip to a node with a lower first coordinate, one chip must moved to a node with a higher first coordinate. Therefore $E^r[b, \{s_k\}]$ does not have a node with a nonzero number of chips on it with first coordinate less than $i_{min} -2C$.
 
-An analogous argument shows that if $X_{max}=x_h$, both $GE_T^m(f)$ and $LE_T^m(f)$ do not contain chips above level $x_h+2S$.
+An analogous argument shows that if $i_{max}$, both $GE_T^m(f)$ and $LE_T^m(f)$ do not have a node with a nonzero number of chips on it with first coordinate greater than $i_{max}+2C$.
 \end{proof}
 
 So now we are ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
-(of Theorem~\ref{finitestability}) Suppose $f \in \mathcal{B}$ is a finite board, so $\sum_{x,y} f(x,y) = S$, and suppose all chips lie between levels  $[x_l, x_h]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $m$ all chips in $GE_T^m(f)$ and $LE_T^m(f)$ will lie in $R = [x_l - 2S, x_h + 2S]$
+(of Theorem~\ref{finitestability}) Suppose $b \in \mathcal{B}(d)_f$ is a finite board, so $\sum_{(i,j) \in G_n} b(i,j) = C$, and suppose all chips lie between levels  $[i_{min}, i_{max}]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $r$ and sequence $\{s_k\}$ all chips in $E^r[b, \{s_k\}]$ will have first coordinate in $ [i_{min} -2C, i_{max} +2C]$.
 
 We have restricted the size of the board to be finite, and the number of chips that can be placed on the board to be finite. 
 Thus the total number of ways that the chips can be arranged on the board is finite. 
-In particular there are fewer than $(x_h - x_l+1 + 4 S)$ levels and there are at most 
+In particular there are fewer than $(i_{max} - i_{min}+1 + 4 C)$  and there are at most 
 \begin{equation}
-n^d,
+d^l,
 \end{equation}
-nodes at each level, where $d= \max(x_h, |x_l|)$. So there are at most 
+nodes at each level, where $l= \max(|i_{min}|, |i_{max}|)$. So there are at most 
 \begin{equation}
-N:=(x_h - x_l+1 + 4 S)n^d
+N:=(i_{max} - i_{min}+1 + 4 C)d^l
 \end{equation}
 nodes that are potentially occupied. Therefore there are at most 
 \begin{equation}
 \binom{N+S-1}{N-1}
 \end{equation}
-possible boards $b \in \mathcal{T}_n^f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < \binom{N+S-1}{N-1}$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
+possible boards $b \in \mathcal{B}(n)_f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < \binom{N+S-1}{N-1}$ and some sequence $\{s_k\}$ such that $E^N[b, \{s_k\}] = E^{N+m}[b, \{s_k\}]$ for all $m \geq 0$.
 \end{proof}
+
+
+\section{Computing with Chips}
+\label{Computing with Chips}
+
+\emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}
+
+In this section, we show how we can compute different Boolean functions using the poker chip board and the earthquake operator.
+
+A Boolean input is a number in $\{0,1\}$, and a Boolean function is a function that takes $k$ Boolean inputs and outputs a number in $\{0,1\}$. A simple Boolean function is the AND function that takes in 2 Boolean inputs, and returns a 1 if and only if both the input values are set to 1. Another Boolean function is the OR function, that takes in 2 Boolean inputs, and returns a 0 if and only if both input values are set to 0. If 0 is associated with ``false" and 1 is associated with '``true", then the AND function returns ``true" if both inputs are ``true", and the OR function returns ``true" if at least one input is true. More complicated Boolean functions can be made with more than 2 inputs and compositions of these inputs. Denoting an AND with $\vee$ an OR with $\wedge$, we can construct composite functions such as $b_1 \wedge (b_2 \vee b_3)$. 
+
+Boolean circuits are formed by using wires that transmit 0's and 1's, and feeding them through various \emph{gates}. For example, a wire carrying a 0 and a wire carrying a 1 can be fed through an OR gate, which will ``output" a wire carrying a 1. In this section, we construct circuits using the poker chips board that use AND an OR gates. 
+
+\subsection{Model of Computation}
+
+Our model of computation is as follows: we assume a finite board with finitely many chips. The inputs are designated by each two squares, one apart one is the ``clock" square and other the bit square. Likewise, the outputs each have a ``clock" square and a bit square. The ``clock" squares are set the value 4 and the bit squres are set to 4 if they are 1 and 0 otherwise. A computation is done by a series of earthquakes, when an output has the clock square active, then the bit square is read, and that output bit is considered read. 
+
+\subsection{Example}
+
+A simple example is given by a board that computes the identity.
+
+\[ \begin{array}{cccccc} 0 & 0 & 0 & 0 & 0 & 0 \\
+				     4_c & 3 & 3 & 3 & 3 & 3_e \\
+				     0 & 0 & 0 & 0 & 0 & 0 \\
+				     i  & 3 & 3 & 3 & 3 & 3_o \\
+				     0 & 0 & 0 & 0 & 0 & 0 \end{array} \]
+Where the subscript $c$ indicates the clock, the subscript $e$ indicates the output clock square. $i$ indicates the bit square, and $o$ indicates the output bit. 
+
+One can see that $e$ will become active after 5 earthquakes since it will take that many earthquakes for $c$ to reach $e$. Also, if $i$ is initially inactive, then $o$ will be inactive, and if $i$ is active, then $o$ will be active. Therefore, we can compute the identity. 
+
+This circuit also shows how to make a ``wire" in the circuit. We will represent a wire as two parralel arrows, one containing the clock path and the other carrying the input. 
+
+\subsection{Turner}
+
+Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $e$ is the output clock and $o$ is the output bit.
+
+\[ \begin{array}{cccccc} 0 & 0 & e & 0 & o \\
+				     0 & 3 & 2 & 0 & 3 \\
+			            0 & 2 & 3 & 0 & 3 \\
+				    0 & 3 & 2 & 0 & 3 \\
+				    0 & 2 & 3 & 0 & 3 \\
+				    c & 3 & 3 & 0 & 3 \\
+				    0 & 0 & 0 & 0 & 3 \\
+				    i & 3 & 3 & 3 & 3 \end{array} \]	
+Since the clock snakes along the path while $i$ takes the shorter path. 
+Likewise, we can perform a clockwise path by making $i$ snakes while the clock takes a straight path. 
+
+\subsection{Synchronize}
+
+We can synchronize the inputs so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
+\[ \begin{array}{cccccccc} c & 3 & 3 & 3 & 3 & 3 & 3 & 0 \\
+					 0 & 0 & 0 & 0 & 3 & 0 & 3 & 0 \\
+					 i  & 3 & 3 & 3 & 1 & 3 & 3 & 3 \\
+					 0 & 0 & 0 & 0 & 3 & 0 & 0 & 3 \\
+					 0 & 0 & 0 & 0 & o & 0 & e & 3 \end{array} \]
+Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
+
+The fact that we have a synchronizer means that the model of computation is equivalent to one where there is only one clock for all input bits. 
+
+\subsection{Boolean circuits}
+
+Now we can show how to compute some basic boolean functions and since we have turns and synchronizers, we can assume that we have synchronized the inputs already. The following can compute the AND of two inputs. 
+
+\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
+					   &    & 3   & 2 &  3    &    &  \\
+					   &    &    & 3 &    & 3 & c_2 \\
+					o & 3 & 3 & 2 & 3 & 2 & 	    \\
+					   &    &    &    &    & 3 & i_2 \end{array} \]
+Where we can make the $c_1$ and $c_2$ snake around before hand to guarantee that they are synchronized, and then we can make $c_1$ snake around so that it becomes the clock of the output. So in this case, $o = i_1$ AND $i_2$.
+
+Similarly, we can compute the OR of two circuits with a very simple modification:
+\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
+					   &    & 3   & 2 &  3    &    &  \\
+					   &    &    & 3 &    & 3 & c_2 \\
+					o & 3 & 3 & 3 & 3 & 2 & 	    \\
+					   &    &    &    &    & 3 & i_2 \end{array} \]
+And we can do a similar set up to synchronize the clocks. 
+
+So currently, we can compute any boolean circuit which can be drawn in a planar graph with only ANDs and ORs. So the question is whether we can compute the NOT? We argue that this is not possible. 
+
+\begin{theorem}
+There does not exists any board configuration which computes the NOT operator in the above model of computation.
+\end{theorem}
+
+\begin{proof}
+Suppose we have a board configuration $B$ with input squares $c$, $i$ and output squares $e, o$ that computes the NOT function. Then we can make another board $B'$ that synchronizes the final clock with the input so that we do not need to worry about timing of the clock. That is, we can guarantee that if $o$ is active, then $o$ is active at the same time $e$ is active.
+
+Now lets make $B'$ an infinite board by putting 0s on the sides. So we have a finite board with finitely many chips. Let $S_{c_0i_0}$ be the set of squares which were active (had an earthquake affect them) during the execution of $B$ with the input value $i = i_0$ and $c = c_0$. 
+
+The first claim to make is that $S_{c_0i_0} \subset S_{c_1i_1}$ if $c_0 \leq c_1$ and $i_0 \leq i_1$. This is clearly true since the order of redistribution does not matter. In fact, we can do the earthquakes by first doing the earthquakes on $c$ and $i$ until the value decreases past $c_0$ and $i_0$, then simulate the computation of $c = c_0$ and $i = i_0$ with local earthquakes.
+
+However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{11}$. Therefore, computing NOT with a board is not possible.
+\end{proof}
+
+What does this mean? Well, in particular, it means that we cannot do much. In particular, we can't add, since $x + 1$ will act as the NOT operator on the lowest order bit. We can only compute boolean circuits in planar graphs. 
+
+
+\end{document}
