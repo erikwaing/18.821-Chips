@@ -68,7 +68,7 @@ In Section~\ref{Order of Redistribution}, we show that for a given board the num
 For the remainder of the paper, we consider other approaches and extensions of the problem. 
 In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square.
 We conjecture based on experimental evidence that such arrangements stabilize after $\Theta(n \log n)$ global earthquakes. 
-In Section~\ref{Board Variants: n-Trees}, we generalize away from the infinite grid graph and consider what happens when a similar process happens on tree graphs of infinite size. 
+In Section~\ref{Board Variants: d-Trees}, we generalize away from the infinite grid graph and consider what happens when a similar process happens on tree graphs of infinite size. 
 Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the poker chip board and show how to construct simple Boolean circuits. We will also give impossibility results that show the limits of our model of computation.
 \section{Definitions and Notation}
 \label{Definitions and Notation}
@@ -421,146 +421,111 @@ By looking at Figure~\ref{fig:growthofT} it seems that $T(n) = \Theta(n\log n)$.
 
 
 
-\section{Board Variants: $n$-Trees}
-\label{Board Variants: n-Trees}
+\section{Board Variants: $d$-Trees}
+\label{Board Variants: d-Trees}
 \emph{written by Perry Kleinhenz, edited by Fermi Ma and Erik Waingarten.}\\
 
-Consider a semi-infinite $n$-tree. That is the graph with a parent node which has $n$ unique children. Those children each have $n$ unique children and so on. 
 
-We can join two semi infinite $n$-trees by an edge connecting their parent nodes. This forms a graph where every vertex has $n+1$ neighbors. We would like to adapt our description of chips and earthquakes to this graph. 
+\begin{definition}
+A $d$-tree is a graph composed of a parent node connected by edges to $d-1$ unique children nodes.Those children each have $d-1$ unique children and so on.  
+\end{definition}
+We note that every node other than the original parent node has $d$ neighbors. In order to simplify our process we would like the graph to be regular and so we make the following definition. 
+\begin{definition}
+A joined $d$-tree is two $d$-trees connected at their parent nodes by an edge.
+\end{definition}
 
-\begin{definition} We define a coordinate system for our graph, with the following rules:
+We now define a coordinate system so that our method of proof can mirror that of the standard board case.
+\begin{definition} We define a coordinate system for our joined $d$-trees, with the following rules:
 \begin{enumerate}
 	\item $(0,0)$ and $(1,0)$ are valid coordinates and refer to the two parent nodes.
-	\item $(a,b)$ is a valid coordinate for $a<0$ if $0<b \leq n^{|a|}$
-	\item $(a,b)$ is a valid coordinate for $a>1$ if $0<b \leq n^{|a-1|}$
+	\item $(a,b)$ is a valid coordinate for $a<0$ if $0<b \leq (d-1)^{|a|}$
+	\item $(a,b)$ is a valid coordinate for $a>1$ if $0<b \leq (d-1)^{|a-1|}$
 \end{enumerate}
-We define the set of all valid coordinates $G_n$ as 
+We define the set of all valid coordinates $G_d$ for a joined $d$-tree as 
 \begin{equation}
-G_n := \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules above}\}
+G_d:= \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules above}\}
 \end{equation}
 \end{definition}
 
-\begin{definition}
-We define a tree to be a map from the set of valid coordinates to the nonnegative integers, that is 
-\begin{equation}
-f:  G\rightarrow \mathbb{Z}_{\geq 0}
-\end{equation}
-We write $\mathcal{T}_n$ to refer to the set of all joined $n$-tree's 
-\end{definition}
-
-\begin{definition}
-\label{bigearthquakedeftree}
-We define the global earthquake operator as  as a map from the set of all $n$ trees to the set of all $n$ trees and write $GE_T: \mathcal{T}_n \rightarrow \mathcal{T}_n$. 
-It transforms all of the nodes on the tree with the following rule.
-\begin{equation}
-GE_T(f(x,y)) = f(x,y) - (n+1)[[f(x,y) \geq n+1]] + [[f(x-k,y_0) \geq n+1]] +  \sum_{i=1}^{n} [[f(x-k,y_i) \geq n+1]] 
-\end{equation} 
-where $k$ is defined as 
-\begin{equation}
-k = \begin{cases}
-1 \text{ if } x\leq 0 \\
--1 \text{ if } x \geq 1
-\end{cases}
-\end{equation}
-and $(x-k, y_j)$ refers to the $j$th child of $(x,y)$ and $[[A]]$ is defined as 
-\begin{equation}
-[[A]] = 
-\begin{cases} 
-1 \text{ if } A \text{ is true} \\ 
-0 \text{ if } A  \text{ is false}
- \end{cases}.
-\end{equation}
-\end{definition}
-
-\begin{definition}
- We define the local earthquake operator as a map from the set of all $n$-trees to the set of all $n$-trees and write $LE_T: \mathcal{T}_n \rightarrow \mathcal{T}_n$.
-It selects one valid node $(x,y)$ with $f(x,y) \geq n+1$ and transforms it and all of its neighbors with the following rule: 
-\begin{align*}
-LE_T( f( x, y ) ) = f( x , y )-n-1 \\
-LE_T( f( x + k, y)) = f( x + k, y )+1 \\
-LE_T( f(x-k, y_i) ) = f(x-k, y_j )+1 \\
-\end{align*}
-where $k$ is as defined above and $(x-k, y_j)$ refers to the $j$th child of $(x,y)$
-and leaves all other squares unchanged.
-\end{definition}
-
-\begin{definition}
-We say that a $n$-Tree is stable if its values are strictly less than $n+1$. This is equivalent to both of the earthquake maps having no effect on the board. 
-\end{definition}
-
+In order to keep our notation compact we once again define a function that outputs the neighbors of a node
 \begin{definition} 
-We say that a board is finite if the total number of chips on it is finite. That is a board $f$ is finite if the sum
+We define the function $n: G_d \rightarrow G_d^d$ as 
+\begin{equation*}
+n(i,j) = \{ (x_1, y_1); (x_1 = i+1 \text{ or } x_1=i-1), \text{ and }(x_1, y_1) \in G_d\}
+\end{equation*}
+\end{definition}
+
+We now formalize the board of poker chips. Note that this definition only differs from our initial definition in that the input value is a coordinate of a node in a joined $d$-tree rather than a coordinate in the integer lattice.
+\begin{definition}
+We define a $d$-board to be a map from the set of valid coordinates to the nonnegative integers, that is 
 \begin{equation}
-S= \sum_{(x,y) \in G_n} f(x,y) 
+b:  G_d \rightarrow \mathbb{Z}_{\geq 0}
+\end{equation}
+We write $\mathcal{B}(d)$ to refer to the set of all $d$-boards.  
+\end{definition}
+
+Recalling that $n(s)$ refers to the neighbors of $s$ we define our earthquake operation in terms of $d$-boards.
+\begin{definition}
+An earthquake takes as an input an $d$-board and a node and outputs an $d$-board so we write $E: \mathcal{B}(d) \times G_d \rightarrow \mathcal{B}(d)$. If $s$ is the node input and $b(s)>d$ then 
+\begin{align*}
+E[b, s](s) = b(s)- d \\
+E[b, s](t) = b(t) +1 
+\end{align*}
+for $t \in n(s)$. Otherwise $b(s)<d$ and $E[b,s]=b$ as the earthquake does not move any chips. We use the notation $E^r[b, \{s_k\}]$ to denote the application of $E$ to the $b$ $r$ times, to the sites $s_1, \ldots s_r$ respectively.
+\end{definition}
+
+Now that we have formalized the earthquake operator we can introduce a precise definition of stability of a board. 
+\begin{definition}
+We say that a $d$-board is stable if its values are strictly less than $n$.
+\end{definition}
+This is equivalent to saying all earthquakes have no effect on the board. We also make a precise definition for a finite board.
+\begin{definition} 
+We say that a $d$-board is finite if the total number of chips on it is finite. That is a $d$board $b$ is finite if the sum
+\begin{equation}
+C= \sum_{(i,j) \in G_d} b(i,j) 
 \end{equation}
 is finite. 
-We denote the set of finite boards as $\mathcal{T}_n^f$.
+We denote the set of finite $d$-boards as $B(d)_F$.
 \end{definition}
 
-As it turns out we can use a  method of proof nearly identical to the standard board case to show that the state of a tree under this process can never cycle.
+We will now show that any finite $d$-board will stabilize under earthquakes. Our method of proof will mirror the method used for the square lattice, without only minor changes.  Therefore we will proceed by shooing that if an earthquake changes the state of a $d$-board, then no sequence of earthquakes can transform the output $d$-board back into the original $d$-board. We will then give a bound on the maximum number of configurations a given $d$-board can be transformed into by earthquakes. Once again these together will show that all finite $d$-boards will stabilize.
 
-We once again define a potential function 
-\begin{definition} Let $\Phi: \mathcal{T}_n^f \rightarrow \mathbb{Z}_{\geq 0}$ be the  function
+We once again define a spread function 
+\begin{definition}
+ Let $\Psi: \mathcal{B}(d)_F \rightarrow \mathbb{Z}_{\geq 0}$ be the function
 \begin{equation}
-\Phi(f) = \sum_{(x,y) \in G_n} f(x,y)(|x|)^2
+\Psi(f) = \sum_{(i,j) \in G_d} b(i,j) |i|^2
 \end{equation}
 Note that this is well defined for trees which contain a finite number of chips. 
 \end{definition} 
+We can once again think of this spread function as the sum of the number of chips on every node weighted by the taxi-cab distance from the node to the origin.
 
 \begin{lemma}
-If $LE_T(f) \neq f$, then $LE_T^n(f) \neq f$ for all $n > 0$.
+If $E[b, s_1] \neq b$, then $E^r[b, \{s_k\}] \neq b$ for all $r>0$ and all sequences $\{s_k\}$ of length $r$ that begin with $s_1$. 
 \end{lemma}
 
 \begin{proof}
-We will show that  if $LE$ acts on a board nontrivially then $\Phi(LE(f))$ will be strictly larger. That is  
+For ease of notation let $s=(s_1, s_2)$. We will show that if $E$ acts on a board nontrivially then $\Psi(E[b, s])$ will be strictly larger. That is  
 \begin{equation}
-LE(f) \neq f \Rightarrow \Phi(LE(f)) > \Phi(f)
+E[b, s] \neq f \Rightarrow \Psi(E[b, s]) > \Psi(b)
 \end{equation}
 
 
-We can evaluate $\Phi(LE(f)) - \Phi(f)$.
+We can evaluate $\Psi(E[b, s]) - \Psi(b)$.
 \begin{align}
-\Phi(LE_T(f))-\Phi(f) = \sum_{(x,y) \in G_n} LE_T(f)(x,y)(x)^2 - \sum_{(x,y) \in G_n} f(x,y)(x)^2 
+\Psi(E[b, s])-\Psi(b) = \sum_{(i,j) \in G_d} E[b, s](i,j)|i|^2 - \sum_{(i,j) \in G_d} b(i,j)|i|^2 
 \end{align}
-Only one node call it $(x_0,y_0)$ and its neighbors are affected. Therefore the above expression simplifies to
+We note that only $s$ and its neighbors are affected so our expression simplifies to
 \begin{align*}
-\Phi(LE_T(f)-\Phi(f) = LE_T( f(x_0,y_0) )* (x_0)^2 + LE_T( (f(x_0+k, y_0) )* (|x_0+k|)^2 \\
-+ \sum_{i} LE_T( f(x_0-k, y_i) ) * (|x_0-k|)^2 \\
-= -(n+1)*(|x_0|)^2 + (|x_0+k)^2 + n (|x_0-k|)^2 \\
-\geq-(n+1)*(|x_0|)^2 + (|x_0|-1)^2 + n (|x_0|+1)^2
-= -nx^2-x^2+x^2-2|x|+1+n(x^2+2|x|+1) \\
-= 2x(n-1)+n+1 > 0
+\Psi(E[b, s]) - \Psi(b) &= E[b, s](s) |s_1|^2 - b(s) |s_1|^2 + \sum_{(i,j) \in n(s)} (E[b,s](i,j) |i|^2 - b(i,j)|i|^2) \\
+&= -d |s_1|^2 + \sum_{(i,j) \in n(s)} |i|^2
 \end{align*}
-Where $(x_0-k,y_i)$ refers to the $j$th child of $(x_0,y_0)$ and $k$ is as defined in Definition \ref{bigearthquakedeftree}.
-\end{proof}
-
-\begin{lemma}
-If $GE_T(f) \neq f$, then $GE_T^n(f) \neq f$ for all $n > 0$.
-\end{lemma}
-
-\begin{proof}
-We will show that 
-\begin{equation}
-GE_T(f) \neq f \Rightarrow \Phi(GE_T(f)) > \Phi(f)
-\end{equation}
-This means that if there is an earthquake that changes things, then $\Phi(f)$ increases, which means that if $E(f) \neq f$, then for all $N > 0$, $E^N(f) \neq f$, or that you never return to your original state.
-
-We can evaluate $\Phi(GE_T(f)) - \Phi(f)$.
-\begin{align}
-\Phi(GE_T(f))-\Phi(f) = \sum_{(x,y) \in G_n} GE_T(f)(x,y)(|x|)^2 - \sum_{(x,y) \in G_n} f(x,y)(|x|)^2 
-\end{align}
-Let $A$ be the set of active locations, or locations with $f(x,y) \geq (n+1)$, which is non-empty by assumption. 
+We note that exactly $d-1$ of the neighbors of $s$ are a distance $|s_1 +1|$ from the origin and one of the neighbors of $s$ is a distance $(|s_1| - 1)$ from the origin.  A point to emphasize is that this is the only substantial way in which this proof differs from the similar proof for the square lattice. Our expression simplifies to 
 \begin{align*}
-\Phi(GE_T(f)) - \Phi(f) =  \sum_{(x,y) \in A}  GE_T(f(x,y))x^2 + GE_T(f(x+k,y))(|x+k|)^2 + \\
-\sum_{i} \left( GE_T(f(x-k,y_i))(|x-k|)^2 \right) -f(x,y)x^2 +f(x+k,y) (|x+k|)^2 +  \sum_{i} \left ( f(x-k,y_i) (|x-k|)^2 \right)  \\
-=\sum_{(x,y) \in A} -(n+1)x^2 + (|x+k|)^2 + n(|x-k|)^2 
+&= -d |s_1|^2 + \sum_{(i,j) \in n(s)}-|i|^2 \\
+&= - d|s_1|^2 + (d-1)(|s_1| +1)^2 +(|s_1| -1)^2 \\
+&= d + (d-2)2|s_1| >0
 \end{align*}
-Where $(x-k,y_i)$ refers to the $j$th child of $(x,y)$ and $k$ is as defined in Definition \ref{bigearthquakedeftree}. We note that each term in this sum is positive by our proof of the lemma for local earthquakes and so the sum itself must be positive. That is 
-\begin{equation}
-\Phi(GE_T(f)) - \Phi(f) > 0
-\end{equation}
-
 \end{proof}
 
 \begin{lemma}
@@ -599,101 +564,3 @@ nodes that are potentially occupied. Therefore there are at most
 \end{equation}
 possible boards $b \in \mathcal{T}_n^f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < \binom{N+S-1}{N-1}$ such that $E^N(f) = E^{N+m}(f)$ for all $m \geq 0$.
 \end{proof}
-
-
-\section{Computing with Chips}
-\label{Computing with Chips}
-
-\emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}
-
-In this section, we show how we can compute different Boolean functions using the poker chip board and the earthquake operator.
-
-A Boolean input is a number in $\{0,1\}$, and a Boolean function is a function that takes $k$ Boolean inputs and outputs a number in $\{0,1\}$. A simple Boolean function is the AND function that takes in 2 Boolean inputs, and returns a 1 if and only if both the input values are set to 1. Another Boolean function is the OR function, that takes in 2 Boolean inputs, and returns a 0 if and only if both input values are set to 0. If 0 is associated with ``false" and 1 is associated with '``true", then the AND function returns ``true" if both inputs are ``true", and the OR function returns ``true" if at least one input is true. More complicated Boolean functions can be made with more than 2 inputs and compositions of these inputs. Denoting an AND with $\vee$ an OR with $\wedge$, we can construct composite functions such as $b_1 \wedge (b_2 \vee b_3)$. 
-
-Boolean circuits are formed by using wires that transmit 0's and 1's, and feeding them through various \emph{gates}. For example, a wire carrying a 0 and a wire carrying a 1 can be fed through an OR gate, which will ``output" a wire carrying a 1. In this section, we construct circuits using the poker chips board that use AND an OR gates. 
-
-\subsection{Model of Computation}
-
-Our model of computation is as follows: we assume a finite board with finitely many chips. The inputs are designated by each two squares, one apart one is the ``clock" square and other the bit square. Likewise, the outputs each have a ``clock" square and a bit square. The ``clock" squares are set the value 4 and the bit squres are set to 4 if they are 1 and 0 otherwise. A computation is done by a series of earthquakes, when an output has the clock square active, then the bit square is read, and that output bit is considered read. 
-
-\subsection{Example}
-
-A simple example is given by a board that computes the identity.
-
-\[ \begin{array}{cccccc} 0 & 0 & 0 & 0 & 0 & 0 \\
-				     4_c & 3 & 3 & 3 & 3 & 3_e \\
-				     0 & 0 & 0 & 0 & 0 & 0 \\
-				     i  & 3 & 3 & 3 & 3 & 3_o \\
-				     0 & 0 & 0 & 0 & 0 & 0 \end{array} \]
-Where the subscript $c$ indicates the clock, the subscript $e$ indicates the output clock square. $i$ indicates the bit square, and $o$ indicates the output bit. 
-
-One can see that $e$ will become active after 5 earthquakes since it will take that many earthquakes for $c$ to reach $e$. Also, if $i$ is initially inactive, then $o$ will be inactive, and if $i$ is active, then $o$ will be active. Therefore, we can compute the identity. 
-
-This circuit also shows how to make a ``wire" in the circuit. We will represent a wire as two parralel arrows, one containing the clock path and the other carrying the input. 
-
-\subsection{Turner}
-
-Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $e$ is the output clock and $o$ is the output bit.
-
-\[ \begin{array}{cccccc} 0 & 0 & e & 0 & o \\
-				     0 & 3 & 2 & 0 & 3 \\
-			            0 & 2 & 3 & 0 & 3 \\
-				    0 & 3 & 2 & 0 & 3 \\
-				    0 & 2 & 3 & 0 & 3 \\
-				    c & 3 & 3 & 0 & 3 \\
-				    0 & 0 & 0 & 0 & 3 \\
-				    i & 3 & 3 & 3 & 3 \end{array} \]	
-Since the clock snakes along the path while $i$ takes the shorter path. 
-Likewise, we can perform a clockwise path by making $i$ snakes while the clock takes a straight path. 
-
-\subsection{Synchronize}
-
-We can synchronize the inputs so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
-\[ \begin{array}{cccccccc} c & 3 & 3 & 3 & 3 & 3 & 3 & 0 \\
-					 0 & 0 & 0 & 0 & 3 & 0 & 3 & 0 \\
-					 i  & 3 & 3 & 3 & 1 & 3 & 3 & 3 \\
-					 0 & 0 & 0 & 0 & 3 & 0 & 0 & 3 \\
-					 0 & 0 & 0 & 0 & o & 0 & e & 3 \end{array} \]
-Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
-
-The fact that we have a synchronizer means that the model of computation is equivalent to one where there is only one clock for all input bits. 
-
-\subsection{Boolean circuits}
-
-Now we can show how to compute some basic boolean functions and since we have turns and synchronizers, we can assume that we have synchronized the inputs already. The following can compute the AND of two inputs. 
-
-\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
-					   &    & 3   & 2 &  3    &    &  \\
-					   &    &    & 3 &    & 3 & c_2 \\
-					o & 3 & 3 & 2 & 3 & 2 & 	    \\
-					   &    &    &    &    & 3 & i_2 \end{array} \]
-Where we can make the $c_1$ and $c_2$ snake around before hand to guarantee that they are synchronized, and then we can make $c_1$ snake around so that it becomes the clock of the output. So in this case, $o = i_1$ AND $i_2$.
-
-Similarly, we can compute the OR of two circuits with a very simple modification:
-\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
-					   &    & 3   & 2 &  3    &    &  \\
-					   &    &    & 3 &    & 3 & c_2 \\
-					o & 3 & 3 & 3 & 3 & 2 & 	    \\
-					   &    &    &    &    & 3 & i_2 \end{array} \]
-And we can do a similar set up to synchronize the clocks. 
-
-So currently, we can compute any boolean circuit which can be drawn in a planar graph with only ANDs and ORs. So the question is whether we can compute the NOT? We argue that this is not possible. 
-
-\begin{theorem}
-There does not exists any board configuration which computes the NOT operator in the above model of computation.
-\end{theorem}
-
-\begin{proof}
-Suppose we have a board configuration $B$ with input squares $c$, $i$ and output squares $e, o$ that computes the NOT function. Then we can make another board $B'$ that synchronizes the final clock with the input so that we do not need to worry about timing of the clock. That is, we can guarantee that if $o$ is active, then $o$ is active at the same time $e$ is active.
-
-Now lets make $B'$ an infinite board by putting 0s on the sides. So we have a finite board with finitely many chips. Let $S_{c_0i_0}$ be the set of squares which were active (had an earthquake affect them) during the execution of $B$ with the input value $i = i_0$ and $c = c_0$. 
-
-The first claim to make is that $S_{c_0i_0} \subset S_{c_1i_1}$ if $c_0 \leq c_1$ and $i_0 \leq i_1$. This is clearly true since the order of redistribution does not matter. In fact, we can do the earthquakes by first doing the earthquakes on $c$ and $i$ until the value decreases past $c_0$ and $i_0$, then simulate the computation of $c = c_0$ and $i = i_0$ with local earthquakes.
-
-However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{11}$. Therefore, computing NOT with a board is not possible.
-\end{proof}
-
-What does this mean? Well, in particular, it means that we cannot do much. In particular, we can't add, since $x + 1$ will act as the NOT operator on the lowest order bit. We can only compute boolean circuits in planar graphs. 
-
-
-\end{document}
