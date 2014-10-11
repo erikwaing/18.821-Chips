@@ -214,12 +214,12 @@ We have shown that finite boards never return to the same state. Suppose that an
 
 Now that we have shown that all finite boards will eventually reach a stable state we would like to know if the order in which these earthquakes occur matters. More specifically, if we consider some finite starting board and two sequences of earthquakes that stabilizes the board, we would like to know if the resultant board is the same for both sequences. 
 
-In fact we are able to show that not only is this final board the same but that the number of earthquakes that target a particular square in order to stabilize the board is invariant of the order in which the earthquakes occur. We do so by first describing conditions under which the position of an Earthquake in a sequence can change without effecting the final state. We then define a process that rearranges a sequence of earthquakes without changing the final board state and produces the same sequence for any board.\\
+In fact we are able to show that not only is this final board the same but that the number of earthquakes that target a particular node in order to stabilize the board is invariant of the order in which the earthquakes occur. We do so by first describing conditions under which the position of an Earthquake in a sequence can change without effecting the final state. We then define a process that rearranges a sequence of earthquakes without changing the final board state and produces the same sequence for any board.\\
 
 First, we formalize the notion of earthquakes that are ``allowed to happen".
 
 \begin{definition}
-We say that an earthquake $E$ is valid if the square it targets has at least $4$ chips on it. 
+We say that an earthquake $E$ is valid if the node it targets has at least $4$ chips on it. 
 We say that a sequence of earthquakes $E_1, E_2, \ldots E_n$ to be a valid sequence of earthquakes if each earthquake is valid in the order applied. That is 
 \begin{equation*}
 E^{m}[b, \{s_k\}](s_{m+1}  \geq 4
@@ -251,7 +251,7 @@ This follows directly from the definition of an earthquake and a valid earthquak
 Now we can show that switching the order of two earthquakes with certain validity conditions does not affect the final board state.
 \begin{lemma}
 \label{swappinglemma}
-Consider a board $b$ and two earthquakes $E_1$ and $E_2$, affecting squares $s_1$ and $s_2$ respectively. If $E_1, E_2$ is a valid sequence and $E_2$ is a valid earthquake when applied before $E_1$ then $E_2, E_1$ is also a valid sequence of earthquakes and 
+Consider a board $b$ and two earthquakes $E_1$ and $E_2$, affecting nodes $s_1$ and $s_2$ respectively. If $E_1, E_2$ is a valid sequence and $E_2$ is a valid earthquake when applied before $E_1$ then $E_2, E_1$ is also a valid sequence of earthquakes and 
 \begin{equation*}
 E_2[E_1[b, s_1] s_2] = E_1[LE_2[b, s_2], s_1] 
 \end{equation*}
@@ -259,15 +259,15 @@ E_2[E_1[b, s_1] s_2] = E_1[LE_2[b, s_2], s_1]
 \begin{proof}
 We will first show that $E_2, E_1$ is a valid sequence and then use this to show that the order in which the earthquakes occur does not matter. 
 
-We demonstrate this by contradiction. Assume  $E_2, E_1$ is an invalid sequence, that is $E_2[B, s_2](s_1)<4$. Since $E_1$ is a valid earthquake when applied directly to $b$ we know $b(s_1) \geq 4 $. 
+We demonstrate this by contradiction. Assume  $E_2, E_1$ is an invalid sequence, that is $E_2[b, s_2](s_1)<4$. Since $E_1$ is a valid earthquake when applied directly to $b$ we know $b(s_1) \geq 4 $. 
 Therefore we must have $b(s_1)<8$ and $s_2=s_1$. But then $E_1[b, s_1](s_1)<4$ and so $E_1, E_2$ would not be a valid sequence of earthquakes. This contradicts one our hypothesis and so $E_2, E_1$ is a valid sequence. 
 
-Now in order to demonstrate that the order in which the earthquakes are applied does not affect the final board state consider $E_2[ E_1[b, s_1], s_2](x)$ for some $(i,j) \in \mathbb{Z} \times \mathbb{Z}$. Applying Lemma ~\ref{earthquakeredefine} we have 
+Now in order to demonstrate that the order in which the earthquakes are applied does not affect the final board state consider $E_2[ E_1[b, s_1], s_2](x)$ for some $x \in \mathbb{Z} \times \mathbb{Z}$. Applying Lemma ~\ref{earthquakeredefine} we have 
 \begin{align*}
 E_2[E_1[b, s_1], s_2](x) = E_1[b, s_1])(x)  + [[ x \in n(s_2) ]] - 4[[ x=s_2]] \\
 = b(x) + [[ x \in n(s_1) ]] - 4[[x = s_1] + [[ x \in n(s_2) ]] - 4[[ x= s_2)]]  \\
 = b(x) + [[ x \in n(s_2) ]] - 4[[x = s_2] + [[ x \in n(s_1) ]] - 4[[ x= s_1)]]\\
-= E_2[B, s_2](x) + [[ x \in n(s_1) ]] - 4[[ x = s_1]] \\
+= E_2[b, s_2](x) + [[ x \in n(s_1) ]] - 4[[ x = s_1]] \\
 = E_1[E_2 [b, s_2], s_1](x) 
 \end{align*}
 The critical step in this proof is recognizing that because $E_1$ and $E_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
@@ -275,7 +275,7 @@ The critical step in this proof is recognizing that because $E_1$ and $E_2$ are 
 
 We can use this lemma along with a simple induction to show that under appropriate conditions we can move an earthquake earlier in the sequence without affecting the final board state.
 \begin{lemma}
-Let $E_1,E_2,E_3,\dots, E_n$ be a sequence of earthquakes, where $E_k$ hits the square $s_k$. Consider  the sequence given by moving some earthquake $E_j$ to position $m<j$ in the sequence, such that $E_j$ is a valid earthquake for all positions between $m$ and $j$, inclusive. 
+Let $E_1,E_2,E_3,\dots, E_n$ be a sequence of earthquakes, where $E_k$ hits the node $s_k$. Consider  the sequence given by moving some earthquake $E_j$ to position $m<j$ in the sequence, such that $E_j$ is a valid earthquake for all positions between $m$ and $j$, inclusive. 
 This sequence is valid and produces the same final board configuration.
 \end{lemma}
 \label{shiftlemma}
