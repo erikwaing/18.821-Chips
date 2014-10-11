@@ -92,12 +92,12 @@ First, we formalize the definition of a board. The board is an infinite grid gra
 \end{figure}
 We can coordinatize the grid graph by labeling it like the standard Cartesian grid, where we fix one node to be the origin $(0,0)$, and we index all other nodes by integer coordinates $(i,j)$. We will define the board as a function from the Cartesian grid to the nonnegative integers.
 
-\begin{definition} We write boards as functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
+\begin{definition} Boards are functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
 \end{definition}
 
 This function maps node labels given as integer coordinates to chip stack sizes. For example, in Figure \ref{cartesiangrid} the board $b$ has 8 chips at the node with coordinate $(3,1)$, so we write $b(3,1) = 8$.
 
-\begin{definition} We define $n(i,j)$ to be the set of neighbors of node $(i,j)$
+\begin{definition} Let $n(i,j)$ be the set of neighbors of node $(i,j)$
 \begin{equation*}
 n(i,j) = \{ (i+1, j), (i-1, j), (i, j-1), (i, j+1) \}.
 \end{equation*}
@@ -106,7 +106,7 @@ n(i,j) = \{ (i+1, j), (i-1, j), (i, j-1), (i, j+1) \}.
 We now formally define the earthquake operation. Recall that an earthquake hits a node that has 4 or more chips and moves 1 chip to each of the node's 4 neighbors. 
 
 \begin{definition}
-An earthquake hits a board $b$ at node $s$, and the resulting board is denoted $E_sb$. If $b(s) \geq 4$, then
+Let $E_sb$ be the board that results from an earthquake hitting board $b$ at node $s$. If $b(s) \geq 4$, then
 \begin{align*}
 E_sb(s) &= b(s)-4,\\
 E_sb(t) &= b(t)+1 \hspace{.5cm} \forall t \in n(s).\\
@@ -127,14 +127,14 @@ Often, a number of earthquakes will hit a board $b$. We represent the result of 
 
 Now that we have formalized the earthquake operator, we make precise the definition of stability.
 \begin{definition}
-We say that a board is stable if all nodes contain values strictly less than 4. 
+A board is stable if all nodes contain values strictly less than 4. 
 \end{definition}
 This definition corresponds with the intuitive notion of a process that has stabilized, as stable boards can no longer be affected by earthquake operations.
 
 Finally, we formalize the notion of $\emph{finite}$ and $\emph{infinite}$ boards, a distinction we will refer to extensively throughout this paper.
 
 \begin{definition} 
-We say that a board is finite if the total number of chips on it is finite. Otherwise we say a board is infinite. 
+A board is finite if the total number of chips on it is finite. Otherwise we say a board is infinite. 
 \end{definition}
 
 \section{Stability of Finite Boards}
@@ -333,60 +333,61 @@ Now, we find the end of the sequence of moved earthquakes and consider the board
 
 Thus we have transformed our starting sequence into canonical sequence that is completely determined by the state of the initial board. Therefore we can do this for any other sequence that stabilizes the board and get the same sequence. This shows not only that the order in which the earthquakes occur does not change the final state of the board but also that a given square is targeted by the same number of valid earthquakes regardless of the order of the earthquakes (we know this because our process only shifts the order of valid earthquakes it never adds or removes them). 
 \end{proof}
-
-\section{Global Earthquakes}
-\label{Global Earthquakes}
-\emph{written by Perry Kleinhenz, edited by Erik Waingarten and Fermi Ma}
-
-Now that we have shown that the order in which earthquakes occur does not matter we might wonder if the behavior of the system changes when all possible earthquakes occur at the \emph{same} time. In this section we will formalize this notion and show that all finite boards stabilize under such earthquakes as well.
-
-We will call these earthquakes global earthquakes. A global earthquake (abbreviated as $GE$) is esentially to a standard earthquake applied to every square on the board simultaneously.
-\begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
-It transforms all of the squares on the board with the following rule
-\begin{align*}
-GE[b](i,j) = b(i,j) +\sum_{s \in \mathbb{Z} \times \mathbb{Z}} (E[b, s](i,j) - b(i,j)).
-\end{align*}
-That is the value of the board at a square after applying a global earthquake is equal to the value of the board originally plus the change in the value at the square that would occur from standard earthquakes affecting every square.  
-\end{definition}
-
-In order to prove that finite boards stabilize under global earthquakes we will first show that global earthquakes are equivalent to some finite sequence of standard earthquakes. Before doing so we will introduce a definition to refer to the squares a global earthquake can effect.
-
-\begin{definition} The active sites $A_b$ of a board $b$ are all those squares which have at least 4 chips on them or written symbolically
-\begin{equation*}
-A_b=\{ (i,j); b(i,j) \geq 4 \}
-\end{equation*}
-\end{definition}
-
-We now show that a global earthquake is equivalent to applying standard earthquakes to each of the active sites on a board in any order.
-\begin{lemma} Suppose $b$ is a finite board. If we let arrange the terms of $A_b$ into a sequence $\{a_k\}$ with $N$ elements then 
-\begin{equation*}
-GE[b] = E^N[b, \{a_k\}]
-\end{equation*}
-\end{lemma}
-\begin{proof} 
-A standard earthquake is nontrivial only if the square it targets is contained in $A_b$. That is $E[b, s] = b$  if $s \notin A_b$. Therefore $GE[b](i,j)$ becomes
-\begin{equation*}
-GE[b](i,j) = b(i,j) +\sum_{s \in A_b} (E[b, s](i,j) - b(i,j)).
-\end{equation*}
-So a global earthquake can be considered finitely many earthquakes occurring at the same time. But now if we consider $E^N[b, \{a_k\}]$, because the order of earthquakes does not matter the change in the value at some $(i,j)$ between the application of the $m+1$th and $m$th earthquake is equal to the change in the value at $(i,j)$ if the $m+1$th earthquake was applied directly to the original board. That is 
-\begin{equation*}
-E^{m+1}[b, \{a_k\}](i,j) - E^{m}[b, \{a_k\}](i,j) = E[b, a_{m+1} ](i,j) - b(i,j)
-\end{equation*}
-Therefore 
-\begin{equation*}
-E^N[b, \{a_k\}](i,j) = b(i,j) + \sum_{a_k \in A_b} (E[b, a_k](i,j) - b(i,j)),
-\end{equation*}
-but this is the same expression as the value at $(i,j)$ after a global earthquake effects the board $b$. 
-\end{proof}
-
-\begin{theorem} Suppose $b$ is a finite board, then there exists $N$ such that for all $m>0$ 
-\begin{equation*}
-GE^{N+m}[b] = GE^{N}[b]
-\end{equation*}
-\end{theorem}
-\begin{proof}
-Assume otherwise. That is for some board $b, GE^N[b]$ always has at least one square with at least four chips on it. But applying a global earthquake is equivalent to applying a sequence of standard earthquakes and so we have a board which does not stabilize under standard earthquakes which is a contradiction.  
-\end{proof}
+%
+%
+%\section{Global Earthquakes}
+%\label{Global Earthquakes}
+%\emph{written by Perry Kleinhenz, edited by Erik Waingarten and Fermi Ma}
+%
+%Now that we have shown that the order in which earthquakes occur does not matter we might wonder if the behavior of the system changes when all possible earthquakes occur at the \emph{same} time. In this section we will formalize this notion and show that all finite boards stabilize under such earthquakes as well.
+%
+%We will call these earthquakes global earthquakes. A global earthquake (abbreviated as $GE$) is esentially to a standard earthquake applied to every square on the board simultaneously.
+%\begin{definition} We define the global earthquake operator as a map from the set of all boards to the set of all boards and write $GE: \mathcal{B} \rightarrow \mathcal{B}$. 
+%It transforms all of the squares on the board with the following rule
+%\begin{align*}
+%GE[b](i,j) = b(i,j) +\sum_{s \in \mathbb{Z} \times \mathbb{Z}} (E[b, s](i,j) - b(i,j)).
+%\end{align*}
+%That is the value of the board at a square after applying a global earthquake is equal to the value of the board originally plus the change in the value at the square that would occur from standard earthquakes affecting every square.  
+%\end{definition}
+%
+%In order to prove that finite boards stabilize under global earthquakes we will first show that global earthquakes are equivalent to some finite sequence of standard earthquakes. Before doing so we will introduce a definition to refer to the squares a global earthquake can effect.
+%
+%\begin{definition} The active sites $A_b$ of a board $b$ are all those squares which have at least 4 chips on them or written symbolically
+%\begin{equation*}
+%A_b=\{ (i,j); b(i,j) \geq 4 \}
+%\end{equation*}
+%\end{definition}
+%
+%We now show that a global earthquake is equivalent to applying standard earthquakes to each of the active sites on a board in any order.
+%\begin{lemma} Suppose $b$ is a finite board. If we let arrange the terms of $A_b$ into a sequence $\{a_k\}$ with $N$ elements then 
+%\begin{equation*}
+%GE[b] = E^N[b, \{a_k\}]
+%\end{equation*}
+%\end{lemma}
+%\begin{proof} 
+%A standard earthquake is nontrivial only if the square it targets is contained in $A_b$. That is $E[b, s] = b$  if $s \notin A_b$. Therefore $GE[b](i,j)$ becomes
+%\begin{equation*}
+%GE[b](i,j) = b(i,j) +\sum_{s \in A_b} (E[b, s](i,j) - b(i,j)).
+%\end{equation*}
+%So a global earthquake can be considered finitely many earthquakes occurring at the same time. But now if we consider $E^N[b, \{a_k\}]$, because the order of earthquakes does not matter the change in the value at some $(i,j)$ between the application of the $m+1$th and $m$th earthquake is equal to the change in the value at $(i,j)$ if the $m+1$th earthquake was applied directly to the original board. That is 
+%\begin{equation*}
+%E^{m+1}[b, \{a_k\}](i,j) - E^{m}[b, \{a_k\}](i,j) = E[b, a_{m+1} ](i,j) - b(i,j)
+%\end{equation*}
+%Therefore 
+%\begin{equation*}
+%E^N[b, \{a_k\}](i,j) = b(i,j) + \sum_{a_k \in A_b} (E[b, a_k](i,j) - b(i,j)),
+%\end{equation*}
+%but this is the same expression as the value at $(i,j)$ after a global earthquake effects the board $b$. 
+%\end{proof}
+%
+%\begin{theorem} Suppose $b$ is a finite board, then there exists $N$ such that for all $m>0$ 
+%\begin{equation*}
+%GE^{N+m}[b] = GE^{N}[b]
+%\end{equation*}
+%\end{theorem}
+%\begin{proof}
+%Assume otherwise. That is for some board $b, GE^N[b]$ always has at least one square with at least four chips on it. But applying a global earthquake is equivalent to applying a sequence of standard earthquakes and so we have a board which does not stabilize under standard earthquakes which is a contradiction.  
+%\end{proof}
 
 \section{Time until Stability}
 \label{Time until Stability}
