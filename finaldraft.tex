@@ -92,12 +92,12 @@ First, we formalize the definition of a board. The board is an infinite grid gra
 \end{figure}
 We can coordinatize the grid graph by labeling it like the standard Cartesian grid, where we fix one node to be the origin $(0,0)$, and we index all other nodes by integer coordinates $(i,j)$. We will define the board as a function from the Cartesian grid to the nonnegative integers.
 
-\begin{definition} We write boards as functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
+\begin{definition} Boards are functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
 \end{definition}
 
 This function maps node labels given as integer coordinates to chip stack sizes. For example, in Figure \ref{cartesiangrid} the board $b$ has 8 chips at the node with coordinate $(3,1)$, so we write $b(3,1) = 8$.
 
-\begin{definition} We define $n(i,j)$ to be the set of neighbors of node $(i,j)$
+\begin{definition} Let $n(i,j)$ be the set of neighbors of node $(i,j)$
 \begin{equation*}
 n(i,j) = \{ (i+1, j), (i-1, j), (i, j-1), (i, j+1) \}.
 \end{equation*}
@@ -106,7 +106,7 @@ n(i,j) = \{ (i+1, j), (i-1, j), (i, j-1), (i, j+1) \}.
 We now formally define the earthquake operation. Recall that an earthquake hits a node that has 4 or more chips and moves 1 chip to each of the node's 4 neighbors. 
 
 \begin{definition}
-An earthquake hits a board $b$ at node $s$, and the resulting board is denoted $E_sb$. If $b(s) \geq 4$, then
+Let $E_sb$ be the board that results from an earthquake hitting board $b$ at node $s$. If $b(s) \geq 4$, then
 \begin{align*}
 E_sb(s) &= b(s)-4,\\
 E_sb(t) &= b(t)+1 \hspace{.5cm} \forall t \in n(s).\\
@@ -127,14 +127,14 @@ Often, a number of earthquakes will hit a board $b$. We represent the result of 
 
 Now that we have formalized the earthquake operator, we make precise the definition of stability.
 \begin{definition}
-We say that a board is stable if all nodes contain values strictly less than 4. 
+A board is stable if all nodes contain values strictly less than 4. 
 \end{definition}
 This definition corresponds with the intuitive notion of a process that has stabilized, as stable boards can no longer be affected by earthquake operations.
 
 Finally, we formalize the notion of $\emph{finite}$ and $\emph{infinite}$ boards, a distinction we will refer to extensively throughout this paper.
 
 \begin{definition} 
-We say that a board is finite if the total number of chips on it is finite. Otherwise we say a board is infinite. 
+A board is finite if the total number of chips on it is finite. Otherwise we say a board is infinite. 
 \end{definition}
 
 \section{Stability of Finite Boards}
