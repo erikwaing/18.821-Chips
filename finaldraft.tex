@@ -148,36 +148,41 @@ In this section, we show that any finite board will eventually become stable aft
 We then give a bound on the maximum number of board configurations a finite board can ever reach. We will argue that since a finite number of boards are reachable and board states are never revisited, that eventually this process must terminate. Thus, we eventually reach a stable board where no earthquakes are allowable.
 
 To define the spread function, we fix one coordinate on a board $b$ as the origin $(0,0)$, and we define the \emph{taxicab distance} $d(s)$ of a node $s$ on the board to be $|s_x| + |s_y|$, where $s_x$ is the $x$ coordinate of node $s$, and $s_y$ is the $y$ coordinate of node $s$. Then the spread function is
-\[ \psi(b) = \sum_{\text{all nodes }s}b(s)d(s)^2 \]
+\begin{equation*}
+\Psi(b) = \sum_{\text{all nodes }s}b(s)d(s)^2 
+\end{equation*}
 
-Thus, the function sums up the chip stack sizes weighted by the taxicab distance to the origin squared. The motivation for this definition is that the spread function gives a measure of how ``spread out" the chips on a board are. Intuitvely, earthquakes move chips that are condensed in a single pile and spreads them out over a greater area. We capture this in the following lemma:
+Thus, the function sums up the chip stack sizes weighted by the taxicab distance to the origin squared. The motivation for this definition is that the spread function gives a measure of how ``spread out" the chips on a board are. Intuitively, earthquakes takes chips that are condensed in a single pile and spreads them out over a greater area. We capture this in the following lemma:
 
 \begin{lemma}
 \label{spreadfunction}
-Suppose an earthquake hits node $s$ of a board $b$, producing the board $E_sb$. Then
-\[ \Psi(E_sb) > \Psi(b) \]
+Suppose an earthquake hits node $s$ of a finite board $b$, producing the board $E_sb$. Then
+\begin{equation*}
+\Psi(E_sb) > \Psi(b) 
+\end{equation*}
 so the earthquake strictly increases the spread of the board.
 \end{lemma}
 \begin{proof}
 The chip stacks of the two boards are the same at all nodes except at $s$ and $n(s)$, the nodes that neighbor $s$. Thus, the contribution to $\Psi$ is the same at all nodes except for those 5.
 
-Let the taxicab distance to $s$ is $d_s$. Then the contribution to the spread function from node $s$ decreases from $b(s)d_s^2$ to $(b(s)-4)d_s^2$.
+Let the taxicab distance to $s$ be $d_s$. Then the contribution to the spread function from node $s$ decreases from $b(s)d_s^2$ to $(b(s)-4)d_s^2$.
 
-Out of the 4 nodes in $n(s)$, some have a taxicab distance of $d_s+1$, and the rest are at distance $d_s-1$. In particular, if $s$ is not exactly on the $x$ or $y$ axis, exactly 2 neighboring nodes are at $d_s+1$, and exactly 2 are at distance $d_s-1$. If $s$ is on either the $x$ or $y$ axis, then 3 nodes are at distance $d_s+1$, and 1 neighboring node is at distance $d_s-1$. Since we want to lower bound the increase in the spread function, we focus only on the case where exactly 2 neighboring nodes are at distance $d_s+1$, as it can be shown that this case leads to a strictly smaller increase than the other.
+Out of the 4 nodes in $n(s)$, some have a taxicab distance of $d_s+1$, and the rest are at distance $d_s-1$. In particular, if $s$ is not exactly on the $x$ or $y$ axis, exactly 2 neighboring nodes are at $d_s+1$, and exactly 2 are at distance $d_s-1$. If $s$ is on either the $x$ or $y$ axis, then 3 nodes are at distance $d_s+1$, and 1 neighboring node is at distance $d_s-1$. Since we only need a lower bound for the increase in the spread function, we focus only on the case where exactly 2 neighboring nodes are at distance $d_s+1$, as it can be shown that this case leads to a strictly smaller increase than the other.
 
 Suppose that the two neighboring nodes at distance $d_s+1$ have chip stacks of $n_1$ and $n_2$ originally. Then their contribution to the spread function goes from $n_1(d_s+1)^2$ and $n_2(d_s+1)^2$ to $(n_1+1)(d_s+1)^2$ and $(n_2+1)(d_s+1)^2$. If the other two nodes at distance $d_s-1$ have chip stacks of $n_3$ and $n_4$, their contribution to the spread function goes from $n_3(d_s-1)^2$ and $n_4(d_s-1)^2$ to $(n_3+1)(d_s-1)^2$ and $(n_4+1)(d_s-1)^2$.
 
 Omitting the algebraic details, we find that summing up the changes in the spread function gives
-\[ \Psi(E_sb) - \Psi(b) = 4\]
+\begin{equation*}
+ \Psi(E_sb) - \Psi(b) = 4
+ \end{equation*}
 which completes the proof.
 \end{proof}
 
 \begin{corollary}
-\label{finitestability}
-A board can never return to a previous state via a sequence of earthquakes.
+A finite board can never return to a previous state via a sequence of earthquakes.
 \end{corollary}
 \begin{proof}
-Suppose for the sake of contradiction that this is possible, and that $b = E_1E_2\cdots E_kb$ for some sequence of earthquakes $E_1,E_2,\dots,E_k$. Lemma~\ref{spreadfunction} shows that $\psi(b) > \psi(E_1E_2\cdots E_kb)$, which is a contradiction.
+Suppose for the sake of contradiction that this is possible, and that $b = E_1E_2\cdots E_kb$ for some sequence of earthquakes $E_1,E_2,\dots,E_k$. Lemma~\ref{spreadfunction} shows that $\psi(b) < \psi(E_1E_2\cdots E_kb)$, which is a contradiction.
 \end{proof} 
 
 Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that earthquakes can transform a given finite board into.
@@ -192,10 +197,12 @@ Suppose that $\sum_{j\in \mathbb{Z}} b(i,j) \geq 1$ for some $i \in \mathbb{Z}$,
 The same is true for each row. This means that if a chip  is ever in a row or column of nodes, there will be always be a chip on that row or column. This finishes the lemma. 
 \end{proof}
 
-We are now ready to prove the theorem that all finite boards will reach a stable state. 
+We are now ready to show that all finite boards will reach a stable state. 
 
+\begin{theorem} If $b$ is a finite board then there exists some sequence $\{s_1, \ldots, s_k\}$ such that after applying an earthquake to each of these locations on $b$ the resultant board is stable. 
+\end{theorem}
 \begin{proof}
-(of Theorem~\ref{finitestability}) Recall that $b$ is a finite board so $\sum_{i,j} b(i,j) = C$, furthermore this tells us that the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then by Lemma~\ref{finiteextension}, we have that after any number of earthquakes the resultant board is nonzero only in the range $ R=[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$. If we set 
+ Since $b$ is a finite board so $\sum_{i,j} b(i,j) = C$, furthermore this tells us that the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then by Lemma~\ref{finiteextension}, we have that after any number of earthquakes the resultant board is nonzero only in the range $ R=[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$. If we set 
 \begin{equation*}
 D= |j_{max}-j_{min} + 2C|*|i_{max} - i_{min} + 2C|
 \end{equation*}
@@ -226,11 +233,7 @@ First, we formalize the notion of earthquakes that are ``allowed to happen".
 
 \begin{definition}
 We say that an earthquake $E$ is valid if the node it targets has at least $4$ chips on it. 
-We say that a sequence of earthquakes $E_1, E_2, \ldots E_n$ to be a valid sequence of earthquakes if each earthquake is valid in the order applied. That is 
-\begin{equation*}
-E^{m}[b, \{s_k\}](s_{m+1}  \geq 4
-\end{equation*}
-for all $1\geq m+1 \leq n$.
+We say that a sequence of earthquakes $E_1, E_2, \ldots E_n$ to be a valid sequence of earthquakes if each earthquake is valid when applied one after another. 
 \end{definition}
 
 
@@ -247,7 +250,7 @@ Recalling that $n(s)$ refers to the set of neighbors of the square $s$ we note t
 \label{earthquakeredefine}
 Consider a board $b$ if $E$ is a valid earthquake, then 
 \begin{equation*}
-E[b, s](x) = b(x) + 1[[ x \in n(s)]] - 4[[x =s]]
+E_s b(x) = b(x) + 1[[ x \in n(s)]] - 4[[x =s]]
 \end{equation*}
 \end{lemma}
 \begin{proof}
@@ -259,22 +262,22 @@ Now we can show that switching the order of two earthquakes with certain validit
 \label{swappinglemma}
 Consider a board $b$ and two earthquakes $E_1$ and $E_2$, affecting nodes $s_1$ and $s_2$ respectively. If $E_1, E_2$ is a valid sequence and $E_2$ is a valid earthquake when applied before $E_1$ then $E_2, E_1$ is also a valid sequence of earthquakes and 
 \begin{equation*}
-E_2[E_1[b, s_1] s_2] = E_1[LE_2[b, s_2], s_1] 
+E_2 E_1 b = E_1 E_2 b
 \end{equation*}
 \end{lemma}
 \begin{proof}
 We will first show that $E_2, E_1$ is a valid sequence and then use this to show that the order in which the earthquakes occur does not matter. 
 
-We demonstrate this by contradiction. Assume  $E_2, E_1$ is an invalid sequence, that is $E_2[b, s_2](s_1)<4$. Since $E_1$ is a valid earthquake when applied directly to $b$ we know $b(s_1) \geq 4 $. 
-Therefore we must have $b(s_1)<8$ and $s_2=s_1$. But then $E_1[b, s_1](s_1)<4$ and so $E_1, E_2$ would not be a valid sequence of earthquakes. This contradicts one our hypothesis and so $E_2, E_1$ is a valid sequence. 
+We demonstrate this by contradiction. Assume  $E_2, E_1$ is an invalid sequence, that is $E_2 b(s_1)<4$. Since $E_1$ is a valid earthquake when applied directly to $b$ we know $b(s_1) \geq 4 $. 
+Therefore we must have $b(s_1)<8$ and $s_2=s_1$. But then $E_1 b(s_1)<4$ and so $E_1, E_2$ would not be a valid sequence of earthquakes. This contradicts one our hypothesis and so $E_2, E_1$ is a valid sequence. 
 
-Now in order to demonstrate that the order in which the earthquakes are applied does not affect the final board state consider $E_2[ E_1[b, s_1], s_2](x)$ for some $x \in \mathbb{Z} \times \mathbb{Z}$. Applying Lemma ~\ref{earthquakeredefine} we have 
+Now in order to demonstrate that the order in which the earthquakes are applied does not affect the final board state consider $E_2 E_1 b(x)$ for some $x \in \mathbb{Z} \times \mathbb{Z}$. Applying Lemma ~\ref{earthquakeredefine} we have 
 \begin{align*}
-E_2[E_1[b, s_1], s_2](x) = E_1[b, s_1])(x)  + [[ x \in n(s_2) ]] - 4[[ x=s_2]] \\
+E_2 E_1 b (x) = E_1(x)  + [[ x \in n(s_2) ]] - 4[[ x=s_2]] \\
 = b(x) + [[ x \in n(s_1) ]] - 4[[x = s_1] + [[ x \in n(s_2) ]] - 4[[ x= s_2)]]  \\
 = b(x) + [[ x \in n(s_2) ]] - 4[[x = s_2] + [[ x \in n(s_1) ]] - 4[[ x= s_1)]]\\
-= E_2[b, s_2](x) + [[ x \in n(s_1) ]] - 4[[ x = s_1]] \\
-= E_1[E_2 [b, s_2], s_1](x) 
+= E_2 b(x) + [[ x \in n(s_1) ]] - 4[[ x = s_1]] \\
+= E_1 E_2 b(x) 
 \end{align*}
 The critical step in this proof is recognizing that because $E_1$ and $E_2$ are valid earthquakes regardless of their ordering the algebra above was valid.
 \end{proof}
@@ -440,10 +443,22 @@ By looking at Figure~\ref{fig:growthofT} it seems that $T(n) = \Theta(n\log n)$.
 \begin{definition}
 A $d$-tree is a graph composed of a parent node connected by edges to $d-1$ unique children nodes.Those children each have $d-1$ unique children and so on.  
 \end{definition}
+\begin{figure}[!h]
+\label{4tree}
+\centering
+\includegraphics[width=0.4\linewidth]{4tree}
+\caption{A 4-tree}
+\end{figure}
 We note that every node other than the original parent node has $d$ neighbors. In order to simplify our process we would like the graph to be regular and so we make the following definition. 
 \begin{definition}
 A joined $d$-tree is two $d$-trees connected at their parent nodes by an edge.
 \end{definition}
+\begin{figure}[!h]
+\label{joined4tree}
+\centering
+\includegraphics[width=0.8\linewidth]{joined4tree}
+\caption{A joined 4-tree}
+\end{figure}
 
 We now define a coordinate system so that our method of proof can mirror that of the standard board case.
 \begin{definition} We define a coordinate system for our joined $d$-trees, with the following rules:
@@ -460,13 +475,13 @@ G_d:= \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules ab
 
 In order to keep our notation compact we once again define a function that outputs the neighbors of a node
 \begin{definition} 
-We define the function $n: G_d \rightarrow G_d^d$ as 
+Let $n(i,j)d$ be the set of neighbors of node $(i,j)$ 
 \begin{equation*}
 n(i,j) = \{ (x_1, y_1); (x_1 = i+1 \text{ or } x_1=i-1), \text{ and }(x_1, y_1) \in G_d\}
 \end{equation*}
 \end{definition}
 
-We now formalize the board of poker chips. Note that this definition only differs from our initial definition in that the input value is a coordinate of a node in a joined $d$-tree rather than a coordinate in the integer lattice.
+We now formalize the board of poker chips. Note that this definition only differs from our initial definition in that the input value is a coordinate of a node in a joined $d$-tree rather than a coordinate of the cartesian grid.
 \begin{definition}
 We define a $d$-board to be a map from the set of valid coordinates to the nonnegative integers, that is 
 \begin{equation}
@@ -475,37 +490,33 @@ b:  G_d \rightarrow \mathbb{Z}_{\geq 0}
 We write $\mathcal{B}(d)$ to refer to the set of all $d$-boards.  
 \end{definition}
 
-Recalling that $n(s)$ refers to the neighbors of $s$ we define our earthquake operation in terms of $d$-boards.
+Recalling that $n(s)$ refers to the neighbors of $s$ we define our earthquake operation in terms of $d$-boards. It functions analogously to the earthquake for the standard board, but instead of hitting nodes that have more than 4 chips it hits nodes that have more than $d$ chips. 
 \begin{definition}
 An earthquake takes as an input an $d$-board and a node and outputs an $d$-board so we write $E: \mathcal{B}(d) \times G_d \rightarrow \mathcal{B}(d)$. If $s$ is the node input and $b(s)>d$ then 
 \begin{align*}
-E[b, s](s) = b(s)- d \\
-E[b, s](t) = b(t) +1 
+E_s b(s) = b(s)- d \\
+E_s b(t) = b(t) +1 \quad \forall t \in n(s)
 \end{align*}
-for $t \in n(s)$. Otherwise $b(s)<d$ and $E[b,s]=b$ as the earthquake does not move any chips. We use the notation $E^r[b, \{s_k\}]$ to denote the application of $E$ to the $b$ $r$ times, to the sites $s_1, \ldots s_r$ respectively.
+Otherwise $b(s)<d$ and $E_s b=b$ as the earthquake does not move any chips.
 \end{definition}
 
 Now that we have formalized the earthquake operator we can introduce a precise definition of stability of a board. 
 \begin{definition}
-We say that a $d$-board is stable if its values are strictly less than $n$.
+We say that a $d$-board is stable if its values are strictly less than $d$.
 \end{definition}
 This is equivalent to saying all earthquakes have no effect on the board. We also make a precise definition for a finite board.
 \begin{definition} 
-We say that a $d$-board is finite if the total number of chips on it is finite. That is a $d$board $b$ is finite if the sum
-\begin{equation}
-C= \sum_{(i,j) \in G_d} b(i,j) 
-\end{equation}
-is finite. 
-We denote the set of finite $d$-boards as $B(d)_F$.
+We say that a $d$-board is finite if the total number of chips on it is finite.
 \end{definition}
 
 We will now show that any finite $d$-board will stabilize under earthquakes. Our method of proof will mirror the method used for the square lattice, without only minor changes.  Therefore we will proceed by shooing that if an earthquake changes the state of a $d$-board, then no sequence of earthquakes can transform the output $d$-board back into the original $d$-board. We will then give a bound on the maximum number of configurations a given $d$-board can be transformed into by earthquakes. Once again these together will show that all finite $d$-boards will stabilize.
 
 We once again define a spread function 
 \begin{definition}
- Let $\Psi: \mathcal{B}(d)_F \rightarrow \mathbb{Z}_{\geq 0}$ be the function
+To define the spread function we once again define a distance on our graph.  The distance for a node $s$ 
+$\Psi$ is a function from the finite $d$-boards and is defined
 \begin{equation}
-\Psi(f) = \sum_{(i,j) \in G_d} b(i,j) |i|^2
+\Psi(b) = \sum_{(i,j) \in G_d} b(i,j) |i|^2
 \end{equation}
 Note that this is well defined for trees which contain a finite number of chips. 
 \end{definition} 
