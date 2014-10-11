@@ -1,4 +1,4 @@
-\documentclass[runningheads,a4paper]{llncs}
+documentclass[runningheads,a4paper]{llncs}
 
 \usepackage{amssymb}
 \setcounter{tocdepth}{3}
@@ -76,19 +76,26 @@ Finally, in Section~\ref{Computing with Chips} we present a model of computation
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}\\
 
 First, we formalize the definition of a board. The board is an infinite grid graph with a nonnegative number of chips placed at each node
+\begin{figure}
 \begin{center}
 \includegraphics[scale=0.5]{grid1.png}
 \end{center}
+\caption{A finite component of the grid}
+\end{figure}
 
+\begin{figure}
+\label{cartesiangrid}
 \begin{center}
 \includegraphics[scale=0.8]{cartesiangrid.png}
 \end{center}
+\caption{A finite component of the grid with coordinates}
+\end{figure}
 We can coordinatize the grid graph by labeling it like the standard Cartesian grid, where we fix one node to be the origin $(0,0)$, and we index all other nodes by integer coordinates $(i,j)$. We will define the board as a function from the Cartesian grid to the nonnegative integers.
 
 \begin{definition} We write boards as functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
 \end{definition}
 
-This function maps node labels given as integer coordinates to chip stack sizes. For example, FIGUREREFERENCE if a board $b$ has 8 chips at the node with coordinate $(3,1)$, then $b(3,1) = 8$.
+This function maps node labels given as integer coordinates to chip stack sizes. For example, in Figure \ref{cartesiangrid} the board $b$ has 8 chips at the node with coordinate $(3,1)$, so we write $b(3,1) = 8$.
 
 \begin{definition} We define $n(i,j)$ to be the set of neighbors of node $(i,j)$
 \begin{equation*}
@@ -131,32 +138,32 @@ We will then give a bound for the maximum number of configurations that earthqua
 Together these show that all finite boards stabilize. 
 \begin{theorem}
 \label{finitestability}
-If $b \in \mathcal{B}_F$, there exists $N> 0$ such that after $N$ earthquakes the resultant board will be stable, or for all $m > 0$ and all $s \in \mathbb{Z} \times \mathbb{Z}$, $E^{N+m}[b,s] = E^N[b,s]$.
+If a board $b$ is finite then there exists $N>0$ such that after applying a $N$ earthquakes the resultant board will be stable.
 \end{theorem}
 
 In order to show finite boards never revisit a prior arrangement, we define a spread function that maps boards to nonnegative integers. The spread function should give some measure of how ``spread out" the chips on a board are. Earthquakes seem to ``spread out" the chips on a board and so we would like earthquakes to increase the value of the function. 
 
 \begin{lemma}
-Suppose $b \in \mathcal{B}_F$. If $E[b, s] \neq b$, then $E^n[b, \{s_n\}] \neq b$ for all $n > 0$ and all sequences $\{s_n\}$.
+Suppose $b$ is a finite board. If $E_{s}b \neq b$, then no application of earthquakes to $E_{s}b$ can produce $b$. 
 \end{lemma}
 
 \begin{proof}
-For ease of notation we use $s=(s_1, s_2) \in \mathbb{Z} \times \mathbb{Z}$. We define our spread function as $S: \mathcal{B}_F \rightarrow \mathbb{Z}_{\geq 0}$ 
+For ease of notation we use $s=(s_1, s_2) \in \mathbb{Z} \times \mathbb{Z}$. We define our spread function as a map from finite boards to the nonnegative integers
 \begin{equation*}
 S(b) = \sum_{i,j} b(i,j)(|i|+|j|)^2. 
 \end{equation*}
-We can think of $S(b)$ as the sum of the number of chips on each square weighted by the "taxi-cab" distance from the origin squared. This is well-defined since the total number of chips on the board is finite. We claim 
+We can think of $S(b)$ as the sum of the number of chips on each square weighted by the "taxi-cab" distance from the origin squared. This is well-defined since the total number of chips on the board is finite. We claim that 
 \begin{equation*}
-E[b, s] \neq b \Rightarrow S(E[b, s]) > S(b)
+E_{s} b \neq b \Rightarrow S(E[b, s]) > S(b)
 \end{equation*}
 That is if an earthquake changes the board, $S$ increases. This implies that if an earthquake changes a board, then no subsequent application of earthquakes can transform it back to its original state.
 
-We evaluate $S(E[b, s]) - S(b)$, recalling that $E[b, s](i,j)$ refers to the value of $b$ at $(i,j)$ after an earthquake effected $s$.
+We evaluate $S(E_{s} b) - S(b)$, recalling that $E_s b(i,j)$ refers to the value of $b$ at $(i,j)$ after an earthquake effected $s$.
 \begin{align*}
-S(E[b, s]) - S(b) &=\sum_{i,j} E[b, s](i,j)(|i|+|j|)^2 - \sum_{i,j} b(i,j)(|i|+|j|)^2 \\
+S(E_{s} b) - S(b) &=\sum_{i,j} E_{s} b (i,j)(|i|+|j|)^2 - \sum_{i,j} b(i,j)(|i|+|j|)^2 \\
 &=-4(|s_1| + |s_2|)^2 +\sum_{(i,j) \in n(s)} (|i| + |j|)^2
 \end{align*}
-For most two of the neighbors of $(s_1, s_2)$ 
+For at most two of the neighbors of $(s_1, s_2)$ 
 \begin{equation*}
 (|i|+|j|)= (|s_1|+|s_2|-1)^2,
 \end{equation*}
@@ -171,41 +178,37 @@ and for at least two of the neighbors
 \end{align*}
 \end{proof}
 
-Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that any number of earthquakes can transform a given finite board into.
+Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that earthquakes can transform a given finite board into.
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{i,j} b(i,j) = C$, and $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then   $E^n[b, \{s_k\}]$ is nonzero only in the range $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$for all $n$ and for all sequences $\{s_k\}$ .
+Suppose $\sum_{i,j} b(i,j) = C$, and $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then after applying any number of earthquakes the resultant board is nonzero only in the range $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$ .
 \end{lemma}
 
 \begin{proof}
-Suppose that $\sum_{j\in \mathbb{Z}} b(i,j) \geq 1$ for some $i \in \mathbb{Z}$, then $\sum_{j \in \mathbb{Z}} E[b, s](i,j) \geq 1$. This is clear since any earthquake will move either bring things into the column $i$ or if it moves some chips out, then there are two chips that remain in that column.
+Suppose that $\sum_{j\in \mathbb{Z}} b(i,j) \geq 1$ for some $i \in \mathbb{Z}$, then $\sum_{j \in \mathbb{Z}} E_{s}b(i,j) \geq 1$. This is clear since an earthquake can bring things into column $i$ or if it moves some chips out, then there are two chips that remain in the column.
 
-The same is true for each row. This means that if a chip ever goes to a row or column of nodes, there will be always be a chip on that row or column. This finishes the lemma. 
+The same is true for each row. This means that if a chip  is ever in a row or column of nodes, there will be always be a chip on that row or column. This finishes the lemma. 
 \end{proof}
 
 We are now ready to prove the theorem that all finite boards will reach a stable state. 
 
 \begin{proof}
-(of Theorem~\ref{finitestability}) Recall that $b \in \mathcal{B}_F$, so $\sum_{i,j} b(i,j) = C$. Because $b$ is a finite board we know the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then by Lemma~\ref{finiteextension}, we have that $E^n[b, \{s_k \}]$ is nonzero in the range $ R=[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$, for all $n>0$ and all sequences $\{ s_k \}$ of length $n$.
-If we set 
+(of Theorem~\ref{finitestability}) Recall that $b$ is a finite board so $\sum_{i,j} b(i,j) = C$, furthermore this tells us that the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then by Lemma~\ref{finiteextension}, we have that after any number of earthquakes the resultant board is nonzero only in the range $ R=[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$. If we set 
 \begin{equation*}
 D= |j_{max}-j_{min} + 2C|*|i_{max} - i_{min} + 2C|
 \end{equation*}
-then there are at most  $\binom{D+C-1}{D-1}$  boards that have exactly $C$ chips on them and are nonzero only in $R$,. We know that the state of the board cannot cycle, so there must be an $0 \leq N \leq \binom{D+C-1}{D-1}$ and some sequence $\{s_k\}$, which is arbitrary after the first $N$ terms, such that $E^N[ b, \{s_k\}] = E^{N+m}[b, \{s_k\}]$. 
+then there are at most  $\binom{D+C-1}{D-1}$  boards that have exactly $C$ chips on them and are nonzero only in $R$,. We know that the state of the board cannot cycle and there are only a finite number of board states so eventually the board must stabilize.
 \end{proof}
 
-\subsection{Acyclicity of Infinite Boards}
-\label{Acyclicity of Infinite Boards}
-\emph{written by Fermi Ma, edited by Erik Waingarten and Perry Kleinhenz.}\\
-
-We can in fact show that infinite boards cannot cycle under earthquakes. 
+We can use our result for finite boards to show that earthquakes will never cause infinite boards to revisit a prior arrangement.  
 
 \begin{corollary}
-All boards are can never return to their same state.
+Suppose $b$ is an infinite board. If $E_s b \neq b$, then no application of earthquakes to $E_s b$ can produce $b$.
 \end{corollary}
 
 \begin{proof}
-We have shown that finite boards never return to the same state. Suppose that an infinite board $b$ reurns to the same state, then it does so after $N$ earthquakes at locations $\{ s_k \}$. However, we can bound the size of the locations in $\{ s_k \}$ and so this infinite board acts in the same way that a finite board on this bound acts. Therefore, if the infinite board cycles, then the finite board cycles as well. 
+We will proceed by contradiction. Assume otherwise, so there exists some sequence $\{s_1, s_2, \ldots, s_k\}$ such that after applying an earthquake to each of these locations on $E_s b$ the resultant board is $b$.
+However, we can bound the size of the locations affected by $\{s, s_1, s_2, \ldots, s_k \}$, call it $R$.  This infinite board behaves the same way as a finite board with the same values on $R$ and 0 outside of $R$. But this means that earthquakes transformed a finite board back into a previous state which is a contradiction. Therefore infinite boards cannot be transformed back into a previous state.
 \end{proof}
 
 \section{Order of Redistribution}
