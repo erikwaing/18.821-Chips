@@ -150,51 +150,35 @@ We then give a bound on the maximum number of board configurations a finite boar
 To define the spread function, we fix one coordinate on a board $b$ as the origin $(0,0)$, and we define the \emph{taxicab distance} $d(s)$ of a node $s$ on the board to be $|s_x| + |s_y|$, where $s_x$ is the $x$ coordinate of node $s$, and $s_y$ is the $y$ coordinate of node $s$. Then the spread function is
 \[ \psi(b) = \sum_{\text{all nodes }s}b(s)d(s)^2 \]
 
-The motivation for this definition is that the spread function should give a measure of how ``spread out" the chips on a board are. Intuitvely, earthquakes have the function of moving chips that are condensed in a single piile and spreading them out over a greater area. This function, which sums up the chip stack sizes weighted by the taxicab distance squared to the origin, sufficiently captures the idea of spread.
-
-
-
-\begin{theorem}
-\label{finitestability}
-If a board $b$ is finite then there exists $N>0$ such that after applying a $N$ earthquakes the resultant board will be stable.
-\end{theorem}
-
-In order to show finite boards never revisit a prior arrangement, we define a spread function that maps boards to nonnegative integers. The spread function should give some measure of how ``spread out" the chips on a board are. Earthquakes seem to ``spread out" the chips on a board and so we would like earthquakes to increase the value of the function. 
+Thus, the function sums up the chip stack sizes weighted by the taxicab distance to the origin squared. The motivation for this definition is that the spread function gives a measure of how ``spread out" the chips on a board are. Intuitvely, earthquakes move chips that are condensed in a single pile and spreads them out over a greater area. We capture this in the following lemma:
 
 \begin{lemma}
-Suppose $b$ is a finite board. If $E_{s}b \neq b$, then no application of earthquakes to $E_{s}b$ can produce $b$. 
+\label{spreadfunction}
+Suppose an earthquake hits node $s$ of a board $b$, producing the board $E_sb$. Then
+\[ \Psi(E_sb) > \Psi(b) \]
+so the earthquake strictly increases the spread of the board.
 \end{lemma}
-
 \begin{proof}
-For ease of notation we use $s=(s_1, s_2) \in \mathbb{Z} \times \mathbb{Z}$. We define our spread function as a map from finite boards to the nonnegative integers
-\begin{equation*}
-S(b) = \sum_{i,j} b(i,j)(|i|+|j|)^2. 
-\end{equation*}
-We can think of $S(b)$ as the sum of the number of chips on each square weighted by the "taxi-cab" distance from the origin squared. This is well-defined since the total number of chips on the board is finite. We claim that 
-\begin{equation*}
-E_{s} b \neq b \Rightarrow S(E[b, s]) > S(b)
-\end{equation*}
-That is if an earthquake changes the board, $S$ increases. This implies that if an earthquake changes a board, then no subsequent application of earthquakes can transform it back to its original state.
+The chip stacks of the two boards are the same at all nodes except at $s$ and $n(s)$, the nodes that neighbor $s$. Thus, the contribution to $\Psi$ is the same at all nodes except for those 5.
 
-We evaluate $S(E_{s} b) - S(b)$, recalling that $E_s b(i,j)$ refers to the value of $b$ at $(i,j)$ after an earthquake effected $s$.
-\begin{align*}
-S(E_{s} b) - S(b) &=\sum_{i,j} E_{s} b (i,j)(|i|+|j|)^2 - \sum_{i,j} b(i,j)(|i|+|j|)^2 \\
-&=-4(|s_1| + |s_2|)^2 +\sum_{(i,j) \in n(s)} (|i| + |j|)^2
-\end{align*}
-For at most two of the neighbors of $(s_1, s_2)$ 
-\begin{equation*}
-(|i|+|j|)= (|s_1|+|s_2|-1)^2,
-\end{equation*}
-and for at least two of the neighbors 
-\begin{equation*}
-(|i|+|j|)=(|s_1|+|s_2|+1)^2,
-\end{equation*}
- and $(|s_1|+|s_2|+1)^2 > (|s_1|+|s_2|-1)^2$. Therefore 
-\begin{align*}
-&-4(|s_1| + |s_2|)^2 +\sum_{(i,j) \in n(s)} (|i| + |j|)^2 \\
-& \geq 4(|s_1| + |s_2|)^2 + 2 (|s_1| + |s_2|+1)^2 + 2 (|s_1| + |s_2|-1)^2 = 4 >0.
-\end{align*}
+Let the taxicab distance to $s$ is $d_s$. Then the contribution to the spread function from node $s$ decreases from $b(s)d_s^2$ to $(b(s)-4)d_s^2$.
+
+Out of the 4 nodes in $n(s)$, some have a taxicab distance of $d_s+1$, and the rest are at distance $d_s-1$. In particular, if $s$ is not exactly on the $x$ or $y$ axis, exactly 2 neighboring nodes are at $d_s+1$, and exactly 2 are at distance $d_s-1$. If $s$ is on either the $x$ or $y$ axis, then 3 nodes are at distance $d_s+1$, and 1 neighboring node is at distance $d_s-1$. Since we want to lower bound the increase in the spread function, we focus only on the case where exactly 2 neighboring nodes are at distance $d_s+1$, as it can be shown that this case leads to a strictly smaller increase than the other.
+
+Suppose that the two neighboring nodes at distance $d_s+1$ have chip stacks of $n_1$ and $n_2$ originally. Then their contribution to the spread function goes from $n_1(d_s+1)^2$ and $n_2(d_s+1)^2$ to $(n_1+1)(d_s+1)^2$ and $(n_2+1)(d_s+1)^2$. If the other two nodes at distance $d_s-1$ have chip stacks of $n_3$ and $n_4$, their contribution to the spread function goes from $n_3(d_s-1)^2$ and $n_4(d_s-1)^2$ to $(n_3+1)(d_s-1)^2$ and $(n_4+1)(d_s-1)^2$.
+
+Omitting the algebraic details, we find that summing up the changes in the spread function gives
+\[ \Psi(E_sb) - \Psi(b) = 4\]
+which completes the proof.
 \end{proof}
+
+\begin{corollary}
+\label{finitestability}
+A board can never return to a previous state via a sequence of earthquakes.
+\end{corollary}
+\begin{proof}
+Suppose for the sake of contradiction that this is possible, and that $b = E_1E_2\cdots E_kb$ for some sequence of earthquakes $E_1,E_2,\dots,E_k$. Lemma~\ref{spreadfunction} shows that $\psi(b) > \psi(E_1E_2\cdots E_kb)$, which is a contradiction.
+\end{proof} 
 
 Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that earthquakes can transform a given finite board into.
 \begin{lemma}
