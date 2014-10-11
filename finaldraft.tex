@@ -327,6 +327,7 @@ Now that we have developed a tool that will allow us to move earthquakes in a se
 The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
 
 \begin{theorem}
+\label{thm:order}
 Let $b$ be a board that becomes a stable board $b$ after $N$ earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $b$. Furthermore the number of times that a square $x$ is targeted is invariant of the order in which the earthquakes occur. 
 \end{theorem}
 \begin{proof}
@@ -603,30 +604,77 @@ A Boolean input is a number in $\{0,1\}$, and a Boolean function is a function t
 
 Boolean circuits are formed by using wires that transmit 0's and 1's, and feeding them through various \emph{gates}. For example, a wire carrying a 0 and a wire carrying a 1 can be fed through an OR gate, which will ``output" a wire carrying a 1. In this section, we construct circuits using the poker chips board that use AND an OR gates. 
 
-\subsection{Model of Computation}
+\subsection{Simple Model}
 
-Our model of computation is as follows: we assume a finite board with finitely many chips. The inputs are designated by each two squares, one apart one is the ``clock" square and other the bit square. Likewise, the outputs each have a ``clock" square and a bit square. The ``clock" squares are set the value 4 and the bit squres are set to 4 if they are 1 and 0 otherwise. A computation is done by a series of earthquakes, when an output has the clock square active, then the bit square is read, and that output bit is considered read. 
+A simple model of computation can be defined as follows. We assume a finite board. We specify some input nodes and some output nodes. If an input bit is to be set to 1, then we place 4 chips in the input node. We apply earthquakes to the board until it stabilizes. If an output node ever had an earthquake, then we mark that output bit as 1; otherwise, the output bit is set to 0. 
 
-\subsection{Example}
+A simple example is a board that computes the identity function of one output. We can compute 
+\[ f(x) = x \]
+By having a board with no chips, and we let the input node be the same as the output node. Then if $x = 0$, this means that the input node will not contain any chips, so the board is stable. The output node never received an earthquake, so the output is 0. If $x = 1$, then the input node gets 4 chips and an earthquake affects it. So the output node is activated, and so the output is 1.
+With this simple model, there are a surprising number of things we can do. We can make wires, AND gates and OR gates (see Figure~\ref{fig:simplegates}). 
 
-A simple example is given by a board that computes the identity.
+\begin{figure}
+\centering
+\subfigure[Wire]{\includegraphics[width=0.25\linewidth]{wire.pdf}\label{fig:wire}}
+\qquad\qquad
+\subfigure[AND gate]{\includegraphics[width=0.25\linewidth]{andgate.pdf}\label{fig:AND}}
+\qquad\qquad
+\subfigure[OR gate]{\includegraphics[width=0.25\linewidth]{orgate.pdf}\label{fig:OR}}
+\caption{Gates in the simple model. Green are the inputs, red are the outputs. We disregard edges and assume that any two nodes that are touching have an edge between them.}
+\label{fig:simplegates}
+\end{figure}
+
+Composing these gates, we can make circuits which represent some Boolean function. In particular we can compute any Boolean function that can be represented with a planar circuit with only AND and OR.
+
+\begin{theorem}
+There does not exists a board which computes $f(x) = \neg x$.
+\end{theorem}
+
+\begin{proof}
+Suppose for contradiction that we have a board $b$ with one input $i$ and one output $o$ which computes NOT. Then we know that there exists some node which initially has over $4$ chips, since otherwise, the board would be stable and so the output never gets activated. 
+
+Let $A(0)$ be the set of nodes that get activated when $i = 0$ and $A(1)$ be the set of nodes that get activated when $i=1$. Then we claim that $A(0) \subset A(1)$. This would yield a contradiction since $o \in A(0)$ but $o \notin A(1)$. 
+\end{proof}
+
+\begin{lemma}
+Let $A(i)$ be the set of active nodes in an execution of board $b$ with input node $i$. Then $A(0) \subset A(1)$.
+\end{lemma}
+
+\begin{proof}
+By Theorem~\ref{thm:order}, we can simulate an execution of the board with input be 0 before we apply earthquakes to the input node. We start with a board $b$ where the input is 1, so it has 4 chips. We simulate by applying earthquakes to the active nodes that are not the input. If the input node ever receives more than $8$ chips, we apply one earthquake to the input node. This way, we guarantee that the input node always contains more than $4$ chips. In addition, the input node does not contain more than $7$ chips for more than one consecutive earthquake.
+We do this until every node except the input node has less than 4 chips.
+
+Note that this execution is indistinguishable from the execution with input set to 0. This means that all nodes activated in the execution with input 0 are the same as the nodes activated in the above mentioned execution. 
+
+Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
+\end{proof}
+
+\subsection{More powerful model}
+
+As before, we assume a finite board with finitely many chips. The inputs are designated by having one input node. The outputs also each have one node. We now make the model of computation stronger by adding a special node $r$. When $r$ gets activated, it ends the execution and reads the outputs. We assume that in one ``round" we apply an earthquake to each valid node and that $r$ is the last node which gets applied an earthquake. 
+
+In order to make it easier to compute, we will make a special \textit{clock} node, designated as $c$ which always starts out with $4$ chips. We will have the clock go through each input and travel in parallel to each input. We will build \textit{gadgets} that allow us to compute with the clock so that we can build gates in a modular and then put them together. 
+
+We will also make a wire path that takes $c$ to $r$, so that we know exactly at what point the outputs are read. 
+
+As shown before, simple example is given by a board that computes the identity. For simplicity, we write the boards as a board of numbers, which every space is a node and two nodes have an edge between them if they are either above, below, left, or right.
 
 \[ \begin{array}{cccccc} 0 & 0 & 0 & 0 & 0 & 0 \\
-				     4_c & 3 & 3 & 3 & 3 & 3_e \\
+				     4_c & 3 & 3 & 3 & 3 & 3_r \\
 				     0 & 0 & 0 & 0 & 0 & 0 \\
 				     i  & 3 & 3 & 3 & 3 & 3_o \\
 				     0 & 0 & 0 & 0 & 0 & 0 \end{array} \]
-Where the subscript $c$ indicates the clock, the subscript $e$ indicates the output clock square. $i$ indicates the bit square, and $o$ indicates the output bit. 
+Where $i$ indicates the input bit node, and $o$ indicates the output bit. 
 
-One can see that $e$ will become active after 5 earthquakes since it will take that many earthquakes for $c$ to reach $e$. Also, if $i$ is initially inactive, then $o$ will be inactive, and if $i$ is active, then $o$ will be active. Therefore, we can compute the identity. 
+One can see that $r$ will become active after 5 earthquakes since it will take that many earthquakes for $c$ to reach $r$. Also, if $i$ is initially inactive, then $o$ will be inactive, and if $i$ is active, then $o$ will be active. Therefore, we can compute the identity. 
 
 This circuit also shows how to make a ``wire" in the circuit. We will represent a wire as two parralel arrows, one containing the clock path and the other carrying the input. 
 
 \subsection{Turner}
 
-Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $e$ is the output clock and $o$ is the output bit.
+Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $r$ is the output read and $o$ is the output bit.
 
-\[ \begin{array}{cccccc} 0 & 0 & e & 0 & o \\
+\[ \begin{array}{cccccc} 0 & 0 & r & 0 & o \\
 				     0 & 3 & 2 & 0 & 3 \\
 			            0 & 2 & 3 & 0 & 3 \\
 				    0 & 3 & 2 & 0 & 3 \\
@@ -639,12 +687,12 @@ Likewise, we can perform a clockwise path by making $i$ snakes while the clock t
 
 \subsection{Synchronize}
 
-We can synchronize the inputs so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
+We can synchronize the input so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
 \[ \begin{array}{cccccccc} c & 3 & 3 & 3 & 3 & 3 & 3 & 0 \\
 					 0 & 0 & 0 & 0 & 3 & 0 & 3 & 0 \\
 					 i  & 3 & 3 & 3 & 1 & 3 & 3 & 3 \\
 					 0 & 0 & 0 & 0 & 3 & 0 & 0 & 3 \\
-					 0 & 0 & 0 & 0 & o & 0 & e & 3 \end{array} \]
+					 0 & 0 & 0 & 0 & o & 0 & r & 3 \end{array} \]
 Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
 
 The fact that we have a synchronizer means that the model of computation is equivalent to one where there is only one clock for all input bits. 
@@ -668,23 +716,15 @@ Similarly, we can compute the OR of two circuits with a very simple modification
 					   &    &    &    &    & 3 & i_2 \end{array} \]
 And we can do a similar set up to synchronize the clocks. 
 
-So currently, we can compute any boolean circuit which can be drawn in a planar graph with only ANDs and ORs. So the question is whether we can compute the NOT? We argue that this is not possible. 
+We can build a NOT board with the following circuit:
+\begin{figure}
+\centering
+\includegraphics[width=0.25\linewidth]{notgate.pdf}
+\caption{Possible board to compute $f(x) = \neg x$}
+\label{fig:NOT}
+\end{figure}
+In Figure~\ref{fig:NOT}, the wire to $c$ and $r$ is the same length as the wire from $c$ to $o$, but the wire from $i$ to $r$ is shorter than the length of the wire from $c$ to $o$. If $i$ is set to $1$, then $r$ will be activated before the clock reaches $o$, so $o$ will be read as 0. If $i$ is set to 0, then the clock will reach $o$ and $r$ at the same time, so the output is $1$. This computes $f(x) = \neg x$; however, we have switched the order of $r$ and $o$. We also do not know how to compose this board with other boards. 
 
-\begin{theorem}
-There does not exists any board configuration which computes the NOT operator in the above model of computation.
-\end{theorem}
-
-\begin{proof}
-Suppose we have a board configuration $B$ with input squares $c$, $i$ and output squares $e, o$ that computes the NOT function. Then we can make another board $B'$ that synchronizes the final clock with the input so that we do not need to worry about timing of the clock. That is, we can guarantee that if $o$ is active, then $o$ is active at the same time $e$ is active.
-
-Now lets make $B'$ an infinite board by putting 0s on the sides. So we have a finite board with finitely many chips. Let $S_{c_0i_0}$ be the set of squares which were active (had an earthquake affect them) during the execution of $B$ with the input value $i = i_0$ and $c = c_0$. 
-
-The first claim to make is that $S_{c_0i_0} \subset S_{c_1i_1}$ if $c_0 \leq c_1$ and $i_0 \leq i_1$. This is clearly true since the order of redistribution does not matter. In fact, we can do the earthquakes by first doing the earthquakes on $c$ and $i$ until the value decreases past $c_0$ and $i_0$, then simulate the computation of $c = c_0$ and $i = i_0$ with local earthquakes.
-
-However, this arises in a contradiction, since $o \in S_{10}$ but $o \notin S_{11}$. Therefore, computing NOT with a board is not possible.
-\end{proof}
-
-What does this mean? Well, in particular, it means that we cannot do much. In particular, we can't add, since $x + 1$ will act as the NOT operator on the lowest order bit. We can only compute boolean circuits in planar graphs. 
-
+We would also like to build a crossover gadget to allow us to compute circuits which are not necesarily.
 
 \end{document}
