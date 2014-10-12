@@ -179,6 +179,7 @@ which completes the proof.
 \end{proof}
 
 \begin{corollary}
+\label{norepeats}
 A finite board can never return to a previous state via a sequence of earthquakes.
 \end{corollary}
 \begin{proof}
@@ -487,15 +488,14 @@ We define a $d$-board to be a map from the set of valid coordinates to the nonne
 \begin{equation}
 b:  G_d \rightarrow \mathbb{Z}_{\geq 0}
 \end{equation}
-We write $\mathcal{B}(d)$ to refer to the set of all $d$-boards.  
 \end{definition}
 
 Recalling that $n(s)$ refers to the neighbors of $s$ we define our earthquake operation in terms of $d$-boards. It functions analogously to the earthquake for the standard board, but instead of hitting nodes that have more than 4 chips it hits nodes that have more than $d$ chips. 
 \begin{definition}
-An earthquake takes as an input an $d$-board and a node and outputs an $d$-board so we write $E: \mathcal{B}(d) \times G_d \rightarrow \mathcal{B}(d)$. If $s$ is the node input and $b(s)>d$ then 
+An earthquake takes as an input an $d$-board and a node and outputs an $d$-board. If $s$ is the node input and $b(s)>d$ then 
 \begin{align*}
-E_s b(s) = b(s)- d \\
-E_s b(t) = b(t) +1 \quad \forall t \in n(s)
+&E_s b(s) = b(s)- d \\
+&E_s b(t) = b(t) +1 \quad \forall t \in n(s)
 \end{align*}
 Otherwise $b(s)<d$ and $E_s b=b$ as the earthquake does not move any chips.
 \end{definition}
@@ -513,46 +513,48 @@ We will now show that any finite $d$-board will stabilize under earthquakes. Our
 
 We once again define a spread function 
 \begin{definition}
-To define the spread function we once again define a distance on our graph.  The distance for a node $s$ 
-$\Psi$ is a function from the finite $d$-boards and is defined
+$\Psi$ is a function from the finite $d$-boards and is defined as
 \begin{equation}
 \Psi(b) = \sum_{(i,j) \in G_d} b(i,j) |i|^2
 \end{equation}
-Note that this is well defined for trees which contain a finite number of chips. 
+Note that this is well defined for boards which contain a finite number of chips. 
 \end{definition} 
 We can once again think of this spread function as the sum of the number of chips on every node weighted by the taxi-cab distance from the node to the origin.
 
-\begin{lemma}
-If $E[b, s_1] \neq b$, then $E^r[b, \{s_k\}] \neq b$ for all $r>0$ and all sequences $\{s_k\}$ of length $r$ that begin with $s_1$. 
+\begin{lemma} 
+Suppose an earthquake hits node $s$ of a finite $d$-board $b$ producing the board $E_s b$. Then
+\begin{equation*}
+\Psi( E_s b) > \Psi (b)
+\end{equation*}
 \end{lemma}
-
 \begin{proof}
-For ease of notation let $s=(s_1, s_2)$. We will show that if $E$ acts on a board nontrivially then $\Psi(E[b, s])$ will be strictly larger. That is  
-\begin{equation}
-E[b, s] \neq f \Rightarrow \Psi(E[b, s]) > \Psi(b)
-\end{equation}
-
-
-We can evaluate $\Psi(E[b, s]) - \Psi(b)$.
+For ease of notation let $s=(s_1, s_2)$. We can evaluate $\Psi(E_s b) - \Psi(b)$.
 \begin{align}
-\Psi(E[b, s])-\Psi(b) = \sum_{(i,j) \in G_d} E[b, s](i,j)|i|^2 - \sum_{(i,j) \in G_d} b(i,j)|i|^2 
+\Psi(E[b, s])-\Psi(b) = \sum_{(i,j) \in G_d} E_s b (i,j)|i|^2 - \sum_{(i,j) \in G_d} b(i,j)|i|^2 
 \end{align}
 We note that only $s$ and its neighbors are affected so our expression simplifies to
 \begin{align*}
-\Psi(E[b, s]) - \Psi(b) &= E[b, s](s) |s_1|^2 - b(s) |s_1|^2 + \sum_{(i,j) \in n(s)} (E[b,s](i,j) |i|^2 - b(i,j)|i|^2) \\
+\Psi(E_s b ) - \Psi(b) &= E_s b (s) |s_1|^2 - b(s) |s_1|^2 + \sum_{(i,j) \in n(s)} (E_s b (i,j) |i|^2 - b(i,j)|i|^2) \\
 &= -d |s_1|^2 + \sum_{(i,j) \in n(s)} |i|^2
 \end{align*}
-We note that exactly $d-1$ of the neighbors of $s$ are a distance $|s_1 +1|$ from the origin and one of the neighbors of $s$ is a distance $(|s_1| - 1)$ from the origin.  A point to emphasize is that this is the only substantial way in which this proof differs from the similar proof for the square lattice. Our expression simplifies to 
+We note that exactly $d-1$ of the neighbors of $s$ are a distance $|s_1 +1|$ from the origin and one of the neighbors of $s$ is a distance $(|s_1| - 1)$ from the origin.  A point to emphasize is that this is the only substantial way in which this proof differs from the similar proof for the square lattice. Omitting the algebraic details we find that 
 \begin{align*}
-&= -d |s_1|^2 + \sum_{(i,j) \in n(s)}-|i|^2 \\
-&= - d|s_1|^2 + (d-1)(|s_1| +1)^2 +(|s_1| -1)^2 \\
-&= d + (d-2)2|s_1| >0
+\Psi( E_s b) - \Psi(b) > d >0
 \end{align*}
+which completes the proof.
+\end{proof}
+
+
+\begin{lemma}
+A finite $d$-board can never return to a previous state via a sequence of earthquakes
+\end{lemma}
+\begin{proof}
+The proof is identical to that of Corollary ~\ref{norepeats}
 \end{proof}
 
 \begin{lemma}
 \label{finiteextensiontree}
-Suppose $\sum_{x,y} f(x,y) = C$, and the first coordinate of all nodes which are nonzero are in $[i_{min}, i_{max}]$. Then $E^r[b, \{s_k\}]$ only contain chips within the range $[i_{min} - 2C, i_{max} + 2C]$ for all $r>0$ and all sequences $\{s_k\}$ of length $r$.
+Suppose $\sum_{x,y} f(x,y) = C$, and the first coordinate of all nodes which are nonzero are in $[i_{min}, i_{max}]$. Then after applying any number of earthquakes the first coordinates of the nonzero nodes of the resultant board will be in range $[i_{min} - 2C, i_{max} + 2C]$.
 \end{lemma}
 
 \begin{proof}
@@ -560,15 +562,15 @@ It is obvious that a board with $C$ chips on nodes with first coordinate $l<0$ w
 
 Now because chips cannot be transferred between two nodes whose first coordinate differs by more than 1, we know that $C$ chips on a single node with first coordinate $l<0$ will have an $i_{min}$ no lower than $l-2C$ as there must be at least one chip on every other level. 
 
-If we take any other arrangement of $C$ chips, with $i_{min}=l$ but not all $C$ chips are on a single node. We know that $i_{min}$ for this board is bounded below by $l-2C$. In order to have an $i_{min}$ below this at some point in time it would be possible to have $C$ chips on the same node on level $l$. But this cannot occur because in order to move a chip to a node with a lower first coordinate, one chip must moved to a node with a higher first coordinate. Therefore $E^r[b, \{s_k\}]$ does not have a node with a nonzero number of chips on it with first coordinate less than $i_{min} -2C$.
+If we take any other arrangement of $C$ chips, with $i_{min}=l$ but not all $C$ chips are on a single node. We know that $i_{min}$ for this board is bounded below by $l-2C$. In order to have an $i_{min}$ below this at some point in time it would be possible to have $C$ chips on the same node on level $l$. But this cannot occur because in order to move a chip to a node with a lower first coordinate, one chip must moved to a node with a higher first coordinate. Therefore the resultant board does not have a node with a nonzero number of chips on it with first coordinate less than $i_{min} -2C$.
 
-An analogous argument shows that if $i_{max}$, both $GE_T^m(f)$ and $LE_T^m(f)$ do not have a node with a nonzero number of chips on it with first coordinate greater than $i_{max}+2C$.
+An analogous argument shows that  and after applying any sequences of earthquakes to $b$ the resultant board does not have a node with a nonzero number of chips on it with first coordinate greater than $i_{max}+2C$.
 \end{proof}
 
-So now we are ready to prove the theorem that all finite boards will reach a stable state. 
-
+\begin{theorem} If $b$ is a finite $d$-board then there exists some sequence $\{s_1, \ldots, s_k\}$ such that after applying an earthquake to each of these locations on $b$ the resultant $d$-board is stable.
+\end{theorem}
 \begin{proof}
-(of Theorem~\ref{finitestability}) Suppose $b \in \mathcal{B}(d)_f$ is a finite board, so $\sum_{(i,j) \in G_n} b(i,j) = C$, and suppose all chips lie between levels  $[i_{min}, i_{max}]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $r$ and sequence $\{s_k\}$ all chips in $E^r[b, \{s_k\}]$ will have first coordinate in $ [i_{min} -2C, i_{max} +2C]$.
+ Suppose $b \in \mathcal{B}(d)_f$ is a finite board, so $\sum_{(i,j) \in G_n} b(i,j) = C$, and suppose all chips lie between levels  $[i_{min}, i_{max}]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $r$ and sequence $\{s_k\}$ all chips in $E^r[b, \{s_k\}]$ will have first coordinate in $ [i_{min} -2C, i_{max} +2C]$.
 
 We have restricted the size of the board to be finite, and the number of chips that can be placed on the board to be finite. 
 Thus the total number of ways that the chips can be arranged on the board is finite. 
@@ -584,7 +586,7 @@ nodes that are potentially occupied. Therefore there are at most
 \begin{equation}
 \binom{N+S-1}{N-1}
 \end{equation}
-possible boards $b \in \mathcal{B}(n)_f$ that satisfy this. We know that there are no cycles in the states, so there must be an $0 \leq N < \binom{N+S-1}{N-1}$ and some sequence $\{s_k\}$ such that $E^N[b, \{s_k\}] = E^{N+m}[b, \{s_k\}]$ for all $m \geq 0$.
+possible boards $b \in \mathcal{B}(n)_f$ that satisfy this. We know that there are no cycles in the states, so eventually the board must stabilize.
 \end{proof}
 
 
