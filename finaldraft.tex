@@ -598,18 +598,35 @@ The proof is identical to that of Theorem ~\ref{finitestability} with Lemma ~\re
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}
 
-In this section, we show how we can compute different Boolean functions using the poker chip board and the earthquake operator.
+In this section, we show how we can compute introduce the ideas of Boolean functions and Boolean circuits and show how we can compute these use the poker chip board and the earthquake operator.
 
-A Boolean input is a number in $\{0,1\}$, and a Boolean function is a function that takes $k$ Boolean inputs and outputs a number in $\{0,1\}$. A simple Boolean function is the AND function that takes in 2 Boolean inputs, and returns a 1 if and only if both the input values are set to 1. Another Boolean function is the OR function, that takes in 2 Boolean inputs, and returns a 0 if and only if both input values are set to 0. If 0 is associated with ``false" and 1 is associated with '``true", then the AND function returns ``true" if both inputs are ``true", and the OR function returns ``true" if at least one input is true. More complicated Boolean functions can be made with more than 2 inputs and compositions of these inputs. Denoting an AND with $\vee$ an OR with $\wedge$, we can construct composite functions such as $b_1 \wedge (b_2 \vee b_3)$. 
+We first introduce conventional definitions of boolean variables and functions.
+\begin{definition} 
+A Boolean variable is a number in $\{0,1\}$, and a Boolean function is a function that takes in a finite number of Boolean variable and outputs a Boolean variable.
+\end{definition}
 
-Boolean circuits are formed by using wires that transmit 0's and 1's, and feeding them through various \emph{gates}. For example, a wire carrying a 0 and a wire carrying a 1 can be fed through an OR gate, which will ``output" a wire carrying a 1. In this section, we construct circuits using the poker chips board that use AND an OR gates. 
+We now introduce the standard Boolean functions. 
+\begin{definition}
+ The AND function takes in 2 Boolean inputs, and returns a 1 if and only if both the input values are 1. We will use $\vee$ to denote AND. The OR function, that takes in 2 Boolean inputs, and returns a 0 if and only if both input values are set to 0. We will use $\wedge$ to denote OR. The NOT function takes in 1 Boolean input; it returns a 1 if and only if the input value is a 0. 
+ \end{definition}
+ If we think of associating 0 with ``false" and 1 with '``true", then the AND function returns ``true" if both inputs are ``true", and the OR function returns ``true" if at least one input is true. We can make more complicated Boolean functions with more than 2 inputs and compositions of these inputs. 
+ 
+ We now begin to define Boolean circuits, first defining the two component parts, wires and gates.
+\begin{definition}
+ A wire is a device that in theory is capable of transmitting Boolean variables over arbitrarily long distances. If it takes in a 1 it will output a 1 and if it takes in a 0 it will output a 0. A gate is a boolean function that takes in an arbitrary number of wires and outputs an arbitrary number of wires.
+\end{definition}
+Examples of gates include AND gates and OR gates. In this section we will show that we can use the poker chips board to construct circuits that use AND and OR gates.
 
-A simple model of computation can be defined as follows. We assume a finite board. We specify some input nodes and some output nodes. If an input bit is to be set to 1, then we place 4 chips in the input node. We apply earthquakes to the board until it stabilizes. If an output node ever had an earthquake, then we mark that output bit as 1; otherwise, the output bit is set to 0. 
+We now define a simple model of computation. We assume a finite board and specify some nodes as inputs nodes and some as outputs. If an input bit is to be set to 1, then we place 4 chips on the input node. Otherwise we do not place any chips on it. We then apply earthquakes to the board until it stabilizes. If an earthquake ever occurred on an output node, then we set the output bit to 1; otherwise, the output bit is set to 0. 
 
-A simple example is a board that computes the identity function of one output. We can compute 
-\[ f(x) = x \]
-By having a board with no chips, and we let the input node be the same as the output node. Then if $x = 0$, this means that the input node will not contain any chips, so the board is stable. The output node never received an earthquake, so the output is 0. If $x = 1$, then the input node gets 4 chips and an earthquake affects it. So the output node is activated, and so the output is 1.
-With this simple model, there are a surprising number of things we can do. We can make wires, AND gates and OR gates (see Figure~\ref{fig:simplegates}). 
+A simple example of this is a board that computes the identity function of one input. We can compute 
+\begin{equation*}
+f(x) = x
+\end{equation*}
+If our board has no chips on it, other than perhaps at the input node. We set the input node and the output node to be the same. If $x = 0$, then the input node does not have any chips on it and the board is stable. An earthquake never occurred on the output node and so the output is 0. If $x = 1$, then we place 4 chips on the input node and in order for the board to stabilize an earthquake must effect it. Because the input and output node are the same, this means an earthquake occurred on the output node and so the output is 1.
+
+
+Using this simple model, there are a surprising number of things we can do. We can make wires, AND gates and OR gates (see Figure~\ref{fig:simplegates}). 
 
 \begin{figure}
 \centering
@@ -622,16 +639,16 @@ With this simple model, there are a surprising number of things we can do. We ca
 \label{fig:simplegates}
 \end{figure}
 
-Composing these gates, we can make circuits which represent some Boolean function. In particular we can compute any Boolean function that can be represented with a planar circuit with only AND and OR.
+Composing these gates, we can make circuits which certain Boolean functions. In particular we can compute any Boolean function that can be represented by a planar circuit composed of only AND and OR gates. However using this model we cannot construct a NOT gate.  
 
 \begin{theorem}
 There does not exists a board which computes $f(x) = \neg x$.
 \end{theorem}
 
 \begin{proof}
-Suppose for contradiction that we have a board $b$ with one input $i$ and one output $o$ which computes NOT. Then we know that there exists some node which initially has over $4$ chips, since otherwise, the board would be stable and so the output never gets activated. 
+Suppose for contradiction that we have a board with one input $i$ and one output $o$ which computes NOT.  Then we know that there exists some node which initially has over $4$ chips otherwise the board would be stable and the output could never be effected by an earthquake. 
 
-Let $A(0)$ be the set of nodes that get activated when $i = 0$ and $A(1)$ be the set of nodes that get activated when $i=1$. Then we claim that $A(0) \subset A(1)$. This would yield a contradiction since $o \in A(0)$ but $o \notin A(1)$. 
+Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1 we only increase the locations that can be targeted by nontrivial earthquakes. However this produces a contradiction as the output square is not in $A(1)$ by definition of our function.  Therefore we cannot have a board that computes NOT. 
 \end{proof}
 
 \begin{lemma}
