@@ -390,47 +390,53 @@ Thus we have transformed our starting sequence into canonical sequence that is c
 \section{Time until Stability}
 \label{Time until Stability}
 
-Another question of interest is how many global earthquakes it would take for a finite board to reach a stable state. We will first focus on the case of the board with only one stack containing $n$ chips. 
+Another question of interest is how many global earthquakes must be applied to a finite board in order for it to stabilize. We will confine our analysis to the case of the board with only one stack containing $n$ chips. We are able to demonstrate upper bounds on the number of earthquakes it takes to stabilize the board and we conjecture on the existence of tighter ones.  
 
 Without loss of generality, we can assume that the board contains $n$ chips at location $(0,0)$. We first make two definitions we will use in our discussion.
 \begin{definition}
-We define $T: \mathbb{Z} \rightarrow \mathbb{Z}$ where $T(n)$ denotes the number of global earthquakes needed until the board with one stack of $n$ chips stabilizes. We also define $T':\mathbb{Z} \rightarrow \mathbb{Z}$ where $T'(n)$ denotes the local earthquakes that must hit $(0,0)$ in order for the board to stabilize. 
+We define $T(n)$ to be the number of global earthquakes that must be applied to the board for it to stabilize.
 \end{definition}
-Its clear that $T(n) \geq T'(n)$. We also know that $T'(n) \geq \lfloor \frac{n}{4}\rfloor$, since that many earthquakes will reduce the number of chips on $(0,0)$ to less than $4$.
 
-We can get another upper bound for $T(n)$ by looking at the maximum value of the potential function. Recall that the board will be nonzero only in locations in the range $[-\sqrt{n}, \sqrt{n}] \times [-\sqrt{n}, \sqrt{n}]$. 
-So we know that when the board is stable at some $f'$, 
+We can get an upper board for $T(n)$ by looking at the maximum value of our spread function.
+Recall that by Lemma ~\ref{finiteextension} after any number of earthquakes the resultant board will be nonzero only on nodes in the range $[-n, n] \times [-n, n]$. 
+So we know that when the board is stable at some $b'$, 
 \begin{equation*}
-\Phi(f') \leq \sum_{x,y} f'(x,y)(|x| + |y|)^2 \leq \sum_{x,y} 3*4n = 3*4n*4n= O(n^2)
+\Psi(b') \leq \sum_{x,y} b'(x,y)(|x| + |y|)^2 \leq \sum_{x,y} 3*4n^2 = 3*4n^2*4n^2= O(n^4)
 \end{equation*}
 We know that $\Phi(f) = 0$ and that $\Phi$ increases by at least $4$ after each global earthquake, so
-\[ T(n) = O(n^2) \]
+\begin{equation*}
+T(n) = O(n^4)
+\end{equation*}
 We can get tighter bounds by looking at the number of earthquakes more carefully.
+
 \begin{definition}
- Let $T(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. 
- \end{definition}
+ Let $T'(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. 
+ \end{definition} 
  If $(x,y) \neq (0,0)$, then the number of earthquakes required to hit location $(x,y)$ will be the total number of chips entering location $(x,y)$ divided by 4 (after taking floors). For $(0,0)$ the number of earthquakes that must hit the square equals the number of chips entering $(x,y)$ divided by 4 (after taking floors) plus the number of earthquakes needed to clear the original $n$ chips off the square.
  Since a chip only enters a square when an earthquake hits an adjacent square, we have the following formula
 \begin{equation*}
-T(x,y) = \begin{dcases} \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  (x,y) \neq (0,0) \\
- \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  (x,y) = (0,0) .
+T'(x,y) = \begin{dcases} \lfloor\frac{T'(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  \quad (x,y) \neq (0,0) \\
+ \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  \quad (x,y) = (0,0) .
  \end{dcases}
  \end{equation*}
-So solving for $T$ is a solution to a discrete version of the Laplacian. We were able to experiment different scenarious to understand the growth of $T(n)$. 
+So solving for $T'$ is very similar to solving a discrete version of the Laplacian. We note that it is not exactly the same as a discrete Laplacian as the value of the function at a coordinate is not the average of the value of the function at its neighbors.
+
+We were able to experiment different scenarios to understand the growth of $T(n)$. 
 \begin{figure}[!ht]
 \centering
-\subfigure[Global earthquakes until stable. Horizontal axis is $n$ and vertical axis is the number of global earthquakes]{\includegraphics[width=0.4\linewidth]{TimeUntilStabilizeWithOnePeak}\label{fig:case1}} \qquad
-\subfigure[Global earthquakes until stable. Horizontal axis is $n$ and vertical axis is the number of global earthquakes divided by $n$]{\includegraphics[width=0.4\linewidth]{Timeuntilstabledividedbyn}\label{fig:case2}}
+\subfigure[Horizontal axis is the number of chips on $(0,0)$ and vertical axis is the number of global earthquakes]{\includegraphics[width=0.4\linewidth]{TimeUntilStabilizeWithOnePeak}\label{fig:case1}} \qquad
+\subfigure[Horizontal axis is the number of chips on $(0,0)$ and vertical axis is the number of global earthquakes divided by the number of chips on $(0,0)$]{\includegraphics[width=0.4\linewidth]{Timeuntilstabledividedbyn}\label{fig:case2}}
 \caption{Number of global earthquakes until stability}
 \label{fig:growthofT}
 \end{figure}
-By looking at Figure~\ref{fig:growthofT} it seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(n)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(n) = \Theta(n\log n)$.
+
+By looking at Figure~\ref{fig:growthofT} it seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(0,0)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(0,0) = \Theta(n\log n)$.
 
 \begin{figure}[!ht]
 \centering
-\subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes]{\includegraphics[width=0.4\linewidth]{centerearthquakes}\label{fig:case1}} \qquad
-\subfigure[Local earthquakes of center until stable. Horizontal axis is $n$ and vertical axis is the number of local earthquakes divided by $n$]{\includegraphics[width=0.4\linewidth]{centerearthquakesdividedbyn}\label{fig:case2}}
-\caption{Number of local earthquakes in center until stability}
+\subfigure[Horizontal axis is the number of chips on (0,0) and vertical axis is the number of local earthquakes]{\includegraphics[width=0.4\linewidth]{centerearthquakes}\label{fig:case1}} \qquad
+\subfigure[Horizontal axis is the number of chips on (0,0) and vertical axis is the number of local earthquakes divided by the number of chips on (0,0).]{\includegraphics[width=0.4\linewidth]{centerearthquakesdividedbyn}\label{fig:case2}}
+\caption{Number of local earthquakes on (0,0) until stability}
 \label{fig:growthofT'}
 \end{figure}
 
