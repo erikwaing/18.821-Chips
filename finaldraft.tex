@@ -338,6 +338,8 @@ Now, we find the end of the sequence of moved earthquakes and consider the board
 
 Thus we have transformed our starting sequence into canonical sequence that is completely determined by the state of the initial board. Therefore we can do this for any other sequence that stabilizes the board and get the same sequence. This shows not only that the order in which the earthquakes occur does not change the final state of the board but also that a given square is targeted by the same number of valid earthquakes regardless of the order of the earthquakes (we know this because our process only shifts the order of valid earthquakes it never adds or removes them). 
 \end{proof}
+
+Note that the results of this section imply that global earthquakes are a well-defined operation. Recall that a global earthquake is an operation defined on finite boards that hits every square of a finite board with 4 or more chips with an earthquake. By Theorem~\ref{thm:order}, the order of local earthquakes does not matter, and thus global earthquakes are unambiguously defined. This is important as we will refer to global earthquakes in Section~\ref{Computing with Chips}.
 %
 %
 %\section{Global Earthquakes}
@@ -393,61 +395,63 @@ Thus we have transformed our starting sequence into canonical sequence that is c
 %\begin{proof}
 %Assume otherwise. That is for some board $b, GE^N[b]$ always has at least one square with at least four chips on it. But applying a global earthquake is equivalent to applying a sequence of standard earthquakes and so we have a board which does not stabilize under standard earthquakes which is a contradiction.  
 %\end{proof}
-
-\section{Time until Stability}
-\label{Time until Stability}
-
-Another question of interest is how many global earthquakes must be applied to a finite board in order for it to stabilize. We will confine our analysis to the case of the board with only one stack containing $n$ chips. We are able to demonstrate upper bounds on the number of earthquakes it takes to stabilize the board and we conjecture on the existence of tighter ones.  
-
-Without loss of generality, we can assume that the board contains $n$ chips at location $(0,0)$. We first make two definitions we will use in our discussion.
-\begin{definition}
-We define $T(n)$ to be the number of global earthquakes that must be applied to the board for it to stabilize.
-\end{definition}
-
-We can get an upper board for $T(n)$ by looking at the maximum value of our spread function.
-Recall that by Lemma ~\ref{finiteextension} after any number of earthquakes the resultant board will be nonzero only on nodes in the range $[-n, n] \times [-n, n]$. 
-So we know that when the board is stable at some $b'$, 
-\begin{equation*}
-\Psi(b') \leq \sum_{x,y} b'(x,y)(|x| + |y|)^2 \leq \sum_{x,y} 3*4n^2 = 3*4n^2*4n^2= O(n^4)
-\end{equation*}
-We know that $\Phi(f) = 0$ and that $\Phi$ increases by at least $4$ after each global earthquake, so
-\begin{equation*}
-T(n) = O(n^4)
-\end{equation*}
-We can get tighter bounds by looking at the number of earthquakes more carefully.
-
-\begin{definition}
- Let $T'(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. 
- \end{definition} 
- If $(x,y) \neq (0,0)$, then the number of earthquakes required to hit location $(x,y)$ will be the total number of chips entering location $(x,y)$ divided by 4 (after taking floors). For $(0,0)$ the number of earthquakes that must hit the square equals the number of chips entering $(x,y)$ divided by 4 (after taking floors) plus the number of earthquakes needed to clear the original $n$ chips off the square.
- Since a chip only enters a square when an earthquake hits an adjacent square, we have the following formula
-\begin{equation*}
-T'(x,y) = \begin{dcases} \lfloor\frac{T'(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  \quad (x,y) \neq (0,0) \\
- \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  \quad (x,y) = (0,0) .
- \end{dcases}
- \end{equation*}
-So solving for $T'$ is very similar to solving a discrete version of the Laplacian. We note that it is not exactly the same as a discrete Laplacian as the value of the function at a coordinate is not the average of the value of the function at its neighbors.
-
-We were able to experiment different scenarios to understand the growth of $T(n)$. 
-\begin{figure}[!ht]
-\centering
-\subfigure[Horizontal axis is the number of chips on $(0,0)$ and vertical axis is the number of global earthquakes]{\includegraphics[width=0.4\linewidth]{TimeUntilStabilizeWithOnePeak}\label{fig:case1}} \qquad
-\subfigure[Horizontal axis is the number of chips on $(0,0)$ and vertical axis is the number of global earthquakes divided by the number of chips on $(0,0)$]{\includegraphics[width=0.4\linewidth]{Timeuntilstabledividedbyn}\label{fig:case2}}
-\caption{Number of global earthquakes until stability}
-\label{fig:growthofT}
-\end{figure}
-
-By looking at Figure~\ref{fig:growthofT} it seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(0,0)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(0,0) = \Theta(n\log n)$.
-
-\begin{figure}[!ht]
-\centering
-\subfigure[Horizontal axis is the number of chips on (0,0) and vertical axis is the number of local earthquakes]{\includegraphics[width=0.4\linewidth]{centerearthquakes}\label{fig:case1}} \qquad
-\subfigure[Horizontal axis is the number of chips on (0,0) and vertical axis is the number of local earthquakes divided by the number of chips on (0,0).]{\includegraphics[width=0.4\linewidth]{centerearthquakesdividedbyn}\label{fig:case2}}
-\caption{Number of local earthquakes on (0,0) until stability}
-\label{fig:growthofT'}
-\end{figure}
-
-
+%
+%\section{Time until Stability}
+%\label{Time until Stability}
+%
+%Another question of interest is how many earthquakes must be applied to a finite board in order for it to stabilize. In order to simplify our simulations and analysis, we restricted our attention to global earthquakes, which hit entire boards and lead to a high degree of symmetry. We decided that this restriction was reasonable, as global earthquakes 
+%
+%We will confine our analysis to the case of the board with only one stack containing $n$ chips. We are able to demonstrate upper bounds on the number of earthquakes it takes to stabilize the board and we conjecture on the existence of tighter ones.  
+%
+%Without loss of generality, we can assume that the board contains $n$ chips at location $(0,0)$. We first make two definitions we will use in our discussion.
+%\begin{definition}
+%We define $T(n)$ to be the number of global earthquakes that must be applied to the board for it to stabilize.
+%\end{definition}
+%
+%We can get an upper board for $T(n)$ by looking at the maximum value of our spread function.
+%Recall that by Lemma ~\ref{finiteextension} after any number of earthquakes the resultant board will be nonzero only on nodes in the range $[-n, n] \times [-n, n]$. 
+%So we know that when the board is stable at some $b'$, 
+%\begin{equation*}
+%\Psi(b') \leq \sum_{x,y} b'(x,y)(|x| + |y|)^2 \leq \sum_{x,y} 3*4n^2 = 3*4n^2*4n^2= O(n^4)
+%\end{equation*}
+%We know that $\Phi(f) = 0$ and that $\Phi$ increases by at least $4$ after each global earthquake, so
+%\begin{equation*}
+%T(n) = O(n^4)
+%\end{equation*}
+%We can get tighter bounds by looking at the number of earthquakes more carefully.
+%
+%\begin{definition}
+% Let $T'(x,y)$ be the number of local earthquakes needed to hit location $(x,y)$ for the board to stabilize. 
+% \end{definition} 
+% If $(x,y) \neq (0,0)$, then the number of earthquakes required to hit location $(x,y)$ will be the total number of chips entering location $(x,y)$ divided by 4 (after taking floors). For $(0,0)$ the number of earthquakes that must hit the square equals the number of chips entering $(x,y)$ divided by 4 (after taking floors) plus the number of earthquakes needed to clear the original $n$ chips off the square.
+% Since a chip only enters a square when an earthquake hits an adjacent square, we have the following formula
+%\begin{equation*}
+%T'(x,y) = \begin{dcases} \lfloor\frac{T'(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  \quad (x,y) \neq (0,0) \\
+% \lfloor \frac{n}{4} \rfloor  + \lfloor\frac{T(x+1, y)}{4} \rfloor + \lfloor \frac{T(x-1, y)}{4} \rfloor + \lfloor \frac{T(x, y-1)}{4} \rfloor + \lfloor \frac{T(x, y+1)}{4} \rfloor  \quad (x,y) = (0,0) .
+% \end{dcases}
+% \end{equation*}
+%So solving for $T'$ is very similar to solving a discrete version of the Laplacian. We note that it is not exactly the same as a discrete Laplacian as the value of the function at a coordinate is not the average of the value of the function at its neighbors.
+%
+%We were able to experiment different scenarios to understand the growth of $T(n)$. 
+%\begin{figure}[!ht]
+%\centering
+%\subfigure[Horizontal axis is the number of chips on $(0,0)$ and vertical axis is the number of global earthquakes]{\includegraphics[width=0.4\linewidth]{TimeUntilStabilizeWithOnePeak}\label{fig:case1}} \qquad
+%\subfigure[Horizontal axis is the number of chips on $(0,0)$ and vertical axis is the number of global earthquakes divided by the number of chips on $(0,0)$]{\includegraphics[width=0.4\linewidth]{Timeuntilstabledividedbyn}\label{fig:case2}}
+%\caption{Number of global earthquakes until stability}
+%\label{fig:growthofT}
+%\end{figure}
+%
+%By looking at Figure~\ref{fig:growthofT} it seems that $T(n) = \Theta(n\log n)$. Our strategy to show a lower bound on $T(n)$ by giving a lower bound on $T'(0,0)$ seems to be the correct approach, since by experimental evidence (see Figure~\ref{fig:growthofT'}, we believe that $T'(0,0) = \Theta(n\log n)$.
+%
+%\begin{figure}[!ht]
+%\centering
+%\subfigure[Horizontal axis is the number of chips on (0,0) and vertical axis is the number of local earthquakes]{\includegraphics[width=0.4\linewidth]{centerearthquakes}\label{fig:case1}} \qquad
+%\subfigure[Horizontal axis is the number of chips on (0,0) and vertical axis is the number of local earthquakes divided by the number of chips on (0,0).]{\includegraphics[width=0.4\linewidth]{centerearthquakesdividedbyn}\label{fig:case2}}
+%\caption{Number of local earthquakes on (0,0) until stability}
+%\label{fig:growthofT'}
+%\end{figure}
+%
+%
 
 \section{Board Variants: $d$-Trees}
 \label{Board Variants: d-Trees}
