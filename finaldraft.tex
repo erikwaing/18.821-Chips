@@ -133,11 +133,18 @@ A board is stable if all nodes contain values strictly less than 4.
 \end{definition}
 This definition corresponds with the intuitive notion of a process that has stabilized, as stable boards can no longer be affected by earthquake operations.
 
-Finally, we formalize the notion of $\emph{finite}$ and $\emph{infinite}$ boards, a distinction we will refer to extensively throughout this paper.
+We also formalize the notion of $\emph{finite}$ and $\emph{infinite}$ boards, a distinction we will refer to extensively throughout this paper.
 
 \begin{definition} 
 A board is finite if the total number of chips on it is finite. Otherwise we say a board is infinite. 
 \end{definition}
+
+Finally, we use the above definitions to define global earthquakes, which will be defined only for finite boards. 
+\begin{definition}
+Given a finite board $b$, a global earthquake is given by applying one earthquake to every square in $b$ that initially has 4 or more chips.
+\end{definition}
+
+We will see in Section~\ref{Order of Redistribution} that the order in which earthquakes are applied does not matter, and thus global earthquakes are well-defined without the need for an ordering on the individual earthquakes. In order to avoid the case where there may be infinitely many squares with 4 or more chips, we only define global earthquakes for finite boards.
 
 \section{Stability of Finite Boards}
 \label{Stability of Finite Boards}
