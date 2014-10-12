@@ -196,25 +196,23 @@ Suppose for the sake of contradiction that this is possible, and that $b = E_1E_
 Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that earthquakes can transform a given finite board into.
 \begin{lemma}
 \label{finiteextension}
-Suppose $\sum_{i,j} b(i,j) = C$, and $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then after applying any number of earthquakes the resultant board is nonzero only in the range $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$ .
+Suppose there are a total of $C$ chips on the board, and $b$ is nonzero in the region $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$ (equivalently, all chips on the board are in this region). Then after any sequence of earthquakes, the resultant board is nonzero only in the region $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$ .
 \end{lemma}
 
 \begin{proof}
-Suppose that $\sum_{j\in \mathbb{Z}} b(i,j) \geq 1$ for some $i \in \mathbb{Z}$, then $\sum_{j \in \mathbb{Z}} E_{s}b(i,j) \geq 1$. This is clear since an earthquake can bring things into column $i$ or if it moves some chips out, then there are two chips that remain in the column.
+This follows from the observation that if a row / column of the board contains at least one chip, it will always contain at least one chip. Note that this follows from the fact that an earthquake operation can never cause a board to break this property; if a row / column is affected by an earthquake operation, at least 2 chips stay inside that row / column.
 
-The same is true for each row. This means that if a chip  is ever in a row or column of nodes, there will be always be a chip on that row or column. This finishes the lemma. 
+Now consider the maximum value $x$ coordinate of the board that chips can ever ``reach". An earthquake must first move a chip to the column given by $x$ coordinate $i_{max} +1$, and a chip will always stay there. The same argument follows for $i_{max} + 2$, and so on, but we can only do this up until $i_{max} +C$. The same argument works in any direction, so we can never leave the region $[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$.
 \end{proof}
 
 We are now ready to show that all finite boards will reach a stable state. 
 
-\begin{theorem} If $b$ is a finite board then there exists some sequence $\{s_1, \ldots, s_k\}$ such that after applying an earthquake to each of these locations on $b$ the resultant board is stable. 
+\begin{theorem} If $b$ is a finite board that is repeatedly hit by earthquakes, it must eventually reach a stable state. 
 \end{theorem}
 \begin{proof}
- Since $b$ is a finite board so $\sum_{i,j} b(i,j) = C$, furthermore this tells us that the locations with a nonzero number of chips are bounded.  Without loss of generality we can say that $b$ is nonzero only in the range $[i_{min}, i_{max}] \times [j_{min}, j_{max}]$. Then by Lemma~\ref{finiteextension}, we have that after any number of earthquakes the resultant board is nonzero only in the range $ R=[i_{min}-C, i_{max}+C] \times [j_{min}-C, j_{max}+C]$. If we set 
-\begin{equation*}
-D= |j_{max}-j_{min} + 2C|*|i_{max} - i_{min} + 2C|
-\end{equation*}
-then there are at most  $\binom{D+C-1}{D-1}$  boards that have exactly $C$ chips on them and are nonzero only in $R$,. We know that the state of the board cannot cycle and there are only a finite number of board states so eventually the board must stabilize.
+Lemma~\ref{finiteextension} implies that there a finite board with $C$ total chips can only ever occupy a finite number $D$ of squares. This implies a finite upper bound of $\binom{D+C-1}{D-1}$ possible boards (via an elementary combinatorics argument of how to distribute $C$ identical objects among $D$ distinguishable slots).
+
+In addition, Corollary~\ref{norepeats} tells us that we never visit a board state more than once. Thus, since we have a finite number of reachable board states, and the earthquake operation always takes a board to previously unvisited board, a sequence of earthquake operations must eventually end. At this end state, the board cannot allow further earthquakes, and is stable by definition.
 \end{proof}
 
 We can use our result for finite boards to show that earthquakes will never cause infinite boards to revisit a prior arrangement.  
