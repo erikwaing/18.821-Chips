@@ -570,7 +570,7 @@ An analogous argument shows that  and after applying any sequences of earthquake
 \begin{theorem} If $b$ is a finite $d$-board then there exists some sequence $\{s_1, \ldots, s_k\}$ such that after applying an earthquake to each of these locations on $b$ the resultant $d$-board is stable.
 \end{theorem}
 \begin{proof}
- Suppose $b \in \mathcal{B}(d)_f$ is a finite board, so $\sum_{(i,j) \in G_n} b(i,j) = C$, and suppose all chips lie between levels  $[i_{min}, i_{max}]$. Then by Lemma ~\ref{finiteextensiontree}, we have that for all $r$ and sequence $\{s_k\}$ all chips in $E^r[b, \{s_k\}]$ will have first coordinate in $ [i_{min} -2C, i_{max} +2C]$.
+ Since $b$ is finite we know $\sum_{(i,j) \in G_n} b(i,j) = C$. Suppose all chips lie between levels  $[i_{min}, i_{max}]$. Then by Lemma ~\ref{finiteextensiontree}, we have that after applying any sequence of earthquakes to $b$ the any node of the resultant board with a nonzero number of chips on it has a first coordinate contained in $ [i_{min} -2C, i_{max} +2C]$.
 
 We have restricted the size of the board to be finite, and the number of chips that can be placed on the board to be finite. 
 Thus the total number of ways that the chips can be arranged on the board is finite. 
@@ -582,11 +582,11 @@ nodes at each level, where $l= \max(|i_{min}|, |i_{max}|)$. So there are at most
 \begin{equation}
 N:=(i_{max} - i_{min}+1 + 4 C)d^l
 \end{equation}
-nodes that are potentially occupied. Therefore there are at most 
+nodes that could have chips on them. Therefore there are at most 
 \begin{equation}
 \binom{N+S-1}{N-1}
 \end{equation}
-possible boards $b \in \mathcal{B}(n)_f$ that satisfy this. We know that there are no cycles in the states, so eventually the board must stabilize.
+possible boards that satisfy this. We know that there are no cycles in the states, so eventually the board must stabilize.
 \end{proof}
 
 
