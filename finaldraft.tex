@@ -502,10 +502,7 @@ b:  G_d \rightarrow \mathbb{Z}_{\geq 0}
 
 In order to keep our notation compact we once again define a function that outputs the neighbors of a node
 \begin{definition} 
-Let $n(i,j)d$ be the set of neighbors of node $(i,j)$ 
-\begin{equation*}
-n(i,j) = \{ (x_1, y_1); (x_1 = i+1 \text{ or } x_1=i-1), \text{ and }(x_1, y_1) \in G_d\}
-\end{equation*}
+Let $n(i,j)d$ be the set of neighbors of node $(i,j)$.
 \end{definition}
 
 We now define our earthquake operation in terms of $d$-boards. It functions analogously to the earthquake for the standard board, but instead of hitting nodes that have more than 4 chips it hits nodes that have more than $d$ chips. 
@@ -651,18 +648,18 @@ Suppose for contradiction that we have a board with one input $i$ and one output
 Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1 we only increase the locations that can be targeted by nontrivial earthquakes. However this produces a contradiction as the output square is not in $A(1)$ by definition of our function.  Therefore we cannot have a board that computes NOT. 
 \end{proof}
 
-\begin{lemma}
-Let $A(i)$ be the set of active nodes in an execution of board $b$ with input node $i$. Then $A(0) \subset A(1)$.
-\end{lemma}
+%\begin{lemma}
+%Let $A(i)$ be the set of active nodes in an execution of board $b$ with input node $i$. Then $A(0) \subset A(1)$.
+%\end{lemma}
 
-\begin{proof}
-By Theorem~\ref{thm:order}, we can simulate an execution of the board with input be 0 before we apply earthquakes to the input node. We start with a board $b$ where the input is 1, so it has 4 chips. We simulate by applying earthquakes to the active nodes that are not the input. If the input node ever receives more than $8$ chips, we apply one earthquake to the input node. This way, we guarantee that the input node always contains more than $4$ chips. In addition, the input node does not contain more than $7$ chips for more than one consecutive earthquake.
-We do this until every node except the input node has less than 4 chips.
+%\begin{proof}
+%By Theorem~\ref{thm:order}, we can simulate an execution of the board with input be 0 before we apply earthquakes to the input node. We start with a board $b$ where the input is 1, so it has 4 chips. We simulate by applying earthquakes to the active nodes that are not the input. If the input node ever receives more than $8$ chips, we apply one earthquake to the input node. This way, we guarantee that the input node always contains more than $4$ chips. In addition, the input node does not contain more than $7$ chips for more than one consecutive earthquake.
+%We do this until every node except the input node has less than 4 chips.
 
-Note that this execution is indistinguishable from the execution with input set to 0. This means that all nodes activated in the execution with input 0 are the same as the nodes activated in the above mentioned execution. 
+%Note that this execution is indistinguishable from the execution with input set to 0. This means that all nodes activated in the execution with input 0 are the same as the nodes activated in the above mentioned execution. 
 
-Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
-\end{proof}
+%Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
+%\end{proof}
 
 As before, we assume a finite board with finitely many chips. The inputs are designated by having one input node. The outputs also each have one node. We now make the model of computation stronger by adding a special node $r$. When $r$ gets activated, it ends the execution and reads the outputs. We assume that in one ``round" we apply an earthquake to each valid node and that $r$ is the last node which gets applied an earthquake. 
 
