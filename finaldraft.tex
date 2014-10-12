@@ -209,6 +209,7 @@ We are now ready to show that all finite boards will reach a stable state.
 
 \begin{theorem} If $b$ is a finite board that is repeatedly hit by earthquakes, it must eventually reach a stable state. 
 \end{theorem}
+\label{finitestability}
 \begin{proof}
 Lemma~\ref{finiteextension} implies that there a finite board with $C$ total chips can only ever occupy a finite number $D$ of squares. This implies a finite upper bound of $\binom{D+C-1}{D-1}$ possible boards (via an elementary combinatorics argument of how to distribute $C$ identical objects among $D$ distinguishable slots).
 
@@ -484,9 +485,19 @@ We now define a coordinate system so that our method of proof can mirror that of
 	\item $(a,b)$ is a valid coordinate for $a>1$ if $0<b \leq (d-1)^{|a-1|}$
 \end{enumerate}
 We define the set of all valid coordinates $G_d$ for a joined $d$-tree as 
-\begin{equation}
+\begin{equation*}
 G_d:= \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules above}\}
-\end{equation}
+\end{equation*}
+\end{definition}
+
+
+
+We now formalize the board of poker chips. Note that this definition only differs from our initial definition in that the input value is a coordinate of a node in a joined $d$-tree rather than a coordinate of the cartesian grid.
+\begin{definition}
+We define a $d$-board to be a function from the set of valid coordinates to the nonnegative integers, that is 
+\begin{equation*}
+b:  G_d \rightarrow \mathbb{Z}_{\geq 0}
+\end{equation*}
 \end{definition}
 
 In order to keep our notation compact we once again define a function that outputs the neighbors of a node
@@ -497,45 +508,38 @@ n(i,j) = \{ (x_1, y_1); (x_1 = i+1 \text{ or } x_1=i-1), \text{ and }(x_1, y_1) 
 \end{equation*}
 \end{definition}
 
-We now formalize the board of poker chips. Note that this definition only differs from our initial definition in that the input value is a coordinate of a node in a joined $d$-tree rather than a coordinate of the cartesian grid.
+We now define our earthquake operation in terms of $d$-boards. It functions analogously to the earthquake for the standard board, but instead of hitting nodes that have more than 4 chips it hits nodes that have more than $d$ chips. 
 \begin{definition}
-We define a $d$-board to be a map from the set of valid coordinates to the nonnegative integers, that is 
-\begin{equation}
-b:  G_d \rightarrow \mathbb{Z}_{\geq 0}
-\end{equation}
-\end{definition}
-
-Recalling that $n(s)$ refers to the neighbors of $s$ we define our earthquake operation in terms of $d$-boards. It functions analogously to the earthquake for the standard board, but instead of hitting nodes that have more than 4 chips it hits nodes that have more than $d$ chips. 
-\begin{definition}
-An earthquake takes as an input an $d$-board and a node and outputs an $d$-board. If $s$ is the node input and $b(s)>d$ then 
+Let $E_s b$ be the board that results from an earthquake hitting the $d$-board $b$ at node $s$. If $b(s)>d$ then 
 \begin{align*}
 &E_s b(s) = b(s)- d \\
 &E_s b(t) = b(t) +1 \quad \forall t \in n(s)
 \end{align*}
-Otherwise $b(s)<d$ and $E_s b=b$ as the earthquake does not move any chips.
+Otherwise $b(s)<d$ the earthquake does not move any chips and $E_s b=b$.
 \end{definition}
 
-Now that we have formalized the earthquake operator we can introduce a precise definition of stability of a board. 
+Now that we have formalized the earthquake operator we can introduce a precise definition of stability of a $d$-board. Noting that it is almost identical to definition of stability for a standard board. 
 \begin{definition}
 We say that a $d$-board is stable if its values are strictly less than $d$.
 \end{definition}
-This is equivalent to saying all earthquakes have no effect on the board. We also make a precise definition for a finite board.
+This is equivalent to saying all earthquakes have no effect on the board. We also make a precise definition for a finite $d$-board.
 \begin{definition} 
 We say that a $d$-board is finite if the total number of chips on it is finite.
 \end{definition}
 
-We will now show that any finite $d$-board will stabilize under earthquakes. Our method of proof will mirror the method used for the square lattice, without only minor changes.  Therefore we will proceed by shooing that if an earthquake changes the state of a $d$-board, then no sequence of earthquakes can transform the output $d$-board back into the original $d$-board. We will then give a bound on the maximum number of configurations a given $d$-board can be transformed into by earthquakes. Once again these together will show that all finite $d$-boards will stabilize.
+We will now show that any finite $d$-board will stabilize after a finite number of earthquakes. Our method of proof will mirror the method used for the square lattice, without only minor changes.  Therefore we will introduce a new spread function that maps $d$-boards to positive numbers. We once again show that the spread function strictly increases after earthquakes are applied, which will imply that an earthquake irreversibly changes a board configuration. We will then give a bound on the maximum number of configurations a given $d$-board can be transformed into by earthquakes. Once again these together will show that all finite $d$-boards will stabilize.
 
 We once again define a spread function 
 \begin{definition}
 $\Psi$ is a function from the finite $d$-boards and is defined as
-\begin{equation}
+\begin{equation*}
 \Psi(b) = \sum_{(i,j) \in G_d} b(i,j) |i|^2
-\end{equation}
+\end{equation*}
 Note that this is well defined for boards which contain a finite number of chips. 
 \end{definition} 
-We can once again think of this spread function as the sum of the number of chips on every node weighted by the taxi-cab distance from the node to the origin.
+We can once again think of this spread function as the sum of the number of chips on every node weighted by the taxi-cab distance from the node to the origin. 
 
+We again demonstrate that nontrivial earthquakes increase the value of the spread function, using a nearly identical proof.
 \begin{lemma} 
 Suppose an earthquake hits node $s$ of a finite $d$-board $b$ producing the board $E_s b$. Then
 \begin{equation*}
@@ -543,16 +547,15 @@ Suppose an earthquake hits node $s$ of a finite $d$-board $b$ producing the boar
 \end{equation*}
 \end{lemma}
 \begin{proof}
-For ease of notation let $s=(s_1, s_2)$. We can evaluate $\Psi(E_s b) - \Psi(b)$.
-\begin{align}
-\Psi(E[b, s])-\Psi(b) = \sum_{(i,j) \in G_d} E_s b (i,j)|i|^2 - \sum_{(i,j) \in G_d} b(i,j)|i|^2 
-\end{align}
-We note that only $s$ and its neighbors are affected so our expression simplifies to
-\begin{align*}
-\Psi(E_s b ) - \Psi(b) &= E_s b (s) |s_1|^2 - b(s) |s_1|^2 + \sum_{(i,j) \in n(s)} (E_s b (i,j) |i|^2 - b(i,j)|i|^2) \\
-&= -d |s_1|^2 + \sum_{(i,j) \in n(s)} |i|^2
-\end{align*}
-We note that exactly $d-1$ of the neighbors of $s$ are a distance $|s_1 +1|$ from the origin and one of the neighbors of $s$ is a distance $(|s_1| - 1)$ from the origin.  A point to emphasize is that this is the only substantial way in which this proof differs from the similar proof for the square lattice. Omitting the algebraic details we find that 
+Once again the chip stacks of the two boards are the same at all nodes except at $s$ and $n(s)$, the nodes that neighbor $s$. Thus the contribution to $\Psi$ is the same at all nodes except for those $d+1$.
+
+If the first coordinate of $s$ is $s_1$ then the contribution to the spread function from node $s$ decreases from $b(s)|s_1|^2$ to $(b(s)-d)|s_1|^2$. 
+
+Out of the $d$ nodes in $n(s)$ exactly $d-1$ of the neighbors of $s$ have a first coordinate with absolute value $||s_1| +1|$ and the remaining neighbor has a first coordinate with absolute value $||s_1| - 1|$ from the origin.  A point to emphasize is that this is the only substantial way in which this proof differs from the similar proof for the square lattice. 
+
+We note that the contributions of these neighboring nodes increase by $||s_1| +1|$ and $||s_1|-1|$ respectively. 
+
+Omitting the algebraic details we find that 
 \begin{align*}
 \Psi( E_s b) - \Psi(b) > d >0
 \end{align*}
@@ -560,9 +563,10 @@ which completes the proof.
 \end{proof}
 
 
-\begin{lemma}
+\begin{corollary}
+\label{notreerepeats}
 A finite $d$-board can never return to a previous state via a sequence of earthquakes
-\end{lemma}
+\end{corollary}
 \begin{proof}
 The proof is identical to that of Corollary ~\ref{norepeats}
 \end{proof}
@@ -585,23 +589,7 @@ An analogous argument shows that  and after applying any sequences of earthquake
 \begin{theorem} If $b$ is a finite $d$-board then there exists some sequence $\{s_1, \ldots, s_k\}$ such that after applying an earthquake to each of these locations on $b$ the resultant $d$-board is stable.
 \end{theorem}
 \begin{proof}
- Since $b$ is finite we know $\sum_{(i,j) \in G_n} b(i,j) = C$. Suppose all chips lie between levels  $[i_{min}, i_{max}]$. Then by Lemma ~\ref{finiteextensiontree}, we have that after applying any sequence of earthquakes to $b$ the any node of the resultant board with a nonzero number of chips on it has a first coordinate contained in $ [i_{min} -2C, i_{max} +2C]$.
-
-We have restricted the size of the board to be finite, and the number of chips that can be placed on the board to be finite. 
-Thus the total number of ways that the chips can be arranged on the board is finite. 
-In particular there are fewer than $(i_{max} - i_{min}+1 + 4 C)$  and there are at most 
-\begin{equation}
-d^l,
-\end{equation}
-nodes at each level, where $l= \max(|i_{min}|, |i_{max}|)$. So there are at most 
-\begin{equation}
-N:=(i_{max} - i_{min}+1 + 4 C)d^l
-\end{equation}
-nodes that could have chips on them. Therefore there are at most 
-\begin{equation}
-\binom{N+S-1}{N-1}
-\end{equation}
-possible boards that satisfy this. We know that there are no cycles in the states, so eventually the board must stabilize.
+The proof is identical to that of Theorem ~\ref{finitestability} with Lemma ~\ref{finiteextension} replaced by Lemma ~\ref{finiteextensiontree} and Corollary ~\ref{norepeats} replaced by ~\ref{notreerepeats}.
 \end{proof}
 
 
