@@ -618,8 +618,6 @@ A Boolean input is a number in $\{0,1\}$, and a Boolean function is a function t
 
 Boolean circuits are formed by using wires that transmit 0's and 1's, and feeding them through various \emph{gates}. For example, a wire carrying a 0 and a wire carrying a 1 can be fed through an OR gate, which will ``output" a wire carrying a 1. In this section, we construct circuits using the poker chips board that use AND an OR gates. 
 
-\subsection{Simple Model}
-
 A simple model of computation can be defined as follows. We assume a finite board. We specify some input nodes and some output nodes. If an input bit is to be set to 1, then we place 4 chips in the input node. We apply earthquakes to the board until it stabilizes. If an output node ever had an earthquake, then we mark that output bit as 1; otherwise, the output bit is set to 0. 
 
 A simple example is a board that computes the identity function of one output. We can compute 
@@ -663,8 +661,6 @@ Note that this execution is indistinguishable from the execution with input set 
 Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
 \end{proof}
 
-\subsection{More powerful model}
-
 As before, we assume a finite board with finitely many chips. The inputs are designated by having one input node. The outputs also each have one node. We now make the model of computation stronger by adding a special node $r$. When $r$ gets activated, it ends the execution and reads the outputs. We assume that in one ``round" we apply an earthquake to each valid node and that $r$ is the last node which gets applied an earthquake. 
 
 In order to make it easier to compute, we will make a special \textit{clock} node, designated as $c$ which always starts out with $4$ chips. We will have the clock go through each input and travel in parallel to each input. We will build \textit{gadgets} that allow us to compute with the clock so that we can build gates in a modular and then put them together. 
@@ -684,8 +680,6 @@ One can see that $r$ will become active after 5 earthquakes since it will take t
 
 This circuit also shows how to make a ``wire" in the circuit. We will represent a wire as two parralel arrows, one containing the clock path and the other carrying the input. 
 
-\subsection{Turner}
-
 Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $r$ is the output read and $o$ is the output bit.
 
 \[ \begin{array}{cccccc} 0 & 0 & r & 0 & o \\
@@ -699,8 +693,6 @@ Turning is non trivial, we must guarantee that we can turn a signal and align th
 Since the clock snakes along the path while $i$ takes the shorter path. 
 Likewise, we can perform a clockwise path by making $i$ snakes while the clock takes a straight path. 
 
-\subsection{Synchronize}
-
 We can synchronize the input so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
 \[ \begin{array}{cccccccc} c & 3 & 3 & 3 & 3 & 3 & 3 & 0 \\
 					 0 & 0 & 0 & 0 & 3 & 0 & 3 & 0 \\
@@ -710,8 +702,6 @@ We can synchronize the input so that the input signal waits for the clock to arr
 Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
 
 The fact that we have a synchronizer means that the model of computation is equivalent to one where there is only one clock for all input bits. 
-
-\subsection{Boolean circuits}
 
 Now we can show how to compute some basic boolean functions and since we have turns and synchronizers, we can assume that we have synchronized the inputs already. The following can compute the AND of two inputs. 
 
