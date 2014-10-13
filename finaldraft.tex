@@ -337,7 +337,7 @@ The earthquakes that have been moved to the front of the sequence can be in any 
 
 Now, we find the end of the sequence of moved earthquakes and consider the board at this point, noting that we have new values for all the nodes. We repeat this argument, moving a new set of earthquakes directly to the right of previously moved earthquakes. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of Lemma~\ref{shiftlemma}).
 
-Thus we have transformed our starting sequence into a sequence that is completely determined by the state of the initial board, noting that the final state of the board is still the same. We can do this for any other sequence that stabilizes the board and get the same sequence. This shows not only that the order in which the earthquakes occur does not change the final state of the board but also that a given square is targeted by the same number of valid earthquakes regardless of the order of the earthquakes (we know this because our process only shifts the order of valid earthquakes it never adds or removes them). 
+Thus we have transformed our starting sequence into a sequence that is completely determined by the state of the initial board, noting that the final state of the board is still the same. We can do this for any other sequence that stabilizes the board and get the same sequence. This shows not only that the order in which the earthquakes occur does not change the final state of the board but also that a given square is targeted by the same number of valid earthquakes regardless of the order of the earthquakes (we know this because our process only shifts the order of valid earthquakes; it never adds or removes them). 
 \end{proof}
 
 Note that the results of this section imply that global earthquakes are a well-defined operation on finite boards. Recall that a global earthquake is an operation defined on finite boards that hits every square of a finite board with 4 or more chips with an earthquake. By Theorem~\ref{thm:order}, the order of standard earthquakes does not matter, and thus global earthquakes are unambiguously defined. This is important as we will refer to global earthquakes in Section~\ref{Computing with Chips}.
@@ -599,7 +599,7 @@ The proof is identical to that of Theorem ~\ref{finitestability} with Lemma ~\re
 
 \emph{Written by Erik Waingarten, edited by Fermi Ma and Perry Kleinhenz.}
 
-In this section, we show how we can compute introduce the ideas of Boolean functions and Boolean circuits and show how we can compute these use the poker chip board and the earthquake operator.
+In this section, we show how we can compute Boolean functions using the poker chip problem setup. In particular, we use the fact that Boolean functions can be represented as Boolean circuits, and we show how to construct elements of Boolean circuits using the poker chip board and earthquake operator.
 
 We first introduce conventional definitions of Boolean variables and functions.
 \begin{definition} 
@@ -624,16 +624,16 @@ The NOT function takes in 1 Boolean input; it returns a 1 if and only if the inp
 \end{definition}
 Examples of gates include AND gates and OR gates. In this section we will show that we can use the poker chips board to construct circuits that use AND and OR gates.
 
-We now define a simple model of computation. We assume a finite board and specify some nodes as inputs nodes and some as outputs. If an input bit is to be set to 1, then we place 4 chips on the input node. Otherwise we do not place any chips on it. We then apply global earthquakes to the board until it stabilizes. If an output node ever has chips redistributed from it by an earthquake, then we set the output bit to 1; otherwise, the output bit is set to 0. 
+We now define a simple model of computation. We assume a finite board and specify some nodes as inputs nodes and some as outputs. If an input bit is to be set to 1, then we place 4 chips on the input node. Otherwise we do not place any chips on it. We then apply global earthquakes to the board until it stabilizes. If an output node ever has chips redistributed to it by an earthquake, then we set the output bit to 1; otherwise, the output bit is set to 0. 
 
 A simple example of this is a board that computes the identity function of one input. We can compute 
 \begin{equation*}
-f(x) = x
+f(x) = x.
 \end{equation*}
 Our board has no chips on it, other than perhaps at the input node. We set the output node to be the same as the input node. If $x = 0$, then the input node does not have any chips on it and the board is stable. An earthquake never occurred on the output node and so the output is 0. If $x = 1$, then we place 4 chips on the input node and in order for the board to stabilize an earthquake must effect it. Because the input and output node are the same, this means an earthquake occurred on the output node and so the output is 1.
 
 
-Using this simple model, there are a surprising number of things we can do. We can make wires, AND gates and OR gates (see Figure~\ref{fig:simplegates}). 
+Using this simple model, there is a surprising number of things we can do. We can make wires, AND gates and OR gates (see Figure~\ref{fig:simplegates}). 
 
 \begin{figure}
 \centering
@@ -649,13 +649,13 @@ Using this simple model, there are a surprising number of things we can do. We c
 Composing these gates, we can make circuits which can be used to compute certain Boolean functions. In particular we can compute any Boolean function that can be represented by a planar circuit composed of only AND and OR gates. However using this model we cannot construct a NOT gate.  
 
 \begin{theorem}
-There does not exists a board which computes $f(x) = \neg x$.
+There does not exist a board which computes $f(x) = \neg x$.
 \end{theorem}
 
 \begin{proof}
 Suppose for contradiction that we have a board with one input $i$ and one output $o$ which computes NOT.  Then we know that there exists some node which initially has over $4$ chips otherwise the board would be stable and the output could never be effected by an earthquake. 
 
-Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1 we only increase the locations that can have chips redistributed from them by earthquakes. However the output square is not in $A(1)$ by the definition of our function, which produces a contradiction. Therefore our current model of computation cannot have a board that computes NOT. 
+Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1, we only increase the locations that can have chips redistributed to them by earthquakes. However the output square is not in $A(1)$ by the definition of our function, which produces a contradiction. Therefore our current model of computation cannot have a board that computes NOT. 
 \end{proof}
 
 %\begin{lemma}
@@ -723,10 +723,10 @@ Suddenly hit by earthquakes.\\
 Can never return. \\
 
 \noindent Another earthquake\\
-hits the board, and then one more\\
+hits the board, and then one more.\\
 Who cares which was first! \\ 
 
 \noindent Now the aftershock\\
-is computing some functions,\\
-but just basic ones.
+is computing some functions\\
+---but just basic ones!
 \end{document}
