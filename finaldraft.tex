@@ -189,7 +189,7 @@ which completes the proof.
 A finite board can never return to a previous state via a sequence of earthquakes.
 \end{corollary}
 \begin{proof}
-Suppose for the sake of contradiction that this is possible, and that $b = E_1E_2\cdots E_kb$ for some sequence of earthquakes $E_1,E_2,\dots,E_k$. Lemma~\ref{spreadfunction} shows that $\psi(b) < \psi(E_1E_2\cdots E_kb)$, which is a contradiction.
+Suppose for the sake of contradiction that this is possible, and that $b = E_1E_2\cdots E_kb$ for some sequence of earthquakes $E_1,E_2,\dots,E_k$. Lemma~\ref{spreadfunction} shows that $\Psi(b) < \Psi(E_1E_2\cdots E_kb)$, which is a contradiction.
 \end{proof} 
 
 Now that we have shown that an earthquake can never transform a finite board into a board it was previously we will give a bound on the number of different boards that earthquakes can transform a given finite board into.
@@ -484,11 +484,10 @@ We now define a coordinate system so that our method of proof can mirror that of
 	\item $(a,b)$ is a valid coordinate for $a>1$ if $0<b \leq (d-1)^{|a-1|}$
 \end{enumerate}
 We define the set of all valid coordinates $G_d$ for a joined $d$-tree as 
+\end{definition}
 \begin{equation*}
 G_d:= \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules above}\}
 \end{equation*}
-\end{definition}
-
 
 
 We now formalize the board of poker chips. Note that this definition only differs from our initial definition in that the input value is a coordinate of a node in a joined $d$-tree rather than a coordinate of the cartesian grid.
