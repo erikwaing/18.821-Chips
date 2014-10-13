@@ -61,8 +61,8 @@ Each node of an infinite grid graph contains some nonnegative number of chips. A
 
 In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the problem. In particular, we formalize the effects of earthquakes, as well as what it means for a board of chips to be finite or infinite. 
 In Section~\ref{Stability of Finite Boards}, we introduce a spread function that maps finite board configurations to positive integers. 
-We then use the fact that earthquakes strictly increase the value of this spread function to show that finite boards cannot cycle back to previous configurations. We also show that the number of possible configurations a finite board can be transformed into by earthquake is bounded. These two results together will show that all finite boards reach a steady state. 
-In Section~\ref{Order of Redistribution}, we show that for a given board the number of times a particular square must be hit by a earthquake in order for a board to stabilize is independent of the order in which the earthquakes occur. 
+We then use the fact that earthquakes strictly increase the value of this spread function to show that finite boards cannot cycle back to previous configurations. We also show that the number of possible configurations a finite board can be transformed into by earthquakes is bounded. These two results together will show that all finite boards reach a steady state. 
+In Section~\ref{Order of Redistribution}, we show that for a given board the number of times a particular square must be hit by an earthquake in order for a board to stabilize is independent of the order in which the earthquakes occur. 
 
 For the remainder of the paper, we consider other approaches and extensions of the problem. 
 %In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square.
@@ -210,7 +210,7 @@ We are now ready to show that all finite boards will reach a stable state.
 \end{theorem}
 \label{finitestability}
 \begin{proof}
-Lemma~\ref{finiteextension} implies that there a finite board with $C$ total chips can only ever occupy a finite number $D$ of squares. This implies a finite upper bound of $\binom{D+C-1}{D-1}$ possible boards (via an elementary combinatorics argument of how to distribute $C$ identical objects among $D$ distinguishable slots).
+Lemma~\ref{finiteextension} implies that a finite board with $C$ total chips can only ever occupy a finite number $D$ of squares. This implies a finite upper bound of $\binom{D+C-1}{D-1}$ possible boards (via an elementary combinatorics argument of how to distribute $C$ identical objects among $D$ distinguishable slots).
 
 In addition, Corollary~\ref{norepeats} tells us that we never visit a board state more than once. Thus, since we have a finite number of reachable board states, and a nontrivial earthquake operation always outputs a previously unvisited board, a sequence of earthquake operations must eventually end. At this end state, the board cannot allow further nontrivial earthquakes, and is stable by definition.
 \end{proof}
