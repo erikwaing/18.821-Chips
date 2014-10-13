@@ -156,7 +156,7 @@ We then give a bound on the maximum number of board configurations a finite boar
 
 To define the spread function, we fix one coordinate on a board $b$ as the origin $(0,0)$, and we define the \emph{taxicab distance} $d(s)$ of a node $s$ on the board to be $|s_x| + |s_y|$, where $s_x$ is the $x$ coordinate of node $s$, and $s_y$ is the $y$ coordinate of node $s$. Then the spread function is
 \begin{equation*}
-\Psi(b) = \sum_{\text{all nodes }s}b(s)d(s)^2 
+\Psi(b) = \sum_{\text{all nodes }s}b(s)d(s)^2.
 \end{equation*}
 
 Essentially the function sums up the number of chips on a given node weighted by the taxicab distance to the origin squared. The motivation for this definition is that the spread function gives a measure of how ``spread out" the chips on a board are. Intuitively, earthquakes takes chips that are condensed in a single pile and spreads them out over a greater area. We capture this in the following lemma:
@@ -165,7 +165,7 @@ Essentially the function sums up the number of chips on a given node weighted by
 \label{spreadfunction}
 Suppose an earthquake hits node $s$ of a finite board $b$, producing the board $E_sb \neq b$. Then
 \begin{equation*}
-\Psi(E_sb) > \Psi(b) 
+\Psi(E_sb) > \Psi(b),
 \end{equation*}
 so the earthquake strictly increases the spread of the board.
 \end{lemma}
@@ -180,7 +180,7 @@ Suppose that the two neighboring nodes at distance $d_s+1$ have chip stacks of $
 
 Omitting the algebraic details, we find that summing up the changes in the spread function gives
 \begin{equation*}
- \Psi(E_sb) - \Psi(b) = 4
+ \Psi(E_sb) - \Psi(b) = 4,
  \end{equation*}
 which completes the proof.
 \end{proof}
@@ -248,7 +248,7 @@ For ease of notation we also introduce an indicator function
 \begin{definition}
 We define the indicator function $[[\cdot]]$ as 
 \begin{equation*}
-[[A]] = \begin{cases} 1 \text{ if A is true} \\ 0 \text{ if A is false} \end{cases}
+[[A]] = \begin{cases} 1 \text{ if A is true} \\ 0 \text{ if A is false} \end{cases}.
 \end{equation*}
 \end{definition}
 
@@ -257,7 +257,7 @@ Recalling that $n(s)$ refers to the set of neighbors of the square $s$ we note t
 \label{earthquakeredefine}
 Consider a board $b$. If $E$ is a valid earthquake, then 
 \begin{equation*}
-E_s b(x) = b(x) + 1[[ x \in n(s)]] - 4[[x =s]]
+E_s b(x) = b(x) + 1[[ x \in n(s)]] - 4[[x =s]].
 \end{equation*}
 \end{lemma}
 \begin{proof}
@@ -270,7 +270,7 @@ Now we can show that switching the order of two earthquakes with certain validit
 \label{swappinglemma}
 Consider a board $b$ and two earthquakes $E_1$ and $E_2$, affecting nodes $s_1$ and $s_2$ respectively. If $E_1, E_2$ is a valid sequence and $E_2$ is a valid earthquake when applied before $E_1$ then $E_2, E_1$ is also a valid sequence of earthquakes and 
 \begin{equation*}
-E_2 E_1 b = E_1 E_2 b
+E_2E_1 b = E_1E_2 b.
 \end{equation*}
 \end{lemma}
 \begin{proof}
@@ -303,7 +303,7 @@ Therefore we must show that the sequence $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$ ap
 
 We can show this by inducting on the length of the sequence $l=j-m+1$. The base case of $l=2$ is shown in Lemma~\ref{swappinglemma}. Let us assume the result holds for sequences of length $l=p$ and suppose our sequence has length $l=p+1$. So our sequence is 
 \begin{equation*}
-E_m, E_{m+1}, \ldots, E_{j-1}, E_j
+E_m, E_{m+1}, \ldots, E_{j-1}, E_j,
 \end{equation*}
 where $p+1=j-m+1$. Then if we set $b_{m} = E_{m} (b_{m-1})$ by applying our inductive step we have that the two sequences 
 \begin{align*}
@@ -492,7 +492,7 @@ We now define a coordinate system so that our method of proof can mirror that of
 We define the set of all valid coordinates $G_d$ for a joined $d$-tree as 
 \end{definition}
 \begin{equation*}
-G_d:= \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules above}\}
+G_d:= \{ (a,b) \in \mathbb{Z} \times \mathbb{Z} ; (a,b) \text{ obey the rules above}\}.
 \end{equation*}
 
 
@@ -500,7 +500,7 @@ We now formalize the board of poker chips. Note that this definition only differ
 \begin{definition}
 We define a $d$-board to be a function from the set of valid coordinates to the nonnegative integers, that is 
 \begin{equation*}
-b:  G_d \rightarrow \mathbb{Z}_{\geq 0}
+b:  G_d \rightarrow \mathbb{Z}_{\geq 0}.
 \end{equation*}
 \end{definition}
 
@@ -534,7 +534,7 @@ We once again define a spread function
 \begin{definition}
 $\Psi$ is a function from the finite $d$-boards and is defined as
 \begin{equation*}
-\Psi(b) = \sum_{(i,j) \in G_d} b(i,j) |i|^2
+\Psi(b) = \sum_{(i,j) \in G_d} b(i,j) |i|^2.
 \end{equation*}
 Note that this is well defined for boards which contain a finite number of chips. 
 \end{definition} 
@@ -544,7 +544,7 @@ We again demonstrate that nontrivial earthquakes increase the value of the sprea
 \begin{lemma} 
 Suppose an earthquake hits node $s$ of a finite $d$-board $b$ producing the board $E_s b$. Then
 \begin{equation*}
-\Psi( E_s b) > \Psi (b)
+\Psi( E_s b) > \Psi (b).
 \end{equation*}
 \end{lemma}
 \begin{proof}
@@ -558,7 +558,7 @@ We note that the contributions of these neighboring nodes increase by $||s_1| +1
 
 Omitting the algebraic details we find that 
 \begin{align*}
-\Psi( E_s b) - \Psi(b) > d >0
+\Psi( E_s b) - \Psi(b) > d >0,
 \end{align*}
 which completes the proof.
 \end{proof}
