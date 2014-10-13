@@ -89,6 +89,7 @@ First, we formalize the definition of a board. The board is an infinite grid gra
 \end{center}
 \caption{A finite component of the grid with coordinates}
 \end{figure}
+
 We can coordinatize the grid graph by labeling it like the standard Cartesian grid, where we fix one node to be the origin $(0,0)$, and we index all other nodes by integer coordinates $(i,j)$. We will define the board as a function from the Cartesian grid to the nonnegative integers.
 
 \begin{definition} Boards are functions $b$ from $\mathbb{Z}^2 \to \mathbb{Z}_{\geq 0}$.
@@ -712,5 +713,22 @@ Our goal in introducing this more complicated model of computation is to allow o
 \caption{Board which computes $f(x) = \neg x$}
 \label{fig:NOT}
 \end{figure}
+
 We note that in Figure~\ref{fig:NOT}, the number of nodes between the 4 and $r$ is same as the number of nodes between the 4 and the output node, but the number of nodes separating the input node and $r$ is shorter than the number of nodes separating the 4 and the output node. If $i$ is set to $1$, then $r$ will be activated while the output only has 3 chips on it, so the output will be read as 0. If the input is set to 0, then $r$ and the square adjacent to $o$ will both have 4 chips on them at same time so the output will be $1$. This computes $f(x) = \neg x$. However, we have switched the standard positions of $r$ and the output node, so it is unclear how to compose this board with other ones. 
+
+\section{Poem}
+
+\begin{quote}
+A board with chips.\\
+An earthquake redistibutes some chips.\\
+New board! never turn back. \\ \\
+
+Another earthquake hits.\\
+And another earthquakes hits again.\\
+Who cares which first! \\ \\
+
+One last earthquake\\
+So many it must be Japan.\\
+Computation.
+\end{quote}
 \end{document}
