@@ -233,7 +233,7 @@ However, we can bound the size of the locations affected by $\{s, s_1, s_2, \ldo
 
 Now that we have shown that all finite boards will eventually reach a stable state we would like to know if the order in which these earthquakes occur matters. More specifically, if we consider some finite starting board and two sequences of earthquakes that stabilizes the board, we would like to know if the resultant board is the same for both sequences. 
 
-In fact we are able to show that not only is this final board the same but that the number of earthquakes that target a particular node in order to stabilize the board is invariant of the order in which the earthquakes occur. We do so by first describing conditions under which the position of an Earthquake in a sequence can change without effecting the final state. We then define a process that rearranges a sequence of earthquakes without changing the final board state and produces the same sequence for any board.\\
+In fact we are able to show that not only is this final board the same but that the number of earthquakes that target a particular node in order to stabilize the board is invariant of the order in which the earthquakes occur. We show this by first describing conditions under which we can rearrange a sequence earthquakes without changing the resultant board. We then define a process that rearranges a sequence of earthquakes without changing the final board state and for a given board will always produce the same sequence.\\
 
 First, we formalize the notion of earthquakes that are ``allowed to happen".
 
@@ -297,7 +297,7 @@ This sequence is valid and produces the same final board configuration.
 \begin{proof}
 It is sufficient for us to show that the first $j$ earthquakes of each sequences are valid and that the board arrangement will be the same for both sequences after $j$ earthquakes. In fact we can also ignore the first $m-1$ terms, because their order is not changed so the board state will be identical after $m-1$ terms for both sequences. Let us call this board state $b_{m-1}$
 
-Therefore we must show that the sequence $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$ applied to $b_{m-1}$ is valid and produces the same board as the sequence $E_m, E_{m+1}, \ldots, E_{j-1}, LE_j$ applied to $b_{m-1}$. 
+Therefore we must show that the sequence $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$ applied to $b_{m-1}$ is valid and produces the same board as the sequence $E_m, E_{m+1}, \ldots, E_{j-1}, E_j$ applied to $b_{m-1}$. 
 
 We can show this by inducting on the length of the sequence $l=j-m+1$. The base case of $l=2$ is shown in lemma ~\ref{swappinglemma}. Let us assume the result holds for sequences of length $l=p$ and suppose our sequence has length $l=p+1$. So our sequence is 
 \begin{equation*}
@@ -313,31 +313,31 @@ are both valid and produce the same final board configuration. Now if we conside
 E_{m}, E_{j} \\
 E_{j}, E_{m}
 \end{align*}
-are both valid and produce the same final board configuration. If we apply the same reduction as above  we have  that $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$  and $E_m, E_{m+1}, \ldots, E_{j-1}, E_j$ both applied to $b_{m-1}$ are valid and produce the same board. 
+are both valid and produce the same final board configuration. If we apply the same reduction we used in our first step of this proof we have  that $E_j, E_m, E_{m+1}, \ldots, E_{j-1}$  and $E_m, E_{m+1}, \ldots, E_{j-1}, E_j$ both applied to $b_{m-1}$ are valid and produce the same board. 
 \end{proof}
 
 Now that we have developed a tool that will allow us to move earthquakes in a sequence without changing the final board we can show that the number of earthquakes hitting a square for a given board is the same regardless of order. 
-The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, and that we can move it to the front of the sequence of earthquakes without changing the final board. This technique will then specify an order in which the earthquakes will occur, which completes the proof.
+The general idea is that we can recursively specify a sequence of earthquakes that ``must" happen, based on the initial board and then move these earthquakes to the front of the sequence without changing the final board. This technique will specify an order in which the earthquakes will occur, depending only on the original board which completes the proof.
 
 \begin{theorem}
 \label{thm:order}
-Let $b$ be a board that becomes a stable board $b$ after $N$ earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $b$. Furthermore the number of times that a square $x$ is targeted is invariant of the order in which the earthquakes occur. 
+Let $b$ be a board that becomes a stable board $b$ after $N$ earthquakes. Then for any other sequence of $N$ valid earthquakes the resultant board is identical to $b$. Furthermore the number of times that a node $s$ is targeted is invariant of the order in which the earthquakes occur. 
 \end{theorem}
 \begin{proof}
-Given the original configuration of the board, let $A_i$ be the number of chips on square $i$. We know that square $i$ will be hit by at least 
+Given the original configuration of the board, let $A_i$ be the number of chips on node $i$. We know that node $i$ will be hit by at least 
 \begin{equation*}
 \lfloor \frac{A_i}{4} \rfloor
 \end{equation*}
-earthquakes in order to stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquakes that target  square $i$. We note that these earthquakes will be valid in any position to the left of their original one because they are among the first $\lfloor \frac{A_i}{4} \rfloor$ to target a square that starts with $A_i$ chips on it. Thus using Lemma ~\ref{shiftlemma}, we can move these earthquakes to the front of the sequence without changing the final positioning of the board. We do this for all squares $i$. 
+earthquakes in order to stabilize. Thus, somewhere in the sequence $\{E_i\}$, there exist $\lfloor \frac{A_i}{4} \rfloor$ earthquakes that target  square $i$. We note that these earthquakes will be valid in any position to the left of their original one because they are among the first $\lfloor \frac{A_i}{4} \rfloor$ to target a node that starts with $A_i$ chips on it. Thus using Lemma ~\ref{shiftlemma}, we can move these earthquakes to the front of the sequence without changing the final positioning of the board. We do this for all nodes $i$. 
 
-The earthquakes that have been moved to the front of the sequence can be in any order because all these earthquakes could have happened with the initial values of the squares. 
+The earthquakes that have been moved to the front of the sequence can be in any order because all these earthquakes could have happened with the initial values of the nodes. 
 
-Now, we find the end of the sequence of moved earthquakes and consider the board at this point, noting that we have new values for all the squares. We repeat this argument, moving a new set of earthquakes directly to the right of previously moved earthquakes. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of our lemma).
+Now, we find the end of the sequence of moved earthquakes and consider the board at this point, noting that we have new values for all the nodes. We repeat this argument, moving a new set of earthquakes directly to the right of previously moved earthquakes. We repeat this until the end, and we note that eventually this argument terminates (because if we get to a point where there are still more earthquakes ahead, and the board doesn't allow any valid earthquakes, this is a contradiction of Lemma ~\ref{shiftlemma}).
 
-Thus we have transformed our starting sequence into canonical sequence that is completely determined by the state of the initial board. Therefore we can do this for any other sequence that stabilizes the board and get the same sequence. This shows not only that the order in which the earthquakes occur does not change the final state of the board but also that a given square is targeted by the same number of valid earthquakes regardless of the order of the earthquakes (we know this because our process only shifts the order of valid earthquakes it never adds or removes them). 
+Thus we have transformed our starting sequence into a sequence that is completely determined by the state of the initial board, noting that the final state of the board is still the same.  We can do this for any other sequence that stabilizes the board and get the same sequence. This shows not only that the order in which the earthquakes occur does not change the final state of the board but also that a given square is targeted by the same number of valid earthquakes regardless of the order of the earthquakes (we know this because our process only shifts the order of valid earthquakes it never adds or removes them). 
 \end{proof}
 
-Note that the results of this section imply that global earthquakes are a well-defined operation. Recall that a global earthquake is an operation defined on finite boards that hits every square of a finite board with 4 or more chips with an earthquake. By Theorem~\ref{thm:order}, the order of local earthquakes does not matter, and thus global earthquakes are unambiguously defined. This is important as we will refer to global earthquakes in Section~\ref{Computing with Chips}.
+Note that the results of this section imply that global earthquakes are a well-defined operation on finite boards. Recall that a global earthquake is an operation defined on finite boards that hits every square of a finite board with 4 or more chips with an earthquake. By Theorem~\ref{thm:order}, the order of standard earthquakes does not matter, and thus global earthquakes are unambiguously defined. This is important as we will refer to global earthquakes in Section~\ref{Computing with Chips}.
 %
 %
 %\section{Global Earthquakes}
@@ -457,7 +457,7 @@ Note that the results of this section imply that global earthquakes are a well-d
 
 
 \begin{definition}
-A $d$-tree is a graph composed of a parent node connected by edges to $d-1$ unique children nodes.Those children each have $d-1$ unique children and so on.  
+A $d$-tree is a graph composed of a parent node connected by edges to $d-1$ unique children nodes.Those children each are connected by edges to $d-1$ unique children and so on.  
 \end{definition}
 %\begin{figure}[!h]
 %\label{4tree}
