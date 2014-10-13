@@ -654,7 +654,7 @@ There does not exists a board which computes $f(x) = \neg x$.
 \begin{proof}
 Suppose for contradiction that we have a board with one input $i$ and one output $o$ which computes NOT.  Then we know that there exists some node which initially has over $4$ chips otherwise the board would be stable and the output could never be effected by an earthquake. 
 
-Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1 we only increase the locations that can chips redistributed from them by earthquakes. However the output square is not in $A(1)$ by definition of our function, which produces a contradiction.  Therefore our current model of computation cannot have a board that computes NOT. 
+Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1 we only increase the locations that can have chips redistributed from them by earthquakes. However the output square is not in $A(1)$ by the definition of our function, which produces a contradiction. Therefore our current model of computation cannot have a board that computes NOT. 
 \end{proof}
 
 %\begin{lemma}
@@ -670,7 +670,7 @@ Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and
 %Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
 %\end{proof}
 
-We now introduce a slightly more complicated model for computation that will allow us to build NOT gates as well as AND and OR gates. As before, we assume a finite board with finitely many chips. We again specify certain nodes as  inputs and outputs, placing 4 chips on input bits that are to be set to 1. We also designate a specific node $r$ that can be any node including inputs and outputs. When $r$ is affected by an earthquake, we finish redistributing all of the chips and read the outputs, setting an output to be 1 if it has 4 chips on it and 0 otherwise. 
+We now introduce a slightly more complicated model for computation that will allow us to build NOT gates as well as AND and OR gates. As before, we assume a finite board with finitely many chips. We again specify certain nodes as inputs and outputs, placing 4 chips on input bits that are to be set to 1. We also designate a specific node $r$ that can be any node including inputs and outputs. When $r$ is affected by an earthquake, we finish redistributing all of the chips and read the outputs, setting an output to be 1 if it has 4 chips on it and 0 otherwise. 
 
 We show how to make a board that computes the identity, as well as AND and OR gates. They are essentially the same as in our simpler model of computation but they include now include an $r$ node.
 
