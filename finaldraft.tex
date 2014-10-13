@@ -60,16 +60,15 @@ Each node of an infinite grid graph contains some nonnegative number of chips. A
 }
 
 In Section~\ref{Definitions and Notation}, we formalize the terminology and operations we use to analyze the problem. In particular, we formalize the effects of earthquakes, as well as what it means for a board of chips to be finite or infinite. 
-In Section~\ref{Stability of Finite Boards}, we introduce a spread function that maps finite board configurations to $\mathbb{R}$. 
-We then use the fact that earthquakes strictly increase the value of this spread function to show that finite boards cannot cycle back to previous configurations, from which we will conclude that all finite boards reach a steady state. Then we show that this means that no boards can return to their same state. 
-From this, we conclude that such boards never cycle back to previous configurations. 
+In Section~\ref{Stability of Finite Boards}, we introduce a spread function that maps finite board configurations to positive integers. 
+We then use the fact that earthquakes strictly increase the value of this spread function to show that finite boards cannot cycle back to previous configurations. We also show that the number of possible configurations a finite board can be transformed into by earthquake is bounded. These two results together will show that all finite boards reach a steady state. 
 In Section~\ref{Order of Redistribution}, we show that for a given board the number of times a particular square must be hit by a earthquake in order for a board to stabilize is independent of the order in which the earthquakes occur. 
 
 For the remainder of the paper, we consider other approaches and extensions of the problem. 
-In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square.
-We conjecture based on experimental evidence that such arrangements stabilize after $\Theta(n \log n)$ global earthquakes. 
+%In  Section~\ref{Time until Stability}, we present results from our computer simulations of repeated earthquakes. In particular, we look at the starting arrangement where all of the board's $n$ chips are initially on one central square.
+%We conjecture based on experimental evidence that such arrangements stabilize after $\Theta(n \log n)$ global earthquakes. 
 In Section~\ref{Board Variants: d-Trees}, we generalize away from the infinite grid graph and consider what happens when a similar process happens on tree graphs of infinite size. 
-Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the poker chip board and show how to construct simple Boolean circuits. We will also give impossibility results that show the limits of our model of computation.
+Finally, in Section~\ref{Computing with Chips} we present a model of computation based on the poker chip board and show how to construct simple Boolean circuits.
 \section{Definitions and Notation}
 \label{Definitions and Notation}
 
@@ -119,7 +118,7 @@ if $b(s) < 4$, the earthquake has no effect and $E_sb = b$.
 \subfigure[Board before earthquake.]{\includegraphics[width=0.25\linewidth]{action1.pdf}\label{fig:boardbeforeearthquake}}
 \qquad\qquad
 \subfigure[Board after earthquake to active square]{\includegraphics[width=0.25\linewidth]{action2.pdf}\label{fig:boardafterequarthquake}}
-\caption{Earthquake applied to board. Green signifies active nodes}
+\caption{Earthquake applied to board. Green signifies nodes with more than 4 chips}
 \label{fig:earthquakeexample}
 \end{figure}
 
@@ -131,7 +130,7 @@ Now that we have formalized the earthquake operator, we make precise the definit
 \begin{definition}
 A board is stable if all nodes contain values strictly less than 4. 
 \end{definition}
-This definition corresponds with the intuitive notion of a process that has stabilized, as stable boards can no longer be affected by earthquake operations.
+This definition corresponds with the intuitive notion of a process that has stabilized, as stable boards can no longer be changed by earthquake operations.
 
 We also formalize the notion of $\emph{finite}$ and $\emph{infinite}$ boards, a distinction we will refer to extensively throughout this paper.
 
@@ -150,20 +149,20 @@ We will see in Section~\ref{Order of Redistribution} that the order in which ear
 \label{Stability of Finite Boards}
 \emph{Written by Erik Waingarten, Edited by Fermi Ma and Perry Kleinhenz.}
 
-In this section, we show that any finite board will eventually become stable after a finite number of earthquakes. We first introduce a spread function that maps boards to positive numbers. We demonstrate that the spread function strictly increases after earthquakes are applied, which will imply that an earthquake irreversably changes a board configuration. In other words, we can never return to a given board arrangement.
+In this section, we show that any finite board will become stable after a finite number of earthquakes. We first introduce a spread function that maps boards to the positive integers. We demonstrate that the spread function strictly increases after earthquakes are applied, which will imply that an earthquake irreversably changes a board configuration. In other words, we can never return to a given board arrangement.
 
-We then give a bound on the maximum number of board configurations a finite board can ever reach. We will argue that since a finite number of boards are reachable and board states are never revisited, that eventually this process must terminate. Thus, we eventually reach a stable board where no earthquakes are allowable.
+We then give a bound on the maximum number of board configurations a finite board can be transformed into by earthquakes. We will argue that since a finite number of boards are reachable and board states are never revisited, eventually this process must terminate. Thus, we eventually reach a stable board where no earthquakes will change the board.
 
 To define the spread function, we fix one coordinate on a board $b$ as the origin $(0,0)$, and we define the \emph{taxicab distance} $d(s)$ of a node $s$ on the board to be $|s_x| + |s_y|$, where $s_x$ is the $x$ coordinate of node $s$, and $s_y$ is the $y$ coordinate of node $s$. Then the spread function is
 \begin{equation*}
 \Psi(b) = \sum_{\text{all nodes }s}b(s)d(s)^2 
 \end{equation*}
 
-Thus, the function sums up the chip stack sizes weighted by the taxicab distance to the origin squared. The motivation for this definition is that the spread function gives a measure of how ``spread out" the chips on a board are. Intuitively, earthquakes takes chips that are condensed in a single pile and spreads them out over a greater area. We capture this in the following lemma:
+Essentially the function sums up the number of chips on a given node weighted by the taxicab distance to the origin squared. The motivation for this definition is that the spread function gives a measure of how ``spread out" the chips on a board are. Intuitively, earthquakes takes chips that are condensed in a single pile and spreads them out over a greater area. We capture this in the following lemma:
 
 \begin{lemma}
 \label{spreadfunction}
-Suppose an earthquake hits node $s$ of a finite board $b$, producing the board $E_sb$. Then
+Suppose an earthquake hits node $s$ of a finite board $b$, producing the board $E_sb \neq b$. Then
 \begin{equation*}
 \Psi(E_sb) > \Psi(b) 
 \end{equation*}
@@ -174,7 +173,7 @@ The chip stacks of the two boards are the same at all nodes except at $s$ and $n
 
 Let the taxicab distance to $s$ be $d_s$. Then the contribution to the spread function from node $s$ decreases from $b(s)d_s^2$ to $(b(s)-4)d_s^2$.
 
-Out of the 4 nodes in $n(s)$, some have a taxicab distance of $d_s+1$, and the rest are at distance $d_s-1$. In particular, if $s$ is not exactly on the $x$ or $y$ axis, exactly 2 neighboring nodes are at $d_s+1$, and exactly 2 are at distance $d_s-1$. If $s$ is on either the $x$ or $y$ axis, then 3 nodes are at distance $d_s+1$, and 1 neighboring node is at distance $d_s-1$. Since we only need a lower bound for the increase in the spread function, we focus only on the case where exactly 2 neighboring nodes are at distance $d_s+1$, as it can be shown that this case leads to a strictly smaller increase than the other.
+Out of the 4 nodes in $n(s)$, some have a taxicab distance of $d_s+1$, and the rest are at distance $d_s-1$. In particular, if $s$ is not exactly on the $x$ or $y$ axis, exactly 2 neighboring nodes are at $d_s+1$, and exactly 2 are at distance $d_s-1$. If $s$ is on either the $x$ or $y$ axis, then 3 nodes are at distance $d_s+1$, and 1 neighboring node is at distance $d_s-1$. We only need a lower bound for the increase in the spread function, so we focus only on the case where exactly 2 neighboring nodes are at distance $d_s+1$, as it can be shown that this case leads to a strictly smaller increase than the other.
 
 Suppose that the two neighboring nodes at distance $d_s+1$ have chip stacks of $n_1$ and $n_2$ originally. Then their contribution to the spread function goes from $n_1(d_s+1)^2$ and $n_2(d_s+1)^2$ to $(n_1+1)(d_s+1)^2$ and $(n_2+1)(d_s+1)^2$. If the other two nodes at distance $d_s-1$ have chip stacks of $n_3$ and $n_4$, their contribution to the spread function goes from $n_3(d_s-1)^2$ and $n_4(d_s-1)^2$ to $(n_3+1)(d_s-1)^2$ and $(n_4+1)(d_s-1)^2$.
 
@@ -213,7 +212,7 @@ We are now ready to show that all finite boards will reach a stable state.
 \begin{proof}
 Lemma~\ref{finiteextension} implies that there a finite board with $C$ total chips can only ever occupy a finite number $D$ of squares. This implies a finite upper bound of $\binom{D+C-1}{D-1}$ possible boards (via an elementary combinatorics argument of how to distribute $C$ identical objects among $D$ distinguishable slots).
 
-In addition, Corollary~\ref{norepeats} tells us that we never visit a board state more than once. Thus, since we have a finite number of reachable board states, and the earthquake operation always takes a board to previously unvisited board, a sequence of earthquake operations must eventually end. At this end state, the board cannot allow further earthquakes, and is stable by definition.
+In addition, Corollary~\ref{norepeats} tells us that we never visit a board state more than once. Thus, since we have a finite number of reachable board states, and a nontrivial earthquake operation always outputs a previously unvisited board, a sequence of earthquake operations must eventually end. At this end state, the board cannot allow further nontrivial earthquakes, and is stable by definition.
 \end{proof}
 
 We can use our result for finite boards to show that earthquakes will never cause infinite boards to revisit a prior arrangement.  
@@ -224,7 +223,7 @@ Suppose $b$ is an infinite board. If $E_s b \neq b$, then no application of eart
 
 \begin{proof}
 We will proceed by contradiction. Assume otherwise, so there exists some sequence $\{s_1, s_2, \ldots, s_k\}$ such that after applying an earthquake to each of these locations on $E_s b$ the resultant board is $b$.
-However, we can bound the size of the locations affected by $\{s, s_1, s_2, \ldots, s_k \}$, call it $R$.  This infinite board behaves the same way as a finite board with the same values on $R$ and 0 outside of $R$. But this means that earthquakes transformed a finite board back into a previous state which is a contradiction. Therefore infinite boards cannot be transformed back into a previous state.
+However, we can bound the size of the locations affected by $\{s, s_1, s_2, \ldots, s_k \}$, call it $R$.  This infinite board behaves the same way as a finite board with the same values on $R$ and 0 outside of $R$. But this means that earthquakes transformed a finite board back into a previous state which contradicts Lemma ~\ref{finiteextension}. Therefore infinite boards cannot be transformed back into a previous state.
 \end{proof}
 
 \section{Order of Redistribution}
