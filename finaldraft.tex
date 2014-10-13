@@ -670,9 +670,9 @@ Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and
 %Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
 %\end{proof}
 
-We now introduce a slightly more complicated model for computation that will allow us to build NOT gates as well as AND and OR gates. As before, we assume a finite board with finitely many chips. We again specify certain nodes as  inputs and outputs, placing 4 chips on input bits that are to be set to 1. We also designate a specific node $r$, it can be any node including inputs and outputs. When $r$ is effected by an earthquake, we finish redistributing all of the chips and read the outputs, setting an output to be 1 if it has 4 chips on it and 0 otherwise. 
+We now introduce a slightly more complicated model for computation that will allow us to build NOT gates as well as AND and OR gates. As before, we assume a finite board with finitely many chips. We again specify certain nodes as  inputs and outputs, placing 4 chips on input bits that are to be set to 1. We also designate a specific node $r$ that can be any node including inputs and outputs. When $r$ is affected by an earthquake, we finish redistributing all of the chips and read the outputs, setting an output to be 1 if it has 4 chips on it and 0 otherwise. 
 
-We show how to make a board that computes the identity, as well as AND and OR gates. They are essentially the same as for our simpler model of computation but they include now include an $r$ node.
+We show how to make a board that computes the identity, as well as AND and OR gates. They are essentially the same as in our simpler model of computation but they include now include an $r$ node.
 
 \begin{figure}
 \centering
@@ -705,12 +705,12 @@ We show how to make a board that computes the identity, as well as AND and OR ga
 %Similarly, we can compute the OR of two circuits with a very simple modification:
 %And we can do a similar set up to synchronize the clocks. 
 
-Our goal in introducing this more complicated model of computation is to allow ourselves to build a board that would compute NOT. The following board does so:
+Our goal in introducing this more complicated model of computation is to allow ourselves to build a board that can compute NOT. The following board does so:
 \begin{figure}
 \centering
 \includegraphics[width=0.5\linewidth]{notgate}
 \caption{Board which computes $f(x) = \neg x$}
 \label{fig:NOT}
 \end{figure}
-We note that in Figure~\ref{fig:NOT}, the number of nodes between the 4 and $r$ is the as the wire from the 4 and the output node, but the number of nodes separating the input node and $r$ is shorter than the number of nodes separating the 4 and the output node. If $i$ is set to $1$, then $r$ will be activated while the output only has 3 chips on it, so the output will be read as 0. If the input is set to 0, then $r$ and  the square adjacent to $o$ will both have 4 chips on them at same time so the output will be $1$. This computes $f(x) = \neg x$. however, we have switched the standard positions of $r$ and the output node, so it is unclear how to compose this board with other ones. 
+We note that in Figure~\ref{fig:NOT}, the number of nodes between the 4 and $r$ is same as the number of nodes between the 4 and the output node, but the number of nodes separating the input node and $r$ is shorter than the number of nodes separating the 4 and the output node. If $i$ is set to $1$, then $r$ will be activated while the output only has 3 chips on it, so the output will be read as 0. If the input is set to 0, then $r$ and the square adjacent to $o$ will both have 4 chips on them at same time so the output will be $1$. This computes $f(x) = \neg x$. However, we have switched the standard positions of $r$ and the output node, so it is unclear how to compose this board with other ones. 
 \end{document}
