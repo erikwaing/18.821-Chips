@@ -614,13 +614,13 @@ We now introduce the standard Boolean functions.
 \end{definition}
 Examples of gates include AND gates and OR gates. In this section we will show that we can use the poker chips board to construct circuits that use AND and OR gates.
 
-We now define a simple model of computation. We assume a finite board and specify some nodes as inputs nodes and some as outputs. If an input bit is to be set to 1, then we place 4 chips on the input node. Otherwise we do not place any chips on it. We then apply earthquakes to the board until it stabilizes. If an earthquake ever occurred on an output node, then we set the output bit to 1; otherwise, the output bit is set to 0. 
+We now define a simple model of computation. We assume a finite board and specify some nodes as inputs nodes and some as outputs. If an input bit is to be set to 1, then we place 4 chips on the input node. Otherwise we do not place any chips on it. We then apply global earthquakes to the board until it stabilizes. If an output node ever has chips redistributed from it by an earthquake, then we set the output bit to 1; otherwise, the output bit is set to 0. 
 
 A simple example of this is a board that computes the identity function of one input. We can compute 
 \begin{equation*}
 f(x) = x
 \end{equation*}
-If our board has no chips on it, other than perhaps at the input node. We set the input node and the output node to be the same. If $x = 0$, then the input node does not have any chips on it and the board is stable. An earthquake never occurred on the output node and so the output is 0. If $x = 1$, then we place 4 chips on the input node and in order for the board to stabilize an earthquake must effect it. Because the input and output node are the same, this means an earthquake occurred on the output node and so the output is 1.
+Our board has no chips on it, other than perhaps at the input node. We set the output node to be the same as the input node. If $x = 0$, then the input node does not have any chips on it and the board is stable. An earthquake never occurred on the output node and so the output is 0. If $x = 1$, then we place 4 chips on the input node and in order for the board to stabilize an earthquake must effect it. Because the input and output node are the same, this means an earthquake occurred on the output node and so the output is 1.
 
 
 Using this simple model, there are a surprising number of things we can do. We can make wires, AND gates and OR gates (see Figure~\ref{fig:simplegates}). 
@@ -636,7 +636,7 @@ Using this simple model, there are a surprising number of things we can do. We c
 \label{fig:simplegates}
 \end{figure}
 
-Composing these gates, we can make circuits which certain Boolean functions. In particular we can compute any Boolean function that can be represented by a planar circuit composed of only AND and OR gates. However using this model we cannot construct a NOT gate.  
+Composing these gates, we can make circuits which can be used to compute certain Boolean functions. In particular we can compute any Boolean function that can be represented by a planar circuit composed of only AND and OR gates. However using this model we cannot construct a NOT gate.  
 
 \begin{theorem}
 There does not exists a board which computes $f(x) = \neg x$.
@@ -645,7 +645,7 @@ There does not exists a board which computes $f(x) = \neg x$.
 \begin{proof}
 Suppose for contradiction that we have a board with one input $i$ and one output $o$ which computes NOT.  Then we know that there exists some node which initially has over $4$ chips otherwise the board would be stable and the output could never be effected by an earthquake. 
 
-Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1 we only increase the locations that can be targeted by nontrivial earthquakes. However this produces a contradiction as the output square is not in $A(1)$ by definition of our function.  Therefore we cannot have a board that computes NOT. 
+Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and $A(1)$ be the set of nodes that are targeted by earthquakes when $i=1$.  We claim that $A(0) \subset A(1)$. This is true as when we set the input square to 1 we only increase the locations that can chips redistributed from them by earthquakes. However the output square is not in $A(1)$ by definition of our function, which produces a contradiction.  Therefore our current model of computation cannot have a board that computes NOT. 
 \end{proof}
 
 %\begin{lemma}
@@ -661,74 +661,47 @@ Let $A(0)$ be the set of nodes that are targeted by earthquakes when $i = 0$ and
 %Once this is done, then we continue with the execution applying the earthquake to the input node. By Theorem~\ref{thm:order}, the final configuration will be the same as any execution of the board. So $A(0) \subset A(1)$.
 %\end{proof}
 
-As before, we assume a finite board with finitely many chips. The inputs are designated by having one input node. The outputs also each have one node. We now make the model of computation stronger by adding a special node $r$. When $r$ gets activated, it ends the execution and reads the outputs. We assume that in one ``round" we apply an earthquake to each valid node and that $r$ is the last node which gets applied an earthquake. 
+We now introduce a slightly more complicated model for computation that will allow us to build NOT gates as well as AND and OR gates. As before, we assume a finite board with finitely many chips. We again specify certain nodes as  inputs and outputs, placing 4 chips on input bits that are to be set to 1. We also designate a specific node $r$, it can be any node including inputs and outputs. When $r$ is effected by an earthquake, we finish redistributing all of the chips and read the outputs, setting an output to be 1 if it has 4 chips on it and 0 otherwise. 
 
-In order to make it easier to compute, we will make a special \textit{clock} node, designated as $c$ which always starts out with $4$ chips. We will have the clock go through each input and travel in parallel to each input. We will build \textit{gadgets} that allow us to compute with the clock so that we can build gates in a modular and then put them together. 
+We show how to make a board that computes the identity, as well as AND and OR gates. They are essentially the same as for our simpler model of computation but they include now include an $r$ node.
 
-We will also make a wire path that takes $c$ to $r$, so that we know exactly at what point the outputs are read. 
-
-As shown before, simple example is given by a board that computes the identity. For simplicity, we write the boards as a board of numbers, which every space is a node and two nodes have an edge between them if they are either above, below, left, or right.
-
-\[ \begin{array}{cccccc} 0 & 0 & 0 & 0 & 0 & 0 \\
-				     4_c & 3 & 3 & 3 & 3 & 3_r \\
-				     0 & 0 & 0 & 0 & 0 & 0 \\
-				     i  & 3 & 3 & 3 & 3 & 3_o \\
-				     0 & 0 & 0 & 0 & 0 & 0 \end{array} \]
-Where $i$ indicates the input bit node, and $o$ indicates the output bit. 
-
-One can see that $r$ will become active after 5 earthquakes since it will take that many earthquakes for $c$ to reach $r$. Also, if $i$ is initially inactive, then $o$ will be inactive, and if $i$ is active, then $o$ will be active. Therefore, we can compute the identity. 
-
-This circuit also shows how to make a ``wire" in the circuit. We will represent a wire as two parralel arrows, one containing the clock path and the other carrying the input. 
-
-Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $r$ is the output read and $o$ is the output bit.
-
-\[ \begin{array}{cccccc} 0 & 0 & r & 0 & o \\
-				     0 & 3 & 2 & 0 & 3 \\
-			            0 & 2 & 3 & 0 & 3 \\
-				    0 & 3 & 2 & 0 & 3 \\
-				    0 & 2 & 3 & 0 & 3 \\
-				    c & 3 & 3 & 0 & 3 \\
-				    0 & 0 & 0 & 0 & 3 \\
-				    i & 3 & 3 & 3 & 3 \end{array} \]	
-Since the clock snakes along the path while $i$ takes the shorter path. 
-Likewise, we can perform a clockwise path by making $i$ snakes while the clock takes a straight path. 
-
-We can synchronize the input so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
-\[ \begin{array}{cccccccc} c & 3 & 3 & 3 & 3 & 3 & 3 & 0 \\
-					 0 & 0 & 0 & 0 & 3 & 0 & 3 & 0 \\
-					 i  & 3 & 3 & 3 & 1 & 3 & 3 & 3 \\
-					 0 & 0 & 0 & 0 & 3 & 0 & 0 & 3 \\
-					 0 & 0 & 0 & 0 & o & 0 & r & 3 \end{array} \]
-Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
-
-The fact that we have a synchronizer means that the model of computation is equivalent to one where there is only one clock for all input bits. 
-
-Now we can show how to compute some basic boolean functions and since we have turns and synchronizers, we can assume that we have synchronized the inputs already. The following can compute the AND of two inputs. 
-
-\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
-					   &    & 3   & 2 &  3    &    &  \\
-					   &    &    & 3 &    & 3 & c_2 \\
-					o & 3 & 3 & 2 & 3 & 2 & 	    \\
-					   &    &    &    &    & 3 & i_2 \end{array} \]
-Where we can make the $c_1$ and $c_2$ snake around before hand to guarantee that they are synchronized, and then we can make $c_1$ snake around so that it becomes the clock of the output. So in this case, $o = i_1$ AND $i_2$.
-
-Similarly, we can compute the OR of two circuits with a very simple modification:
-\[ \begin{array}{cccccccc}    &    & c_1&   &  i_1 &     &  \\
-					   &    & 3   & 2 &  3    &    &  \\
-					   &    &    & 3 &    & 3 & c_2 \\
-					o & 3 & 3 & 3 & 3 & 2 & 	    \\
-					   &    &    &    &    & 3 & i_2 \end{array} \]
-And we can do a similar set up to synchronize the clocks. 
-
-We can build a NOT board with the following circuit:
 \begin{figure}
 \centering
-\includegraphics[width=0.25\linewidth]{notgate.pdf}
-\caption{Possible board to compute $f(x) = \neg x$}
+\subfigure[Wire]{\includegraphics[width=0.25\linewidth]{wirewithr}\label{fig:wirer}}
+\qquad\qquad
+\subfigure[AND gate]{\includegraphics[width=0.25\linewidth]{andwithr}\label{fig:ANDr}}
+\qquad\qquad
+\subfigure[OR gate]{\includegraphics[width=0.25\linewidth]{orwithr}\label{fig:ORr}}
+\caption{Gates in the our more complicated model. Green are the inputs, red are the outputs and yellow is the node $r$. We disregard edges and assume that any two nodes that are touching have an edge between them.}
+\label{fig:simplegateswithr}
+\end{figure}
+
+
+%Turning is non trivial, we must guarantee that we can turn a signal and align the timinings of the inputs and outputs in the clock so that they have the same distance. this is a counter-clockwise turn where $c$ denotes the clock, $i$ is the input bit, then $r$ is the output read and $o$ is the output bit.
+
+
+%Since the clock snakes along the path while $i$ takes the shorter path. 
+%Likewise, we can perform a clockwise path by making $i$ snakes while the clock takes a straight path. 
+
+%We can synchronize the input so that the input signal waits for the clock to arrive. This can be simply done with the following board configuration:
+
+%Note that the path from $i$ to $o$ is 6 units long, while the path from clock is 12 unit long. $i$ waits for the clock since it needs the signal from $c$ from two sides to activate the 1 in the path from $i$ to $o$.
+
+%The fact that we have a synchronizer means that the model of computation is equivalent to one where there is only one clock for all input bits. 
+
+%Now we can show how to compute some basic boolean functions and since we have turns and synchronizers, we can assume that we have synchronized the inputs already. The following can compute the AND of two inputs. 
+
+%Where we can make the $c_1$ and $c_2$ snake around before hand to guarantee that they are synchronized, and then we can make $c_1$ snake around so that it becomes the clock of the output. So in this case, $o = i_1$ AND $i_2$.
+
+%Similarly, we can compute the OR of two circuits with a very simple modification:
+%And we can do a similar set up to synchronize the clocks. 
+
+Our goal in introducing this more complicated model of computation is to allow ourselves to build a board that would compute NOT. The following board does so:
+\begin{figure}
+\centering
+\includegraphics[width=0.5\linewidth]{notgate}
+\caption{Board which computes $f(x) = \neg x$}
 \label{fig:NOT}
 \end{figure}
-In Figure~\ref{fig:NOT}, the wire to $c$ and $r$ is the same length as the wire from $c$ to $o$, but the wire from $i$ to $r$ is shorter than the length of the wire from $c$ to $o$. If $i$ is set to $1$, then $r$ will be activated before the clock reaches $o$, so $o$ will be read as 0. If $i$ is set to 0, then the clock will reach $o$ and $r$ at the same time, so the output is $1$. This computes $f(x) = \neg x$; however, we have switched the order of $r$ and $o$. We also do not know how to compose this board with other boards. 
-
-We would also like to build a crossover gadget to allow us to compute circuits which are not necesarily.
-
+We note that in Figure~\ref{fig:NOT}, the number of nodes between the 4 and $r$ is the as the wire from the 4 and the output node, but the number of nodes separating the input node and $r$ is shorter than the number of nodes separating the 4 and the output node. If $i$ is set to $1$, then $r$ will be activated while the output only has 3 chips on it, so the output will be read as 0. If the input is set to 0, then $r$ and  the square adjacent to $o$ will both have 4 chips on them at same time so the output will be $1$. This computes $f(x) = \neg x$. however, we have switched the standard positions of $r$ and the output node, so it is unclear how to compose this board with other ones. 
 \end{document}
