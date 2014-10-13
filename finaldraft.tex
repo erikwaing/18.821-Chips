@@ -234,13 +234,13 @@ However, we can bound the size of the locations affected by $\{s, s_1, s_2, \ldo
 
 Now that we have shown that all finite boards will eventually reach a stable state we would like to know if the order in which these earthquakes occur matters. More specifically, if we consider some finite starting board and two sequences of earthquakes that stabilize the board, we would like to know if the resultant board is the same for both sequences. 
 
-In fact we are able to show that not only is this final board the same but that the number of earthquakes that target a particular node in order to stabilize the board is invariant of the order in which the earthquakes occur. We show this by first describing conditions under which we can rearrange a sequence earthquakes without changing the resultant board. We then define a process that rearranges a sequence of earthquakes without changing the final board state and for a given board will always produce the same sequence.\\
+In fact we are able to show that not only is this final board the same but that the number of earthquakes that target a particular node in order to stabilize the board is invariant of the order in which the earthquakes occur. We show this by first describing conditions under which we can rearrange a sequence of earthquakes without changing the resultant board. We then define a process that rearranges a sequence of earthquakes without changing the final board state and for a given board will always produce the same sequence.\\
 
 First, we formalize the notion of earthquakes that are ``allowed to happen".
 
 \begin{definition}
 We say that an earthquake $E$ is valid if the node it targets has at least $4$ chips on it. 
-We say that a sequence of earthquakes $E_1, E_2, \ldots E_n$ to be a valid sequence of earthquakes if each earthquake is valid when applied one after another. 
+We say that a sequence of earthquakes $E_1, E_2, \ldots E_n$ is a valid sequence of earthquakes if each earthquake is valid when applied one after another. 
 \end{definition}
 
 
@@ -277,7 +277,7 @@ E_2 E_1 b = E_1 E_2 b
 We will first show that $E_2, E_1$ is a valid sequence and then use this to show that the order in which the earthquakes occur does not matter. 
 
 We prove this by contradiction. Assume $E_2, E_1$ is an invalid sequence, that is $E_2 b(s_1)<4$. Since $E_1$ is a valid earthquake when applied directly to $b$, we know $b(s_1) \geq 4 $. 
-Therefore we must have $b(s_1)<8$ and $s_2=s_1$. But then $E_1 b(s_1)<4$ and so $E_1, E_2$ would not be a valid sequence of earthquakes. This contradicts one our hypothesis and so $E_2, E_1$ is a valid sequence. 
+Therefore we must have $b(s_1)<8$ and $s_2=s_1$. But then $E_1 b(s_1)<4$ and so $E_1, E_2$ would not be a valid sequence of earthquakes. This contradicts one of our hypotheses, and so $E_2, E_1$ is a valid sequence. 
 
 Now in order to demonstrate that the order in which the earthquakes are applied does not affect the final board state consider $E_2 E_1 b(x)$ for some $x \in \mathbb{Z} \times \mathbb{Z}$. Applying Lemma~\ref{earthquakeredefine} we have 
 \begin{align*}
